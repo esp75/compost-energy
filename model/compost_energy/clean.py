@@ -34,7 +34,12 @@ def _hampel(s: pd.Series, window: int = 15, n_sigmas: float = 4.0, min_dev: floa
 
 
 def _stuck(s: pd.Series, min_run: int = 30) -> pd.Series:
-    """True where a sensor repeats the exact same value for >= min_run samples."""
+    """True where a sensor repeats the exact same value for >= min_run samples.
+
+    Only valid for sensors whose noise exceeds their resolution (DS18B20 at
+    12 bit). Coarsely quantised loggers repeat values when healthy; see
+    reference.py.
+    """
     same = s.diff().eq(0)
     run_id = (~same).cumsum()
     run_len = s.groupby(run_id).transform("size")

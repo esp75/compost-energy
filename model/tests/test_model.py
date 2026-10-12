@@ -152,3 +152,24 @@ def test_measured_energy_matches_truth(sim, cleaned):
     stats = summarize(df)
     true_kwh = led["hx_j"] / 3.6e6
     assert stats["extracted_kwh_estimated"] == pytest.approx(true_kwh, rel=0.05)
+
+
+# ---- third-party reference data ------------------------------------------
+
+def test_collins_bins_load_and_fault_is_removed():
+    from compost_energy.reference import load_collins_controls
+    bins = load_collins_controls()
+    assert len(bins) == 3
+    for df in bins.values():
+        assert 70 < df["mean_c"].max() < 80
+        assert df[["probe_1", "probe_2", "probe_3", "probe_4"]].max().max() <= 80
+    # The 537 C open-circuit run on bin 2, probe 4.
+    assert bins["bin 2 (rep 3)"].attrs["removed_readings"]["probe_4"] > 150
+
+
+def test_kojima_heat_balance():
+    from compost_energy.reference import kojima_heat_balance, load_kojima_daily_exchanger
+    hb = kojima_heat_balance()
+    assert hb["microbial_heat_kw"] == pytest.approx(61.8)
+    assert hb["water_heat_gain_kw"] / hb["microbial_heat_kw"] == pytest.approx(0.377, abs=0.002)
+    assert load_kojima_daily_exchanger()["extracted_from_gas_kw"].mean() == pytest.approx(22.6, abs=0.1)

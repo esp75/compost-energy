@@ -8,7 +8,7 @@ version = "0.1.0"
 description = "Energy model, prototype simulation and logger data pipeline for compost heat recovery"
 requires-python = ">=3.10"
 license = { text = "MIT" }
-dependencies = ["numpy>=1.24", "pandas>=2.0", "matplotlib>=3.7"]
+dependencies = ["numpy>=1.24", "pandas>=2.0", "matplotlib>=3.7", "openpyxl>=3.1"]
 
 [project.optional-dependencies]
 test = ["pytest>=7"]

@@ -41,6 +41,18 @@ The model: two microbial populations (mesophilic + thermophilic) with cardinal-t
 
 ![raw vs clean](figures/sim_run_01_raw_vs_clean.png)
 
+## Checked against real measurements
+
+The simulation is only useful if it matches reality, so this repo also includes two published, openly licensed (CC-BY-4.0) datasets **measured by other research groups**. They are included unmodified with full attribution in [`data/reference/`](data/reference/). They are not Compost Energy measurements.
+
+**Bin scale.** These are temperature logs from three ~320-390 kg compost bins (Collins & Stacey, 2021). The real bins run hotter and stay hot longer than the simulation (peak 75-76 °C vs 65 °C; 10-14 days above 55 °C vs 8.5). Manure-rich feedstock and an aeration plenum are the likely reasons, so the simulated box is conservative. The data also had a real sensor fault: a probe reading a fixed 537 °C for two days. The repo's cleaning rules removed it, and the data showed that the "stuck sensor" rule doesn't suit coarse-resolution loggers.
+
+![measured bins vs simulation](figures/reference_bins_vs_simulation.png)
+
+**Farm scale.** This is an enclosed composter on a 150-cow dairy farm with an exhaust-air heat exchanger (Kojima et al., 2022). **38% of the microbial heat reached the water** (23.3 of 61.8 kW), against ~9% in the simulated 200 kg box. That measured gap is the scale effect behind the [pivot](docs/pivot.md). The facility also drew 13.3 kW of electricity for aeration and agitation, which is the cost side the energy model accounts for.
+
+![measured farm heat recovery](figures/reference_farm_heat_recovery.png)
+
 ## Repository
 
 ```
@@ -57,10 +69,11 @@ hardware/
 model/
   compost_energy/    energy_balance, heat_exchanger, simulate, clean
   scripts/           run_scenarios, simulate_run, analyze_run
-  tests/             18 tests: scenario numbers, energy conservation, cleaning
+  tests/             20 tests: scenario numbers, energy conservation, cleaning, reference data
 data/
   simulated/         raw_run_01.csv (noisy log), clean_run_01.csv, truth, ledger, report
   measured/          real runs go here
+  reference/         third-party measured datasets (CC-BY-4.0), with citations
 figures/             generated
 ```
 
@@ -71,6 +84,7 @@ python3 -m venv .venv && .venv/bin/pip install -e "model[test]"
 .venv/bin/python model/scripts/run_scenarios.py                 # energy model + exchanger figures
 .venv/bin/python model/scripts/simulate_run.py                  # writes data/simulated/raw_run_01.csv
 .venv/bin/python model/scripts/analyze_run.py data/simulated/raw_run_01.csv
+.venv/bin/python model/scripts/compare_reference.py             # vs published measurements
 .venv/bin/python -m pytest model/tests
 ```
 
@@ -78,7 +92,7 @@ python3 -m venv .venv && .venv/bin/pip install -e "model[test]"
 
 - [ ] Build prototype 2 and the logger; first measured run in `data/measured/`
 - [ ] Prototype 3 (double exchanger length): measure how output scales with area
-- [ ] Fit the simulation's kinetic and loss parameters to measured data
+- [ ] Fit the simulation's kinetic and loss parameters to measured data (start with the Collins bins)
 - [ ] Dimensioned drawings and coil layout ([drawings/README](hardware/drawings/README.md))
 - [ ] Farm-scale concept: reactor and conveyor design, exhaust-air heat recovery
 

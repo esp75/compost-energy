@@ -1,0 +1,45 @@
+{
+  "bin 5 (rep 1)": {
+    "peak_c": 74.9,
+    "days_above_55c": 10.7,
+    "removed_readings": {
+      "probe_1": 4,
+      "probe_2": 2,
+      "probe_3": 1,
+      "probe_4": 3
+    }
+  },
+  "bin 9 (rep 2)": {
+    "peak_c": 74.8,
+    "days_above_55c": 10.2,
+    "removed_readings": {
+      "probe_1": 2,
+      "probe_2": 2,
+      "probe_3": 2,
+      "probe_4": 2
+    }
+  },
+  "bin 2 (rep 3)": {
+    "peak_c": 76.2,
+    "days_above_55c": 13.9,
+    "removed_readings": {
+      "probe_1": 2,
+      "probe_2": 0,
+      "probe_3": 9,
+      "probe_4": 186
+    }
+  },
+  "simulation": {
+    "peak_c": 65.5,
+    "days_above_55c": 8.5,
+    "fraction_of_microbial_heat_recovered": 0.089
+  },
+  "kojima": {
+    "electricity_kw": 13.3,
+    "microbial_heat_kw": 61.8,
+    "exhaust_at_exchanger_kw": 46.9,
+    "water_heat_gain_kw": 23.3,
+    "fraction_of_microbial_heat_to_water": 0.377,
+    "daily_extracted_from_gas_kw_mean": 22.6
+  }
+}

@@ -42,6 +42,6 @@ There is also a second, independent ceiling: **an exchanger can't extract more h
 ## Design consequences
 
 1. **Surface area beats material.** Swapping aluminium for copper changes almost nothing. What helps is more pipe in contact with the compost, which is what the patent proposed (§8.2: smaller diameter, more parallel circuits). Prototype 3 doubles the tube length to measure exactly this.
-2. **Bring the heat to the pipe.** Forced aeration, extracting heat from the exhaust air (air-to-water, as in the farm-scale design), or turning the material over the coil all raise the effective h far more than any pipe upgrade.
+2. **Bring the heat to the pipe.** Forced aeration, extracting heat from the exhaust air (air-to-water, as in the farm-scale design), or turning the material over the coil all raise the effective h far more than any pipe upgrade. Published measurements back this up. On a dairy farm, a 9.2 m² plate-fin exchanger in the composter's exhaust air removed a mean 22.6 kW, about **2.5 kW/m²**, against ~0.3 kW/m² for the buried pipe at realistic h. It also ran at a larger temperature difference, so this is an order-of-magnitude comparison ([data](../data/reference/README.md)).
 3. **Measure at low flow.** At ~50-130 W, normal pump flows give an outlet rise below the sensor's accuracy. The logger runs at 0.35 L/min to get a 3-5 °C rise.
 4. **Scale is the real fix.** Microbial heat grows with volume while wall losses grow with surface area. That's the physical reason the project [moved to farm scale](pivot.md).
