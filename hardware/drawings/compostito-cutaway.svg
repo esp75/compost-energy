@@ -1,0 +1,265 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 1100" font-family="Helvetica Neue, Helvetica, Arial, sans-serif">
+<title>Compostito - isometric cutaway</title>
+<defs>
+  <marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#1f2328"/></marker>
+  <marker id="arrHot" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#c2410c"/></marker>
+  <marker id="arrCool" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#2563eb"/></marker>
+  <marker id="arrGreen" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#15803d"/></marker>
+  <marker id="dimA" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,1.5 L10,5 L0,8.5 z" fill="#6e7781"/></marker>
+  <pattern id="mesh" width="7" height="7" patternUnits="userSpaceOnUse"><path d="M0,7 L7,0 M0,0 L7,7" stroke="#9ca3af" stroke-width="0.45" opacity="0.7"/></pattern>
+  <pattern id="concrete" width="12" height="12" patternUnits="userSpaceOnUse"><rect width="12" height="12" fill="#e5e7eb"/><circle cx="3" cy="3" r="1.1" fill="#9ca3af"/><circle cx="9" cy="8" r="0.9" fill="#9ca3af"/><circle cx="7" cy="2" r="0.5" fill="#9ca3af"/></pattern>
+  <pattern id="hatch" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><line x1="0" y1="0" x2="0" y2="6" stroke="#9a6a3a" stroke-width="1"/></pattern>
+  <pattern id="grain" width="40" height="10" patternUnits="userSpaceOnUse"><rect width="40" height="10" fill="#f3e6d6"/><path d="M0,5 C10,3 20,7 40,5" stroke="#9a6a3a" stroke-width="0.4" fill="none" opacity="0.5"/></pattern>
+</defs>
+<rect width="1600" height="1100" fill="#ffffff"/>
+<text x="32.0" y="46.0" font-size="24" fill="#1f2328" font-weight="bold" text-anchor="start" >Compostito: isometric cutaway</text>
+<text x="32.0" y="72.0" font-size="14" fill="#6e7781" font-weight="normal" text-anchor="start" >The home unit from the 2024 patent, prototype 2 proportions. Front walls removed; chamber A lifted to show the coil in B.</text>
+<polygon points="600.0,810.4 826.9,941.4 600.0,1072.4 373.1,941.4" fill="#f6f8fa" stroke="#d0d7de" stroke-width="1" stroke-linejoin="round" stroke-dasharray="5 5"/>
+<g id="legs">
+<polygon points="577.6,853.0 600.0,865.9 600.0,252.4 577.6,239.5" fill="#f3e6d6" stroke="#1f2328" stroke-width="1" stroke-linejoin="round" fill-opacity="1.0"/>
+<polygon points="622.4,853.0 600.0,865.9 600.0,252.4 622.4,239.5" fill="#e6d2bb" stroke="#1f2328" stroke-width="1" stroke-linejoin="round" fill-opacity="1.0"/>
+<polygon points="600.0,226.5 622.4,239.5 600.0,252.4 577.6,239.5" fill="#f3e6d6" stroke="#1f2328" stroke-width="1" stroke-linejoin="round" fill-opacity="1.0"/>
+<polygon points="730.7,941.4 753.2,954.3 753.2,761.9 730.7,749.0" fill="#f3e6d6" stroke="#1f2328" stroke-width="1" stroke-linejoin="round" fill-opacity="1.0"/>
+<polygon points="775.6,941.4 753.2,954.3 753.2,761.9 775.6,749.0" fill="#e6d2bb" stroke="#1f2328" stroke-width="1" stroke-linejoin="round" fill-opacity="1.0"/>
+<polygon points="753.2,736.0 775.6,749.0 753.2,761.9 730.7,749.0" fill="#f3e6d6" stroke="#1f2328" stroke-width="1" stroke-linejoin="round" fill-opacity="1.0"/>
+<polygon points="424.4,941.4 446.8,954.3 446.8,761.9 424.4,749.0" fill="#f3e6d6" stroke="#1f2328" stroke-width="1" stroke-linejoin="round" fill-opacity="1.0"/>
+<polygon points="469.3,941.4 446.8,954.3 446.8,761.9 469.3,749.0" fill="#e6d2bb" stroke="#1f2328" stroke-width="1" stroke-linejoin="round" fill-opacity="1.0"/>
+<polygon points="446.8,736.0 469.3,749.0 446.8,761.9 424.4,749.0" fill="#f3e6d6" stroke="#1f2328" stroke-width="1" stroke-linejoin="round" fill-opacity="1.0"/>
+<polygon points="577.6,1029.8 600.0,1042.8 600.0,850.4 577.6,837.4" fill="#f3e6d6" stroke="#1f2328" stroke-width="1" stroke-linejoin="round" fill-opacity="1.0"/>
+<polygon points="622.4,1029.8 600.0,1042.8 600.0,850.4 622.4,837.4" fill="#e6d2bb" stroke="#1f2328" stroke-width="1" stroke-linejoin="round" fill-opacity="1.0"/>
+<polygon points="600.0,824.5 622.4,837.4 600.0,850.4 577.6,837.4" fill="#f3e6d6" stroke="#1f2328" stroke-width="1" stroke-linejoin="round" fill-opacity="1.0"/>
+</g>
+<g id="box">
+<polygon points="600.0,647.6 424.4,749.0 424.4,544.0 600.0,442.6" fill="url(#grain)" stroke="#9a6a3a" stroke-width="1.3" stroke-linejoin="round" />
+<polygon points="600.0,647.6 775.6,749.0 775.6,544.0 600.0,442.6" fill="url(#grain)" stroke="#9a6a3a" stroke-width="1.3" stroke-linejoin="round" />
+<polygon points="600.0,331.4 424.4,432.8 424.4,327.9 600.0,226.5" fill="url(#grain)" stroke="#9a6a3a" stroke-width="1.3" stroke-linejoin="round" />
+<polygon points="600.0,331.4 775.6,432.8 775.6,327.9 600.0,226.5" fill="url(#grain)" stroke="#9a6a3a" stroke-width="1.3" stroke-linejoin="round" />
+<line x1="600.0" y1="647.6" x2="424.4" y2="749.0" stroke="#9a6a3a" stroke-width="0.4" />
+<line x1="600.0" y1="647.6" x2="775.6" y2="749.0" stroke="#9a6a3a" stroke-width="0.4" />
+<line x1="600.0" y1="603.2" x2="424.4" y2="704.6" stroke="#9a6a3a" stroke-width="0.4" />
+<line x1="600.0" y1="603.2" x2="775.6" y2="704.6" stroke="#9a6a3a" stroke-width="0.4" />
+<line x1="600.0" y1="558.8" x2="424.4" y2="660.2" stroke="#9a6a3a" stroke-width="0.4" />
+<line x1="600.0" y1="558.8" x2="775.6" y2="660.2" stroke="#9a6a3a" stroke-width="0.4" />
+<line x1="600.0" y1="514.4" x2="424.4" y2="615.8" stroke="#9a6a3a" stroke-width="0.4" />
+<line x1="600.0" y1="514.4" x2="775.6" y2="615.8" stroke="#9a6a3a" stroke-width="0.4" />
+<line x1="600.0" y1="470.0" x2="424.4" y2="571.4" stroke="#9a6a3a" stroke-width="0.4" />
+<line x1="600.0" y1="470.0" x2="775.6" y2="571.4" stroke="#9a6a3a" stroke-width="0.4" />
+<line x1="600.0" y1="314.6" x2="424.4" y2="416.0" stroke="#9a6a3a" stroke-width="0.4" />
+<line x1="600.0" y1="314.6" x2="775.6" y2="416.0" stroke="#9a6a3a" stroke-width="0.4" />
+<line x1="600.0" y1="270.2" x2="424.4" y2="371.6" stroke="#9a6a3a" stroke-width="0.4" />
+<line x1="600.0" y1="270.2" x2="775.6" y2="371.6" stroke="#9a6a3a" stroke-width="0.4" />
+<polygon points="424.4,749.0 600.0,850.4 600.0,841.5 424.4,740.1" fill="#f3e6d6" stroke="#9a6a3a" stroke-width="1.2" stroke-linejoin="round" fill-opacity="1.0"/>
+<polygon points="775.6,749.0 600.0,850.4 600.0,841.5 775.6,740.1" fill="#e6d2bb" stroke="#9a6a3a" stroke-width="1.2" stroke-linejoin="round" fill-opacity="1.0"/>
+<polygon points="600.0,638.7 775.6,740.1 600.0,841.5 424.4,740.1" fill="#f3e6d6" stroke="#9a6a3a" stroke-width="1.2" stroke-linejoin="round" fill-opacity="1.0"/>
+</g>
+<polygon points="439.8,740.1 600.0,832.6 600.0,828.9 439.8,736.4" fill="#e5e7eb" stroke="#9ca3af" stroke-width="0.8" stroke-linejoin="round" fill-opacity="1.0"/>
+<polygon points="760.2,740.1 600.0,832.6 600.0,828.9 760.2,736.4" fill="#9ca3af" stroke="#9ca3af" stroke-width="0.8" stroke-linejoin="round" fill-opacity="1.0"/>
+<polygon points="600.0,643.9 760.2,736.4 600.0,828.9 439.8,736.4" fill="#e5e7eb" stroke="#9ca3af" stroke-width="0.8" stroke-linejoin="round" fill-opacity="1.0"/>
+<polygon points="439.8,690.1 600.0,782.7 600.0,779.0 439.8,686.5" fill="#e5e7eb" stroke="#9ca3af" stroke-width="0.8" stroke-linejoin="round" fill-opacity="1.0"/>
+<polygon points="760.2,690.1 600.0,782.7 600.0,779.0 760.2,686.5" fill="#9ca3af" stroke="#9ca3af" stroke-width="0.8" stroke-linejoin="round" fill-opacity="1.0"/>
+<polygon points="600.0,594.0 760.2,686.5 600.0,779.0 439.8,686.5" fill="#e5e7eb" stroke="#9ca3af" stroke-width="0.8" stroke-linejoin="round" fill-opacity="1.0"/>
+<polygon points="439.8,640.2 600.0,732.7 600.0,729.0 439.8,636.5" fill="#e5e7eb" stroke="#9ca3af" stroke-width="0.8" stroke-linejoin="round" fill-opacity="1.0"/>
+<polygon points="760.2,640.2 600.0,732.7 600.0,729.0 760.2,636.5" fill="#9ca3af" stroke="#9ca3af" stroke-width="0.8" stroke-linejoin="round" fill-opacity="1.0"/>
+<polygon points="600.0,544.0 760.2,636.5 600.0,729.0 439.8,636.5" fill="#e5e7eb" stroke="#9ca3af" stroke-width="0.8" stroke-linejoin="round" fill-opacity="1.0"/>
+<polygon points="439.8,432.6 600.0,525.1 600.0,521.8 439.8,429.3" fill="#e5e7eb" stroke="#9ca3af" stroke-width="0.8" stroke-linejoin="round" fill-opacity="1.0"/>
+<polygon points="760.2,432.6 600.0,525.1 600.0,521.8 760.2,429.3" fill="#9ca3af" stroke="#9ca3af" stroke-width="0.8" stroke-linejoin="round" fill-opacity="1.0"/>
+<polygon points="600.0,336.8 760.2,429.3 600.0,521.8 439.8,429.3" fill="#e5e7eb" stroke="#9ca3af" stroke-width="0.8" stroke-linejoin="round" fill-opacity="1.0"/>
+<line x1="600.0" y1="451.7" x2="600.0" y2="340.3" stroke="#6e7781" stroke-width="0.9" stroke-dasharray="2 4"/>
+<line x1="760.2" y1="544.2" x2="760.2" y2="432.8" stroke="#6e7781" stroke-width="0.9" stroke-dasharray="2 4"/>
+<line x1="439.8" y1="544.2" x2="439.8" y2="432.8" stroke="#6e7781" stroke-width="0.9" stroke-dasharray="2 4"/>
+<line x1="600.0" y1="636.7" x2="600.0" y2="525.3" stroke="#6e7781" stroke-width="0.9" stroke-dasharray="2 4"/>
+<g id="chamberD">
+<polygon points="439.8,736.4 600.0,828.9 600.0,782.7 439.8,690.1" fill="#d9f99d" stroke="#1f2328" stroke-width="1.0" stroke-linejoin="round" fill-opacity="0.92"/>
+<polygon points="760.2,736.4 600.0,828.9 600.0,782.7 760.2,690.1" fill="#d9f99d" stroke="#1f2328" stroke-width="1.0" stroke-linejoin="round" fill-opacity="0.92"/>
+<polygon points="600.0,597.6 760.2,690.1 600.0,782.7 439.8,690.1" fill="#d9f99d" stroke="#1f2328" stroke-width="1.0" stroke-linejoin="round" fill-opacity="0.92"/>
+<polygon points="760.2,736.4 600.0,828.9 600.0,782.7 760.2,690.1" fill="url(#mesh)" stroke="none" stroke-width="0" stroke-linejoin="round" />
+<polygon points="439.8,736.4 600.0,828.9 600.0,782.7 439.8,690.1" fill="url(#mesh)" stroke="none" stroke-width="0" stroke-linejoin="round" />
+<text x="678.1" y="761.5" font-size="28" fill="#1f2328" font-weight="bold" text-anchor="end" fill-opacity="0.85" font-family="Georgia, serif">D</text>
+</g>
+<g id="chamberC">
+<polygon points="439.8,686.5 600.0,779.0 600.0,732.7 439.8,640.2" fill="#bfdbfe" stroke="#1f2328" stroke-width="1.0" stroke-linejoin="round" fill-opacity="0.92"/>
+<polygon points="760.2,686.5 600.0,779.0 600.0,732.7 760.2,640.2" fill="#bfdbfe" stroke="#1f2328" stroke-width="1.0" stroke-linejoin="round" fill-opacity="0.92"/>
+<polygon points="600.0,547.7 760.2,640.2 600.0,732.7 439.8,640.2" fill="#bfdbfe" stroke="#1f2328" stroke-width="1.0" stroke-linejoin="round" fill-opacity="0.92"/>
+<polygon points="760.2,686.5 600.0,779.0 600.0,732.7 760.2,640.2" fill="url(#mesh)" stroke="none" stroke-width="0" stroke-linejoin="round" />
+<polygon points="439.8,686.5 600.0,779.0 600.0,732.7 439.8,640.2" fill="url(#mesh)" stroke="none" stroke-width="0" stroke-linejoin="round" />
+<text x="678.1" y="711.6" font-size="28" fill="#1f2328" font-weight="bold" text-anchor="end" fill-opacity="0.85" font-family="Georgia, serif">C</text>
+</g>
+<g id="chamberB">
+<polygon points="452.6,612.5 600.0,697.5 600.0,668.0 452.6,582.9" fill="#e5e7eb" stroke="#9ca3af" stroke-width="0.9" stroke-linejoin="round" fill-opacity="1.0"/>
+<polygon points="747.4,612.5 600.0,697.5 600.0,668.0 747.4,582.9" fill="#e5e7eb" stroke="#9ca3af" stroke-width="0.9" stroke-linejoin="round" fill-opacity="1.0"/>
+<polygon points="600.0,497.8 747.4,582.9 600.0,668.0 452.6,582.9" fill="url(#concrete)" stroke="#9ca3af" stroke-width="0.9" stroke-linejoin="round" fill-opacity="1.0"/>
+<g id="coil">
+<path d="M785.3,629.0 L721.5,592.2 L583.7,512.7 L562.7,524.8 L700.5,604.4 L679.4,616.5 L541.6,537.0 L520.6,549.2 L658.4,628.7 L637.3,640.9 L499.5,561.3 L478.5,573.5 L616.3,653.0 L680.0,689.8" stroke="#c2410c" stroke-width="6.5" fill="none" stroke-linejoin="round" stroke-linecap="round" />
+<path d="M785.3,629.0 L721.5,592.2 L583.7,512.7 L562.7,524.8 L700.5,604.4 L679.4,616.5 L541.6,537.0 L520.6,549.2 L658.4,628.7 L637.3,640.9 L499.5,561.3 L478.5,573.5 L616.3,653.0 L680.0,689.8" stroke="#ffffff" stroke-width="2.2" fill="none" stroke-linejoin="round" stroke-linecap="round" opacity="0.55"/>
+</g>
+<polygon points="439.8,636.5 600.0,729.0 600.0,636.5 439.8,544.0" fill="#fca5a5" stroke="#1f2328" stroke-width="1.0" stroke-linejoin="round" fill-opacity="0.42"/>
+<polygon points="760.2,636.5 600.0,729.0 600.0,636.5 760.2,544.0" fill="#fca5a5" stroke="#1f2328" stroke-width="1.0" stroke-linejoin="round" fill-opacity="0.42"/>
+<polygon points="600.0,451.5 760.2,544.0 600.0,636.5 439.8,544.0" fill="#fca5a5" stroke="#1f2328" stroke-width="1.0" stroke-linejoin="round" fill-opacity="0.42"/>
+<polygon points="760.2,636.5 600.0,729.0 600.0,636.5 760.2,544.0" fill="url(#mesh)" stroke="none" stroke-width="0" stroke-linejoin="round" />
+<polygon points="439.8,636.5 600.0,729.0 600.0,636.5 439.8,544.0" fill="url(#mesh)" stroke="none" stroke-width="0" stroke-linejoin="round" />
+<text x="678.1" y="638.5" font-size="28" fill="#1f2328" font-weight="bold" text-anchor="end" fill-opacity="0.85" font-family="Georgia, serif">B</text>
+</g>
+<g id="chamberA">
+<polygon points="439.8,429.3 600.0,521.8 600.0,429.3 439.8,336.8" fill="#fde68a" stroke="#1f2328" stroke-width="1.0" stroke-linejoin="round" fill-opacity="0.92"/>
+<polygon points="760.2,429.3 600.0,521.8 600.0,429.3 760.2,336.8" fill="#fde68a" stroke="#1f2328" stroke-width="1.0" stroke-linejoin="round" fill-opacity="0.92"/>
+<polygon points="600.0,244.3 760.2,336.8 600.0,429.3 439.8,336.8" fill="#fde68a" stroke="#1f2328" stroke-width="1.0" stroke-linejoin="round" fill-opacity="0.92"/>
+<polygon points="760.2,429.3 600.0,521.8 600.0,429.3 760.2,336.8" fill="url(#mesh)" stroke="none" stroke-width="0" stroke-linejoin="round" />
+<polygon points="439.8,429.3 600.0,521.8 600.0,429.3 439.8,336.8" fill="url(#mesh)" stroke="none" stroke-width="0" stroke-linejoin="round" />
+<text x="678.1" y="431.3" font-size="28" fill="#1f2328" font-weight="bold" text-anchor="end" fill-opacity="0.85" font-family="Georgia, serif">A</text>
+</g>
+<g id="lid">
+<polygon points="424.4,336.8 600.0,438.2 600.0,429.3 424.4,327.9" fill="#f3e6d6" stroke="#9a6a3a" stroke-width="1.3" stroke-linejoin="round" fill-opacity="1.0"/>
+<polygon points="775.6,336.8 600.0,438.2 600.0,429.3 775.6,327.9" fill="#e6d2bb" stroke="#9a6a3a" stroke-width="1.3" stroke-linejoin="round" fill-opacity="1.0"/>
+<polygon points="600.0,226.5 775.6,327.9 600.0,429.3 424.4,327.9" fill="#f3e6d6" stroke="#9a6a3a" stroke-width="1.3" stroke-linejoin="round" fill-opacity="1.0"/>
+<polygon points="663.4,306.8 727.5,343.8 628.8,400.8 564.8,363.8" fill="#e6d2bb" stroke="#9a6a3a" stroke-width="1.4" stroke-linejoin="round" />
+</g>
+<g id="tray">
+<polygon points="455.8,317.2 539.1,365.3 539.1,291.3 455.8,243.2" fill="#f6f8fa" stroke="#6e7781" stroke-width="1.1" stroke-linejoin="round" fill-opacity="1.0"/>
+<polygon points="667.3,291.3 539.1,365.3 539.1,291.3 667.3,217.3" fill="#d0d7de" stroke="#6e7781" stroke-width="1.1" stroke-linejoin="round" fill-opacity="1.0"/>
+<polygon points="584.0,169.2 667.3,217.3 539.1,291.3 455.8,243.2" fill="#f6f8fa" stroke="#6e7781" stroke-width="1.1" stroke-linejoin="round" fill-opacity="1.0"/>
+</g>
+<g id="phantom">
+<line x1="775.6" y1="749.0" x2="775.6" y2="327.9" stroke="#6e7781" stroke-width="0.9" stroke-dasharray="6 5"/>
+<line x1="424.4" y1="749.0" x2="424.4" y2="327.9" stroke="#6e7781" stroke-width="0.9" stroke-dasharray="6 5"/>
+<line x1="600.0" y1="850.4" x2="600.0" y2="438.2" stroke="#6e7781" stroke-width="0.9" stroke-dasharray="6 5"/>
+<line x1="775.6" y1="749.0" x2="600.0" y2="850.4" stroke="#6e7781" stroke-width="0.9" stroke-dasharray="6 5"/>
+<line x1="424.4" y1="749.0" x2="600.0" y2="850.4" stroke="#6e7781" stroke-width="0.9" stroke-dasharray="6 5"/>
+</g>
+<g id="drip">
+<path d="M622.4,243.2 L600.0,250.2 L600.0,473.7 L654.5,505.1" stroke="#2563eb" stroke-width="2" fill="none" stroke-linejoin="round" stroke-linecap="round" stroke-dasharray="5 3"/>
+</g>
+<g id="air">
+<line x1="392.2" y1="710.9" x2="504.2" y2="674.9" stroke="#2563eb" stroke-width="2.4" marker-end="url(#arrCool)"/>
+<line x1="687.0" y1="399.7" x2="809.0" y2="353.7" stroke="#c2410c" stroke-width="2.4" marker-end="url(#arrHot)"/>
+<path d="M710.2,746.8 C728.2,618.5 692.2,490.2 710.2,362.0" stroke="#2563eb" stroke-width="1.3" fill="none" stroke-linejoin="round" stroke-linecap="round" stroke-dasharray="3 4" marker-end="url(#arrHot)" opacity="0.75"/>
+<path d="M670.2,769.9 C688.2,641.6 652.2,513.4 670.2,385.1" stroke="#c2410c" stroke-width="1.3" fill="none" stroke-linejoin="round" stroke-linecap="round" stroke-dasharray="3 4" marker-end="url(#arrHot)" opacity="0.75"/>
+<path d="M630.1,793.0 C648.1,664.7 612.1,536.5 630.1,408.2" stroke="#2563eb" stroke-width="1.3" fill="none" stroke-linejoin="round" stroke-linecap="round" stroke-dasharray="3 4" marker-end="url(#arrHot)" opacity="0.75"/>
+</g>
+<g id="intake">
+<line x1="646.1" y1="203.1" x2="646.1" y2="339.1" stroke="#1f2328" stroke-width="2.2" marker-end="url(#arr)"/>
+<text x="656.1" y="213.1" font-size="13" fill="#6e7781" font-weight="normal" text-anchor="start" >food &amp; garden waste</text>
+</g>
+<g id="probe">
+<line x1="369.8" y1="590.2" x2="584.0" y2="581.4" stroke="#15803d" stroke-width="1.6" />
+<circle cx="584.0" cy="581.4" r="4" fill="#15803d"/>
+<rect x="249.8" y="564.2" width="120.0" height="52.0" fill="#111827" stroke="#111827" stroke-width="1" rx="7"/>
+<text x="309.8" y="587.2" font-size="16" fill="#86efac" font-weight="normal" text-anchor="middle" font-family="Menlo, monospace">62.4 °C</text>
+<text x="309.8" y="606.2" font-size="12" fill="#86efac" font-weight="normal" text-anchor="middle" font-family="Menlo, monospace">RH 96 %</text>
+</g>
+<g id="water">
+<line x1="785.3" y1="629.0" x2="875.3" y2="629.0" stroke="#2563eb" stroke-width="3" marker-start="url(#arrCool)"/>
+<line x1="680.0" y1="689.8" x2="770.0" y2="689.8" stroke="#c2410c" stroke-width="3" marker-end="url(#arrHot)"/>
+<text x="881.3" y="634.0" font-size="12.5" fill="#2563eb" font-weight="normal" text-anchor="start" >in ~40 °C</text>
+<text x="776.0" y="694.8" font-size="12.5" fill="#c2410c" font-weight="normal" text-anchor="start" >out, pre-heated</text>
+</g>
+<g id="callouts">
+<line x1="1040.0" y1="353.1" x2="646.1" y2="353.1" stroke="#6e7781" stroke-width="0.9" />
+<circle cx="646.1" cy="353.1" r="2.6" fill="#1f2328"/>
+<circle cx="1040.0" cy="353.1" r="12" fill="#ffffff" stroke="#1f2328" stroke-width="1.2"/>
+<text x="1040.0" y="357.6" font-size="12" fill="#1f2328" font-weight="bold" text-anchor="middle" >1</text>
+<line x1="230.0" y1="230.2" x2="561.5" y2="230.2" stroke="#6e7781" stroke-width="0.9" />
+<circle cx="561.5" cy="230.2" r="2.6" fill="#1f2328"/>
+<circle cx="230.0" cy="230.2" r="12" fill="#ffffff" stroke="#1f2328" stroke-width="1.2"/>
+<text x="230.0" y="234.7" font-size="12" fill="#1f2328" font-weight="bold" text-anchor="middle" >2</text>
+<line x1="1040.0" y1="422.7" x2="675.6" y2="422.7" stroke="#6e7781" stroke-width="0.9" />
+<circle cx="675.6" cy="422.7" r="2.6" fill="#1f2328"/>
+<circle cx="1040.0" cy="422.7" r="12" fill="#ffffff" stroke="#1f2328" stroke-width="1.2"/>
+<text x="1040.0" y="427.2" font-size="12" fill="#1f2328" font-weight="bold" text-anchor="middle" >3</text>
+<line x1="1040.0" y1="635.6" x2="633.6" y2="635.6" stroke="#6e7781" stroke-width="0.9" />
+<circle cx="633.6" cy="635.6" r="2.6" fill="#1f2328"/>
+<circle cx="1040.0" cy="635.6" r="12" fill="#ffffff" stroke="#1f2328" stroke-width="1.2"/>
+<text x="1040.0" y="640.1" font-size="12" fill="#1f2328" font-weight="bold" text-anchor="middle" >4</text>
+<line x1="1040.0" y1="524.8" x2="562.7" y2="524.8" stroke="#6e7781" stroke-width="0.9" />
+<circle cx="562.7" cy="524.8" r="2.6" fill="#1f2328"/>
+<circle cx="1040.0" cy="524.8" r="12" fill="#ffffff" stroke="#1f2328" stroke-width="1.2"/>
+<text x="1040.0" y="529.3" font-size="12" fill="#1f2328" font-weight="bold" text-anchor="middle" >5</text>
+<line x1="1040.0" y1="727.7" x2="650.4" y2="727.7" stroke="#6e7781" stroke-width="0.9" />
+<circle cx="650.4" cy="727.7" r="2.6" fill="#1f2328"/>
+<circle cx="1040.0" cy="727.7" r="12" fill="#ffffff" stroke="#1f2328" stroke-width="1.2"/>
+<text x="1040.0" y="732.2" font-size="12" fill="#1f2328" font-weight="bold" text-anchor="middle" >6</text>
+<line x1="1040.0" y1="782.5" x2="642.0" y2="782.5" stroke="#6e7781" stroke-width="0.9" />
+<circle cx="642.0" cy="782.5" r="2.6" fill="#1f2328"/>
+<circle cx="1040.0" cy="782.5" r="12" fill="#ffffff" stroke="#1f2328" stroke-width="1.2"/>
+<text x="1040.0" y="787.0" font-size="12" fill="#1f2328" font-weight="bold" text-anchor="middle" >7</text>
+<line x1="230.0" y1="410.8" x2="459.0" y2="410.8" stroke="#6e7781" stroke-width="0.9" />
+<circle cx="459.0" cy="410.8" r="2.6" fill="#1f2328"/>
+<circle cx="230.0" cy="410.8" r="12" fill="#ffffff" stroke="#1f2328" stroke-width="1.2"/>
+<text x="230.0" y="415.3" font-size="12" fill="#1f2328" font-weight="bold" text-anchor="middle" >8</text>
+<line x1="230.0" y1="702.7" x2="465.4" y2="702.7" stroke="#6e7781" stroke-width="0.9" />
+<circle cx="465.4" cy="702.7" r="2.6" fill="#1f2328"/>
+<circle cx="230.0" cy="702.7" r="12" fill="#ffffff" stroke="#1f2328" stroke-width="1.2"/>
+<text x="230.0" y="707.2" font-size="12" fill="#1f2328" font-weight="bold" text-anchor="middle" >9</text>
+<line x1="230.0" y1="329.4" x2="600.0" y2="329.4" stroke="#6e7781" stroke-width="0.9" />
+<circle cx="600.0" cy="329.4" r="2.6" fill="#1f2328"/>
+<circle cx="230.0" cy="329.4" r="12" fill="#ffffff" stroke="#1f2328" stroke-width="1.2"/>
+<text x="230.0" y="333.9" font-size="12" fill="#1f2328" font-weight="bold" text-anchor="middle" >10</text>
+<line x1="230.0" y1="949.3" x2="611.2" y2="949.3" stroke="#6e7781" stroke-width="0.9" />
+<circle cx="611.2" cy="949.3" r="2.6" fill="#1f2328"/>
+<circle cx="230.0" cy="949.3" r="12" fill="#ffffff" stroke="#1f2328" stroke-width="1.2"/>
+<text x="230.0" y="953.8" font-size="12" fill="#1f2328" font-weight="bold" text-anchor="middle" >11</text>
+</g>
+<text x="1150.0" y="130.0" font-size="11" fill="#6e7781" font-weight="normal" text-anchor="start" letter-spacing="2">PARTS</text>
+<circle cx="1160" cy="154" r="10" fill="none" stroke="#1f2328" stroke-width="1"/>
+<text x="1160.0" y="158.0" font-size="10.5" fill="#1f2328" font-weight="bold" text-anchor="middle" >1</text>
+<text x="1180.0" y="158.0" font-size="12.5" fill="#1f2328" font-weight="normal" text-anchor="start" >Intake hatch on the lid: fresh waste</text>
+<text x="1180.0" y="173.0" font-size="12.5" fill="#6e7781" font-weight="normal" text-anchor="start" >goes in at the top</text>
+<circle cx="1160" cy="194" r="10" fill="none" stroke="#1f2328" stroke-width="1"/>
+<text x="1160.0" y="198.0" font-size="10.5" fill="#1f2328" font-weight="bold" text-anchor="middle" >2</text>
+<text x="1180.0" y="198.0" font-size="12.5" fill="#1f2328" font-weight="normal" text-anchor="start" >Rainwater reserve (600 × 400 Euro</text>
+<text x="1180.0" y="213.0" font-size="12.5" fill="#6e7781" font-weight="normal" text-anchor="start" >container)</text>
+<circle cx="1160" cy="234" r="10" fill="none" stroke="#1f2328" stroke-width="1"/>
+<text x="1160.0" y="238.0" font-size="10.5" fill="#1f2328" font-weight="bold" text-anchor="middle" >3</text>
+<text x="1180.0" y="238.0" font-size="12.5" fill="#1f2328" font-weight="normal" text-anchor="start" >A  Mesophilic: 40-45 °C, ~1 week</text>
+<circle cx="1160" cy="274" r="10" fill="none" stroke="#1f2328" stroke-width="1"/>
+<text x="1160.0" y="278.0" font-size="10.5" fill="#1f2328" font-weight="bold" text-anchor="middle" >4</text>
+<text x="1180.0" y="278.0" font-size="12.5" fill="#1f2328" font-weight="normal" text-anchor="start" >B  Thermophilic: 55-70 °C, 3-4 weeks;</text>
+<text x="1180.0" y="293.0" font-size="12.5" fill="#6e7781" font-weight="normal" text-anchor="start" >heat taken here</text>
+<circle cx="1160" cy="314" r="10" fill="none" stroke="#1f2328" stroke-width="1"/>
+<text x="1160.0" y="318.0" font-size="10.5" fill="#1f2328" font-weight="bold" text-anchor="middle" >5</text>
+<text x="1180.0" y="318.0" font-size="12.5" fill="#1f2328" font-weight="normal" text-anchor="start" >Aluminium coil (Ø19 mm, 3 m) cast in a</text>
+<text x="1180.0" y="333.0" font-size="12.5" fill="#6e7781" font-weight="normal" text-anchor="start" >concrete block</text>
+<circle cx="1160" cy="354" r="10" fill="none" stroke="#1f2328" stroke-width="1"/>
+<text x="1160.0" y="358.0" font-size="10.5" fill="#1f2328" font-weight="bold" text-anchor="middle" >6</text>
+<text x="1180.0" y="358.0" font-size="12.5" fill="#1f2328" font-weight="normal" text-anchor="start" >C  Cooling, half volume</text>
+<circle cx="1160" cy="394" r="10" fill="none" stroke="#1f2328" stroke-width="1"/>
+<text x="1160.0" y="398.0" font-size="10.5" fill="#1f2328" font-weight="bold" text-anchor="middle" >7</text>
+<text x="1180.0" y="398.0" font-size="12.5" fill="#1f2328" font-weight="normal" text-anchor="start" >D  Maturation, half volume: finished</text>
+<text x="1180.0" y="413.0" font-size="12.5" fill="#6e7781" font-weight="normal" text-anchor="start" >compost</text>
+<circle cx="1160" cy="434" r="10" fill="none" stroke="#1f2328" stroke-width="1"/>
+<text x="1160.0" y="438.0" font-size="10.5" fill="#1f2328" font-weight="bold" text-anchor="middle" >8</text>
+<text x="1180.0" y="438.0" font-size="12.5" fill="#1f2328" font-weight="normal" text-anchor="start" >Plastic-mesh inner chambers keep air</text>
+<text x="1180.0" y="453.0" font-size="12.5" fill="#6e7781" font-weight="normal" text-anchor="start" >moving through</text>
+<circle cx="1160" cy="474" r="10" fill="none" stroke="#1f2328" stroke-width="1"/>
+<text x="1160.0" y="478.0" font-size="10.5" fill="#1f2328" font-weight="bold" text-anchor="middle" >9</text>
+<text x="1180.0" y="478.0" font-size="12.5" fill="#1f2328" font-weight="normal" text-anchor="start" >Solid PVC floors hold moisture between</text>
+<text x="1180.0" y="493.0" font-size="12.5" fill="#6e7781" font-weight="normal" text-anchor="start" >phases</text>
+<circle cx="1160" cy="514" r="10" fill="none" stroke="#1f2328" stroke-width="1"/>
+<text x="1160.0" y="518.0" font-size="10.5" fill="#1f2328" font-weight="bold" text-anchor="middle" >10</text>
+<text x="1180.0" y="518.0" font-size="12.5" fill="#1f2328" font-weight="normal" text-anchor="start" >Drip line keeps B at 50-60 % moisture</text>
+<circle cx="1160" cy="554" r="10" fill="none" stroke="#1f2328" stroke-width="1"/>
+<text x="1160.0" y="558.0" font-size="10.5" fill="#1f2328" font-weight="bold" text-anchor="middle" >11</text>
+<text x="1180.0" y="558.0" font-size="12.5" fill="#1f2328" font-weight="normal" text-anchor="start" >Treated-timber box on 70 × 70 stilts</text>
+<text x="1150.0" y="640.0" font-size="11" fill="#6e7781" font-weight="normal" text-anchor="start" letter-spacing="2">AIR</text>
+<text x="1150.0" y="664.0" font-size="13" fill="#2563eb" font-weight="normal" text-anchor="start" >VB low vent: fresh air in</text>
+<text x="1150.0" y="684.0" font-size="13" fill="#c2410c" font-weight="normal" text-anchor="start" >VH high vent: warm, moist air out</text>
+<text x="1150.0" y="704.0" font-size="12.5" fill="#6e7781" font-weight="normal" text-anchor="start" >Warm air rises through the mesh (chimney effect).</text>
+<text x="32.0" y="1070.0" font-size="12" fill="#6e7781" font-weight="normal" text-anchor="start" >Indicative proportions derived from the prototype bill of materials, not a verified build.</text>
+<rect x="1146.0" y="972.0" width="430.0" height="104.0" fill="#ffffff" stroke="#1f2328" stroke-width="1.4" />
+<line x1="1146.0" y1="1012.0" x2="1576.0" y2="1012.0" stroke="#1f2328" stroke-width="0.8" />
+<line x1="1146.0" y1="1044.0" x2="1576.0" y2="1044.0" stroke="#d0d7de" stroke-width="0.8" />
+<line x1="1296.0" y1="1012.0" x2="1296.0" y2="1076.0" stroke="#d0d7de" stroke-width="0.8" />
+<line x1="1436.0" y1="1012.0" x2="1436.0" y2="1076.0" stroke="#d0d7de" stroke-width="0.8" />
+<text x="1160.0" y="998.0" font-size="15" fill="#1f2328" font-weight="bold" text-anchor="start" >Compostito: isometric cutaway</text>
+<text x="1160.0" y="1026.0" font-size="8.5" fill="#6e7781" font-weight="normal" text-anchor="start" letter-spacing="1">DRAWING</text>
+<text x="1160.0" y="1039.0" font-size="11.5" fill="#1f2328" font-weight="normal" text-anchor="start" >CE-01</text>
+<text x="1310.0" y="1026.0" font-size="8.5" fill="#6e7781" font-weight="normal" text-anchor="start" letter-spacing="1">REV / DATE</text>
+<text x="1310.0" y="1039.0" font-size="11.5" fill="#1f2328" font-weight="normal" text-anchor="start" >A · 2026-10</text>
+<text x="1450.0" y="1026.0" font-size="8.5" fill="#6e7781" font-weight="normal" text-anchor="start" letter-spacing="1">SCALE</text>
+<text x="1450.0" y="1039.0" font-size="11.5" fill="#1f2328" font-weight="normal" text-anchor="start" >NTS, indicative</text>
+<text x="1160.0" y="1058.0" font-size="8.5" fill="#6e7781" font-weight="normal" text-anchor="start" letter-spacing="1">AUTHOR</text>
+<text x="1160.0" y="1071.0" font-size="11.5" fill="#1f2328" font-weight="normal" text-anchor="start" >Maxime Kadri</text>
+<text x="1310.0" y="1058.0" font-size="8.5" fill="#6e7781" font-weight="normal" text-anchor="start" letter-spacing="1">PROJECT</text>
+<text x="1310.0" y="1071.0" font-size="11.5" fill="#1f2328" font-weight="normal" text-anchor="start" >Compost Energy</text>
+<text x="1450.0" y="1058.0" font-size="8.5" fill="#6e7781" font-weight="normal" text-anchor="start" letter-spacing="1">LICENCE</text>
+<text x="1450.0" y="1071.0" font-size="11.5" fill="#1f2328" font-weight="normal" text-anchor="start" >CERN-OHL-P-2.0</text>
+</svg>

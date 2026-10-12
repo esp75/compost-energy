@@ -7,7 +7,7 @@ Compost Energy is open hardware. Different parts of the repo are under licenses 
 | Hardware design: drawings, BOM, mechanical and electrical design, the design described in the patent text | `hardware/`, the design content of `docs/` | [CERN-OHL-P v2](LICENSES/CERN-OHL-P-2.0.txt) |
 | Documentation and the patent text (French original and English translation) | `docs/`, `README.md` | [CC-BY-4.0](LICENSES/CC-BY-4.0.txt) |
 | Software: model, simulation, analysis scripts, logger firmware | `model/`, `hardware/logger/` | [MIT](LICENSES/MIT.txt) |
-| Data and generated figures | `data/`, `figures/` | [CC-BY-4.0](LICENSES/CC-BY-4.0.txt) |
+| Data, generated figures and the explainer video | `data/`, `figures/`, `video/` (except `video/src/`, which is MIT) | [CC-BY-4.0](LICENSES/CC-BY-4.0.txt) |
 | Third-party measured datasets | `data/reference/collins2021/`, `data/reference/kojima2022/` | CC-BY-4.0 **by their original authors**. See [data/reference/README.md](data/reference/README.md) for citations. |
 | Name and logo ("Compost Energy", "Compostenergies") | `assets/brand/` | **Not licensed.** All rights reserved. You may use the files to refer to this project, not to brand your own product. |
 

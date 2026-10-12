@@ -1,0 +1,103 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 1000" font-family="Helvetica Neue, Helvetica, Arial, sans-serif">
+<title>Farm-scale plant layout</title>
+<defs>
+  <marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#1f2328"/></marker>
+  <marker id="arrHot" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#c2410c"/></marker>
+  <marker id="arrCool" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#2563eb"/></marker>
+  <marker id="arrGreen" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#15803d"/></marker>
+  <marker id="dimA" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,1.5 L10,5 L0,8.5 z" fill="#6e7781"/></marker>
+  <pattern id="mesh" width="7" height="7" patternUnits="userSpaceOnUse"><path d="M0,7 L7,0 M0,0 L7,7" stroke="#9ca3af" stroke-width="0.45" opacity="0.7"/></pattern>
+  <pattern id="concrete" width="12" height="12" patternUnits="userSpaceOnUse"><rect width="12" height="12" fill="#e5e7eb"/><circle cx="3" cy="3" r="1.1" fill="#9ca3af"/><circle cx="9" cy="8" r="0.9" fill="#9ca3af"/><circle cx="7" cy="2" r="0.5" fill="#9ca3af"/></pattern>
+  <pattern id="hatch" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><line x1="0" y1="0" x2="0" y2="6" stroke="#9a6a3a" stroke-width="1"/></pattern>
+  <pattern id="grain" width="40" height="10" patternUnits="userSpaceOnUse"><rect width="40" height="10" fill="#f3e6d6"/><path d="M0,5 C10,3 20,7 40,5" stroke="#9a6a3a" stroke-width="0.4" fill="none" opacity="0.5"/></pattern>
+</defs>
+<rect width="1600" height="1000" fill="#ffffff"/>
+<text x="32.0" y="46.0" font-size="24" fill="#1f2328" font-weight="bold" text-anchor="start" >Farm-scale plant: layout (first pass)</text>
+<text x="32.0" y="72.0" font-size="14" fill="#6e7781" font-weight="normal" text-anchor="start" >Where the project went after the home numbers didn't add up. Sizes from farm_sizing() in model/compost_energy/energy_balance.py.</text>
+<rect x="60.0" y="170.0" width="220.0" height="120.0" fill="#f6f8fa" stroke="#1f2328" stroke-width="1.6" rx="10" fill-opacity="0.9"/>
+<text x="76.0" y="200.0" font-size="15" fill="#1f2328" font-weight="bold" text-anchor="start" >1  Reception</text>
+<text x="76.0" y="222.0" font-size="12" fill="#1f2328" font-weight="normal" text-anchor="start" >39 t/day manure, silage,</text>
+<text x="76.0" y="240.0" font-size="12" fill="#6e7781" font-weight="normal" text-anchor="start" >straw ≈ 46 m³/day</text>
+<text x="76.0" y="258.0" font-size="12" fill="#6e7781" font-weight="normal" text-anchor="start" >optional shredding</text>
+<rect x="340.0" y="140.0" width="640.0" height="330.0" fill="none" stroke="#1f2328" stroke-width="1.2" rx="14" stroke-dasharray="8 6"/>
+<text x="360.0" y="166.0" font-size="13" fill="#6e7781" font-weight="normal" text-anchor="start" >Enclosed reactors · ~490 m³ of material</text>
+<rect x="360.0" y="190.0" width="180.0" height="150.0" fill="#fde68a" stroke="#1f2328" stroke-width="1.6" rx="10" fill-opacity="0.9"/>
+<text x="376.0" y="220.0" font-size="15" fill="#1f2328" font-weight="bold" text-anchor="start" >2  Reactor A</text>
+<text x="376.0" y="242.0" font-size="12" fill="#1f2328" font-weight="normal" text-anchor="start" >mesophilic</text>
+<text x="376.0" y="260.0" font-size="12" fill="#6e7781" font-weight="normal" text-anchor="start" >seeded, mixed</text>
+<text x="376.0" y="278.0" font-size="12" fill="#6e7781" font-weight="normal" text-anchor="start" >~40-45 °C</text>
+<rect x="570.0" y="190.0" width="190.0" height="150.0" fill="#fca5a5" stroke="#1f2328" stroke-width="1.6" rx="10" fill-opacity="0.9"/>
+<text x="586.0" y="220.0" font-size="15" fill="#1f2328" font-weight="bold" text-anchor="start" >3  Reactor B</text>
+<text x="586.0" y="242.0" font-size="12" fill="#1f2328" font-weight="normal" text-anchor="start" >thermophilic</text>
+<text x="586.0" y="260.0" font-size="12" fill="#6e7781" font-weight="normal" text-anchor="start" >55-70 °C, aerated</text>
+<text x="586.0" y="278.0" font-size="12" fill="#6e7781" font-weight="normal" text-anchor="start" >sanitises the compost</text>
+<rect x="790.0" y="190.0" width="170.0" height="150.0" fill="#bfdbfe" stroke="#1f2328" stroke-width="1.6" rx="10" fill-opacity="0.9"/>
+<text x="806.0" y="220.0" font-size="15" fill="#1f2328" font-weight="bold" text-anchor="start" >4  Reactor C</text>
+<text x="806.0" y="242.0" font-size="12" fill="#1f2328" font-weight="normal" text-anchor="start" >mesophilic</text>
+<text x="806.0" y="260.0" font-size="12" fill="#6e7781" font-weight="normal" text-anchor="start" >cooling</text>
+<text x="806.0" y="278.0" font-size="12" fill="#6e7781" font-weight="normal" text-anchor="start" >~40 °C</text>
+<path d="M280,230 L356,230" stroke="#1f2328" stroke-width="3" fill="none" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#arr)"/>
+<path d="M540,265 L566,265" stroke="#1f2328" stroke-width="3" fill="none" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#arr)"/>
+<path d="M760,265 L786,265" stroke="#1f2328" stroke-width="3" fill="none" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#arr)"/>
+<circle cx="665" cy="420" r="26" fill="#ffffff" stroke="#1f2328" stroke-width="1.5"/>
+<path d="M650,410 L680,420 L650,430 Z" stroke="#1f2328" stroke-width="1" fill="#1f2328" stroke-linejoin="round" stroke-linecap="round" />
+<text x="705.0" y="425.0" font-size="12" fill="#6e7781" font-weight="normal" text-anchor="start" >aeration fan (in the 10 kW auxiliaries)</text>
+<path d="M665,394 L665,344" stroke="#2563eb" stroke-width="3" fill="none" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#arrCool)"/>
+<path d="M665,190 L665,110 L1060,110 L1060,166" stroke="#c2410c" stroke-width="3" fill="none" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#arrHot)"/>
+<text x="700.0" y="100.0" font-size="12" fill="#c2410c" font-weight="normal" text-anchor="start" >hot, moist exhaust air</text>
+<rect x="1010.0" y="170.0" width="250.0" height="130.0" fill="#f6f8fa" stroke="#1f2328" stroke-width="1.6" rx="10" fill-opacity="0.9"/>
+<text x="1026.0" y="200.0" font-size="15" fill="#1f2328" font-weight="bold" text-anchor="start" >5  Air-to-water exchanger</text>
+<text x="1026.0" y="222.0" font-size="12" fill="#1f2328" font-weight="normal" text-anchor="start" >plate-fin, in the exhaust</text>
+<text x="1026.0" y="240.0" font-size="12" fill="#6e7781" font-weight="normal" text-anchor="start" >≈ 2.5 kW/m² measured on</text>
+<text x="1026.0" y="258.0" font-size="12" fill="#6e7781" font-weight="normal" text-anchor="start" >a dairy farm (Kojima 2022)</text>
+<path d="M1260,235 L1310,235" stroke="#c2410c" stroke-width="3" fill="none" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#arrHot)"/>
+<rect x="1314.0" y="140.0" width="240.0" height="200.0" fill="#f6f8fa" stroke="#1f2328" stroke-width="1.6" rx="10" fill-opacity="0.9"/>
+<text x="1330.0" y="170.0" font-size="15" fill="#1f2328" font-weight="bold" text-anchor="start" >6  Farm heat users</text>
+<text x="1330.0" y="192.0" font-size="12" fill="#1f2328" font-weight="normal" text-anchor="start" >dairy hot water</text>
+<text x="1330.0" y="210.0" font-size="12" fill="#6e7781" font-weight="normal" text-anchor="start" >barn / greenhouse</text>
+<text x="1330.0" y="228.0" font-size="12" fill="#6e7781" font-weight="normal" text-anchor="start" >grain or hay drying</text>
+<text x="1330.0" y="246.0" font-size="12" fill="#6e7781" font-weight="normal" text-anchor="start" >~230 kW winter average</text>
+<text x="1330.0" y="264.0" font-size="12" fill="#6e7781" font-weight="normal" text-anchor="start" >≈ 2 GWh/yr (model)</text>
+<path d="M1135,300 L1135,380" stroke="#6e7781" stroke-width="3" fill="none" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#arr)"/>
+<rect x="1010.0" y="384.0" width="250.0" height="80.0" fill="#f6f8fa" stroke="#1f2328" stroke-width="1.6" rx="10" fill-opacity="0.9"/>
+<text x="1026.0" y="414.0" font-size="15" fill="#1f2328" font-weight="bold" text-anchor="start" >7  Biofilter</text>
+<text x="1026.0" y="436.0" font-size="12" fill="#1f2328" font-weight="normal" text-anchor="start" >cooled air, odour treated</text>
+<path d="M875,340 L875,560" stroke="#1f2328" stroke-width="3" fill="none" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#arr)"/>
+<text x="890.0" y="520.0" font-size="12" fill="#6e7781" font-weight="normal" text-anchor="start" >21 m³/day pre-compost</text>
+<rect x="560.0" y="566.0" width="540.0" height="160.0" fill="#d9f99d" stroke="#1f2328" stroke-width="1.6" rx="10" fill-opacity="0.9"/>
+<text x="576.0" y="596.0" font-size="15" fill="#1f2328" font-weight="bold" text-anchor="start" >8  Maturation hall</text>
+<text x="576.0" y="618.0" font-size="12" fill="#1f2328" font-weight="normal" text-anchor="start" >~1,200 m³ windrows, ≤ 1 m deep → ~1,200 m²</text>
+<text x="576.0" y="636.0" font-size="12" fill="#6e7781" font-weight="normal" text-anchor="start" >8 weeks, turned; the mesophilic microbes</text>
+<text x="576.0" y="654.0" font-size="12" fill="#6e7781" font-weight="normal" text-anchor="start" >and fungi finish the humus</text>
+<path d="M560,646 L420,646" stroke="#1f2328" stroke-width="3" fill="none" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#arr)"/>
+<rect x="120.0" y="566.0" width="296.0" height="160.0" fill="#f6f8fa" stroke="#1f2328" stroke-width="1.6" rx="10" fill-opacity="0.9"/>
+<text x="136.0" y="596.0" font-size="15" fill="#1f2328" font-weight="bold" text-anchor="start" >9  Storage</text>
+<text x="136.0" y="618.0" font-size="12" fill="#1f2328" font-weight="normal" text-anchor="start" >~4,500 m³ finished compost</text>
+<text x="136.0" y="636.0" font-size="12" fill="#6e7781" font-weight="normal" text-anchor="start" >7 months, until spreading</text>
+<text x="136.0" y="654.0" font-size="12" fill="#6e7781" font-weight="normal" text-anchor="start" >season</text>
+<path d="M268,726 L268,800" stroke="#1f2328" stroke-width="3" fill="none" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#arr)"/>
+<rect x="120.0" y="804.0" width="296.0" height="90.0" fill="#d9f99d" stroke="#1f2328" stroke-width="1.6" rx="10" fill-opacity="0.9"/>
+<text x="136.0" y="834.0" font-size="15" fill="#1f2328" font-weight="bold" text-anchor="start" >10  Fields</text>
+<text x="136.0" y="856.0" font-size="12" fill="#1f2328" font-weight="normal" text-anchor="start" >stable, sanitised fertiliser</text>
+<text x="560.0" y="790.0" font-size="13" fill="#1f2328" font-weight="normal" text-anchor="start" >Measured on a 150-cow dairy farm composter: 38 % of the microbial heat</text>
+<text x="560.0" y="810.0" font-size="13" fill="#6e7781" font-weight="normal" text-anchor="start" >reached the water (23.3 of 61.8 kW). Kojima et al. 2022, CC-BY-4.0.</text>
+<text x="32.0" y="970.0" font-size="12" fill="#6e7781" font-weight="normal" text-anchor="start" >First-pass layout from the energy model. Plant sizes are model outputs, not a site design.</text>
+<rect x="1146.0" y="872.0" width="430.0" height="104.0" fill="#ffffff" stroke="#1f2328" stroke-width="1.4" />
+<line x1="1146.0" y1="912.0" x2="1576.0" y2="912.0" stroke="#1f2328" stroke-width="0.8" />
+<line x1="1146.0" y1="944.0" x2="1576.0" y2="944.0" stroke="#d0d7de" stroke-width="0.8" />
+<line x1="1296.0" y1="912.0" x2="1296.0" y2="976.0" stroke="#d0d7de" stroke-width="0.8" />
+<line x1="1436.0" y1="912.0" x2="1436.0" y2="976.0" stroke="#d0d7de" stroke-width="0.8" />
+<text x="1160.0" y="898.0" font-size="15" fill="#1f2328" font-weight="bold" text-anchor="start" >Farm-scale plant layout</text>
+<text x="1160.0" y="926.0" font-size="8.5" fill="#6e7781" font-weight="normal" text-anchor="start" letter-spacing="1">DRAWING</text>
+<text x="1160.0" y="939.0" font-size="11.5" fill="#1f2328" font-weight="normal" text-anchor="start" >CE-05</text>
+<text x="1310.0" y="926.0" font-size="8.5" fill="#6e7781" font-weight="normal" text-anchor="start" letter-spacing="1">REV / DATE</text>
+<text x="1310.0" y="939.0" font-size="11.5" fill="#1f2328" font-weight="normal" text-anchor="start" >A · 2026-10</text>
+<text x="1450.0" y="926.0" font-size="8.5" fill="#6e7781" font-weight="normal" text-anchor="start" letter-spacing="1">SCALE</text>
+<text x="1450.0" y="939.0" font-size="11.5" fill="#1f2328" font-weight="normal" text-anchor="start" >NTS, indicative</text>
+<text x="1160.0" y="958.0" font-size="8.5" fill="#6e7781" font-weight="normal" text-anchor="start" letter-spacing="1">AUTHOR</text>
+<text x="1160.0" y="971.0" font-size="11.5" fill="#1f2328" font-weight="normal" text-anchor="start" >Maxime Kadri</text>
+<text x="1310.0" y="958.0" font-size="8.5" fill="#6e7781" font-weight="normal" text-anchor="start" letter-spacing="1">PROJECT</text>
+<text x="1310.0" y="971.0" font-size="11.5" fill="#1f2328" font-weight="normal" text-anchor="start" >Compost Energy</text>
+<text x="1450.0" y="958.0" font-size="8.5" fill="#6e7781" font-weight="normal" text-anchor="start" letter-spacing="1">LICENCE</text>
+<text x="1450.0" y="971.0" font-size="11.5" fill="#1f2328" font-weight="normal" text-anchor="start" >CERN-OHL-P-2.0</text>
+</svg>

@@ -11,7 +11,15 @@
 
 This repo contains the full engineering record: the (now open) patent, the system design, an energy model at three scales, a physics simulation of a prototype run, the data pipeline that will process real logger data, and the logger firmware.
 
-![System schematic](hardware/drawings/system-schematic.svg)
+## Watch: how Compostito works (2.5 min)
+
+[![How Compostito works: explainer video](video/poster.png)](video/compostito-explainer.mp4)
+
+Composting, aerobic vs anaerobic, the four-chamber home unit, why the microbes get hot, the four phases, where the heat goes, and why aerobic compost makes a better fertiliser. Captioned, no voice ([script](video/narration-script.md), [subtitles](video/compostito-explainer.srt)). Rendered from code in [`video/src/`](video/src/).
+
+![Compostito cutaway](hardware/drawings/png/compostito-cutaway.png)
+
+More drawings (build drawing, exchanger coil, P&ID, farm layout): [`hardware/drawings/`](hardware/drawings/).
 
 ## The short version
 
@@ -64,12 +72,13 @@ docs/
   pivot.md           why home units were dropped for farm scale
 hardware/
   bom/               prototype 1-3 bill of materials
-  drawings/          system schematic (more to come)
+  drawings/          CE-01..05: cutaway, build drawing, exchanger coil, P&ID, farm layout (generated)
   logger/            ESP32 + DS18B20 logger firmware and wiring (not yet built)
 model/
   compost_energy/    energy_balance, heat_exchanger, simulate, clean
   scripts/           run_scenarios, simulate_run, analyze_run
   tests/             20 tests: scenario numbers, energy conservation, cleaning, reference data
+video/               explainer video, subtitles, script; src/ renders it frame by frame
 data/
   simulated/         raw_run_01.csv (noisy log), clean_run_01.csv, truth, ledger, report
   measured/          real runs go here
@@ -93,7 +102,7 @@ python3 -m venv .venv && .venv/bin/pip install -e "model[test]"
 - [ ] Build prototype 2 and the logger; first measured run in `data/measured/`
 - [ ] Prototype 3 (double exchanger length): measure how output scales with area
 - [ ] Fit the simulation's kinetic and loss parameters to measured data (start with the Collins bins)
-- [ ] Dimensioned drawings and coil layout ([drawings/README](hardware/drawings/README.md))
+- [x] Dimensioned drawings and coil layout ([drawings/README](hardware/drawings/README.md)); re-dimension after the first build
 - [ ] Farm-scale concept: reactor and conveyor design, exhaust-air heat recovery
 
 ## License

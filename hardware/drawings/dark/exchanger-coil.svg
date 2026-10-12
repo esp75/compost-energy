@@ -1,0 +1,153 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 1100" font-family="Helvetica Neue, Helvetica, Arial, sans-serif">
+<title>Exchanger coil - prototype 2 vs 3</title>
+<defs>
+  <marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#fafafa"/></marker>
+  <marker id="arrHot" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#f7c72f"/></marker>
+  <marker id="arrCool" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#2dd4bf"/></marker>
+  <marker id="arrGreen" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#2dd4bf"/></marker>
+  <marker id="dimA" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,1.5 L10,5 L0,8.5 z" fill="#a1a1aa"/></marker>
+  <pattern id="mesh" width="7" height="7" patternUnits="userSpaceOnUse"><path d="M0,7 L7,0 M0,0 L7,7" stroke="#52525b" stroke-width="0.45" opacity="0.7"/></pattern>
+  <pattern id="concrete" width="12" height="12" patternUnits="userSpaceOnUse"><rect width="12" height="12" fill="#2a2a2e"/><circle cx="3" cy="3" r="1.1" fill="#52525b"/><circle cx="9" cy="8" r="0.9" fill="#52525b"/><circle cx="7" cy="2" r="0.5" fill="#52525b"/></pattern>
+  <pattern id="hatch" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><line x1="0" y1="0" x2="0" y2="6" stroke="#c08a55" stroke-width="1"/></pattern>
+  <pattern id="grain" width="40" height="10" patternUnits="userSpaceOnUse"><rect width="40" height="10" fill="#1a1510"/><path d="M0,5 C10,3 20,7 40,5" stroke="#c08a55" stroke-width="0.4" fill="none" opacity="0.5"/></pattern>
+</defs>
+<rect width="1600" height="1100" fill="#050505"/>
+<text x="32.0" y="46.0" font-size="24" fill="#fafafa" font-weight="bold" text-anchor="start" >Exchanger coil in its concrete block</text>
+<text x="32.0" y="72.0" font-size="14" fill="#a1a1aa" font-weight="normal" text-anchor="start" >Prototype 2 has one 3 m tube. Prototype 3 doubles it, to measure how heat output scales with surface area.</text>
+<rect x="110.0" y="170.0" width="285.2" height="285.2" fill="url(#concrete)" stroke="#52525b" stroke-width="1.4" rx="6"/>
+<path d="M465.2,210.7 L375.2,210.7 L130.0,210.7 L130.0,251.5 L375.2,251.5 L375.2,292.2 L130.0,292.2 L130.0,333.0 L375.2,333.0 L375.2,373.7 L130.0,373.7 L130.0,414.5 L375.2,414.5 L465.2,414.5" stroke="#f59e5b" stroke-width="7" fill="none" stroke-linejoin="round" stroke-linecap="round" opacity="0.95"/>
+<path d="M465.2,210.7 L375.2,210.7 L130.0,210.7 L130.0,251.5 L375.2,251.5 L375.2,292.2 L130.0,292.2 L130.0,333.0 L375.2,333.0 L375.2,373.7 L130.0,373.7 L130.0,414.5 L375.2,414.5 L465.2,414.5" stroke="#050505" stroke-width="2" fill="none" stroke-linejoin="round" stroke-linecap="round" opacity="0.5"/>
+<text x="110.0" y="152.0" font-size="15" fill="#fafafa" font-weight="bold" text-anchor="start" >Prototype 2: 1 tube</text>
+<line x1="110.0" y1="455.2" x2="110.0" y2="485.1" stroke="#a1a1aa" stroke-width="0.7" />
+<line x1="395.2" y1="455.2" x2="395.2" y2="485.1" stroke="#a1a1aa" stroke-width="0.7" />
+<line x1="110.0" y1="481.2" x2="395.2" y2="481.2" stroke="#a1a1aa" stroke-width="0.9" marker-start="url(#dimA)" marker-end="url(#dimA)"/>
+<text x="252.6" y="476.2" font-size="12" fill="#fafafa" text-anchor="middle" transform="rotate(0.0 252.6 481.2)">460</text>
+<line x1="110.0" y1="170.0" x2="50.2" y2="170.0" stroke="#a1a1aa" stroke-width="0.7" />
+<line x1="110.0" y1="455.2" x2="50.2" y2="455.2" stroke="#a1a1aa" stroke-width="0.7" />
+<line x1="58.0" y1="170.0" x2="58.0" y2="455.2" stroke="#a1a1aa" stroke-width="0.9" marker-start="url(#dimA)" marker-end="url(#dimA)"/>
+<text x="58.0" y="307.6" font-size="12" fill="#fafafa" text-anchor="middle" transform="rotate(90.0 58.0 312.6)">460</text>
+<line x1="80.0" y1="312.6" x2="425.2" y2="312.6" stroke="#a1a1aa" stroke-width="1" stroke-dasharray="14 4 3 4"/>
+<text x="66.0" y="317.6" font-size="13" fill="#a1a1aa" font-weight="bold" text-anchor="start" >A</text>
+<text x="429.2" y="317.6" font-size="13" fill="#a1a1aa" font-weight="bold" text-anchor="start" >A</text>
+<rect x="640.0" y="170.0" width="285.2" height="285.2" fill="url(#concrete)" stroke="#52525b" stroke-width="1.4" rx="6"/>
+<path d="M995.2,210.7 L905.2,210.7 L660.0,210.7 L660.0,251.5 L905.2,251.5 L905.2,292.2 L660.0,292.2 L660.0,333.0 L905.2,333.0 L905.2,373.7 L660.0,373.7 L660.0,414.5 L905.2,414.5 L995.2,414.5" stroke="#f59e5b" stroke-width="7" fill="none" stroke-linejoin="round" stroke-linecap="round" opacity="0.95"/>
+<path d="M995.2,210.7 L905.2,210.7 L660.0,210.7 L660.0,251.5 L905.2,251.5 L905.2,292.2 L660.0,292.2 L660.0,333.0 L905.2,333.0 L905.2,373.7 L660.0,373.7 L660.0,414.5 L905.2,414.5 L995.2,414.5" stroke="#050505" stroke-width="2" fill="none" stroke-linejoin="round" stroke-linecap="round" opacity="0.5"/>
+<path d="M995.2,231.1 L905.2,231.1 L660.0,231.1 L660.0,271.9 L905.2,271.9 L905.2,312.6 L660.0,312.6 L660.0,353.3 L905.2,353.3 L905.2,394.1 L660.0,394.1 L660.0,434.8 L905.2,434.8 L995.2,434.8" stroke="#f7c72f" stroke-width="7" fill="none" stroke-linejoin="round" stroke-linecap="round" opacity="0.75" stroke-dasharray="1 0"/>
+<path d="M995.2,231.1 L905.2,231.1 L660.0,231.1 L660.0,271.9 L905.2,271.9 L905.2,312.6 L660.0,312.6 L660.0,353.3 L905.2,353.3 L905.2,394.1 L660.0,394.1 L660.0,434.8 L905.2,434.8 L995.2,434.8" stroke="#050505" stroke-width="2" fill="none" stroke-linejoin="round" stroke-linecap="round" opacity="0.5"/>
+<text x="640.0" y="152.0" font-size="15" fill="#fafafa" font-weight="bold" text-anchor="start" >Prototype 3: 2 tubes</text>
+<line x1="640.0" y1="455.2" x2="640.0" y2="485.1" stroke="#a1a1aa" stroke-width="0.7" />
+<line x1="925.2" y1="455.2" x2="925.2" y2="485.1" stroke="#a1a1aa" stroke-width="0.7" />
+<line x1="640.0" y1="481.2" x2="925.2" y2="481.2" stroke="#a1a1aa" stroke-width="0.9" marker-start="url(#dimA)" marker-end="url(#dimA)"/>
+<text x="782.6" y="476.2" font-size="12" fill="#fafafa" text-anchor="middle" transform="rotate(0.0 782.6 481.2)">460</text>
+<line x1="640.0" y1="170.0" x2="580.2" y2="170.0" stroke="#a1a1aa" stroke-width="0.7" />
+<line x1="640.0" y1="455.2" x2="580.2" y2="455.2" stroke="#a1a1aa" stroke-width="0.7" />
+<line x1="588.0" y1="170.0" x2="588.0" y2="455.2" stroke="#a1a1aa" stroke-width="0.9" marker-start="url(#dimA)" marker-end="url(#dimA)"/>
+<text x="588.0" y="307.6" font-size="12" fill="#fafafa" text-anchor="middle" transform="rotate(90.0 588.0 312.6)">460</text>
+<line x1="610.0" y1="312.6" x2="955.2" y2="312.6" stroke="#a1a1aa" stroke-width="1" stroke-dasharray="14 4 3 4"/>
+<text x="596.0" y="317.6" font-size="13" fill="#a1a1aa" font-weight="bold" text-anchor="start" >A</text>
+<text x="959.2" y="317.6" font-size="13" fill="#a1a1aa" font-weight="bold" text-anchor="start" >A</text>
+<rect x="110.0" y="520.0" width="285.2" height="109.1" fill="url(#concrete)" stroke="#52525b" stroke-width="1.4" />
+<circle cx="150.7" cy="574.6" r="6.5" fill="#f59e5b" stroke="#fafafa" stroke-width="0.8"/>
+<circle cx="150.7" cy="574.6" r="3.5" fill="#050505"/>
+<circle cx="191.5" cy="574.6" r="6.5" fill="#f59e5b" stroke="#fafafa" stroke-width="0.8"/>
+<circle cx="191.5" cy="574.6" r="3.5" fill="#050505"/>
+<circle cx="232.2" cy="574.6" r="6.5" fill="#f59e5b" stroke="#fafafa" stroke-width="0.8"/>
+<circle cx="232.2" cy="574.6" r="3.5" fill="#050505"/>
+<circle cx="273.0" cy="574.6" r="6.5" fill="#f59e5b" stroke="#fafafa" stroke-width="0.8"/>
+<circle cx="273.0" cy="574.6" r="3.5" fill="#050505"/>
+<circle cx="313.7" cy="574.6" r="6.5" fill="#f59e5b" stroke="#fafafa" stroke-width="0.8"/>
+<circle cx="313.7" cy="574.6" r="3.5" fill="#050505"/>
+<circle cx="354.5" cy="574.6" r="6.5" fill="#f59e5b" stroke="#fafafa" stroke-width="0.8"/>
+<circle cx="354.5" cy="574.6" r="3.5" fill="#050505"/>
+<text x="110.0" y="651.1" font-size="11" fill="#a1a1aa" font-weight="normal" text-anchor="start" letter-spacing="1.5">SECTION A-A (vertical ×2.2)</text>
+<line x1="395.2" y1="520.0" x2="422.8" y2="520.0" stroke="#a1a1aa" stroke-width="0.7" />
+<line x1="395.2" y1="629.1" x2="422.8" y2="629.1" stroke="#a1a1aa" stroke-width="0.7" />
+<line x1="419.2" y1="520.0" x2="419.2" y2="629.1" stroke="#a1a1aa" stroke-width="0.9" marker-start="url(#dimA)" marker-end="url(#dimA)"/>
+<text x="419.2" y="569.6" font-size="12" fill="#fafafa" text-anchor="middle" transform="rotate(90.0 419.2 574.6)">80</text>
+<rect x="640.0" y="520.0" width="285.2" height="109.1" fill="url(#concrete)" stroke="#52525b" stroke-width="1.4" />
+<circle cx="680.7" cy="554.9" r="6.5" fill="#f59e5b" stroke="#fafafa" stroke-width="0.8"/>
+<circle cx="680.7" cy="554.9" r="3.5" fill="#050505"/>
+<circle cx="721.5" cy="554.9" r="6.5" fill="#f59e5b" stroke="#fafafa" stroke-width="0.8"/>
+<circle cx="721.5" cy="554.9" r="3.5" fill="#050505"/>
+<circle cx="762.2" cy="554.9" r="6.5" fill="#f59e5b" stroke="#fafafa" stroke-width="0.8"/>
+<circle cx="762.2" cy="554.9" r="3.5" fill="#050505"/>
+<circle cx="803.0" cy="554.9" r="6.5" fill="#f59e5b" stroke="#fafafa" stroke-width="0.8"/>
+<circle cx="803.0" cy="554.9" r="3.5" fill="#050505"/>
+<circle cx="843.7" cy="554.9" r="6.5" fill="#f59e5b" stroke="#fafafa" stroke-width="0.8"/>
+<circle cx="843.7" cy="554.9" r="3.5" fill="#050505"/>
+<circle cx="884.5" cy="554.9" r="6.5" fill="#f59e5b" stroke="#fafafa" stroke-width="0.8"/>
+<circle cx="884.5" cy="554.9" r="3.5" fill="#050505"/>
+<circle cx="701.1" cy="594.2" r="6.5" fill="#f59e5b" stroke="#fafafa" stroke-width="0.8"/>
+<circle cx="701.1" cy="594.2" r="3.5" fill="#050505"/>
+<circle cx="741.9" cy="594.2" r="6.5" fill="#f59e5b" stroke="#fafafa" stroke-width="0.8"/>
+<circle cx="741.9" cy="594.2" r="3.5" fill="#050505"/>
+<circle cx="782.6" cy="594.2" r="6.5" fill="#f59e5b" stroke="#fafafa" stroke-width="0.8"/>
+<circle cx="782.6" cy="594.2" r="3.5" fill="#050505"/>
+<circle cx="823.3" cy="594.2" r="6.5" fill="#f59e5b" stroke="#fafafa" stroke-width="0.8"/>
+<circle cx="823.3" cy="594.2" r="3.5" fill="#050505"/>
+<circle cx="864.1" cy="594.2" r="6.5" fill="#f59e5b" stroke="#fafafa" stroke-width="0.8"/>
+<circle cx="864.1" cy="594.2" r="3.5" fill="#050505"/>
+<circle cx="904.8" cy="594.2" r="6.5" fill="#f59e5b" stroke="#fafafa" stroke-width="0.8"/>
+<circle cx="904.8" cy="594.2" r="3.5" fill="#050505"/>
+<text x="640.0" y="651.1" font-size="11" fill="#a1a1aa" font-weight="normal" text-anchor="start" letter-spacing="1.5">SECTION A-A (vertical ×2.2)</text>
+<line x1="925.2" y1="520.0" x2="952.8" y2="520.0" stroke="#a1a1aa" stroke-width="0.7" />
+<line x1="925.2" y1="629.1" x2="952.8" y2="629.1" stroke="#a1a1aa" stroke-width="0.7" />
+<line x1="949.2" y1="520.0" x2="949.2" y2="629.1" stroke="#a1a1aa" stroke-width="0.9" marker-start="url(#dimA)" marker-end="url(#dimA)"/>
+<text x="949.2" y="569.6" font-size="12" fill="#fafafa" text-anchor="middle" transform="rotate(90.0 949.2 574.6)">80</text>
+<text x="1130.0" y="174.0" font-size="11" fill="#a1a1aa" font-weight="normal" text-anchor="start" letter-spacing="1.5">WHAT EACH PROTOTYPE SHOULD DELIVER</text>
+<line x1="1130.0" y1="190.0" x2="1550.0" y2="190.0" stroke="#fafafa" stroke-width="1" />
+<text x="1360.0" y="208.0" font-size="12" fill="#fafafa" font-weight="bold" text-anchor="start" >P2</text>
+<text x="1470.0" y="208.0" font-size="12" fill="#fafafa" font-weight="bold" text-anchor="start" >P3</text>
+<text x="1130.0" y="236.0" font-size="12" fill="#a1a1aa" font-weight="normal" text-anchor="start" >Tube (aluminium)</text>
+<text x="1360.0" y="236.0" font-size="12.5" fill="#fafafa" font-weight="normal" text-anchor="start" >Ø19, 3 mm wall</text>
+<text x="1470.0" y="236.0" font-size="12.5" fill="#fafafa" font-weight="normal" text-anchor="start" >2 × Ø19</text>
+<line x1="1130.0" y1="245.0" x2="1550.0" y2="245.0" stroke="#27272a" stroke-width="0.6" />
+<text x="1130.0" y="264.0" font-size="12" fill="#a1a1aa" font-weight="normal" text-anchor="start" >Length</text>
+<text x="1360.0" y="264.0" font-size="12.5" fill="#fafafa" font-weight="normal" text-anchor="start" >3 m</text>
+<text x="1470.0" y="264.0" font-size="12.5" fill="#fafafa" font-weight="normal" text-anchor="start" >6 m</text>
+<line x1="1130.0" y1="273.0" x2="1550.0" y2="273.0" stroke="#27272a" stroke-width="0.6" />
+<text x="1130.0" y="292.0" font-size="12" fill="#a1a1aa" font-weight="normal" text-anchor="start" >Surface A = π·d·L</text>
+<text x="1360.0" y="292.0" font-size="12.5" fill="#fafafa" font-weight="normal" text-anchor="start" >0.179 m²</text>
+<text x="1470.0" y="292.0" font-size="12.5" fill="#fafafa" font-weight="normal" text-anchor="start" >0.358 m²</text>
+<line x1="1130.0" y1="301.0" x2="1550.0" y2="301.0" stroke="#27272a" stroke-width="0.6" />
+<text x="1130.0" y="320.0" font-size="12" fill="#a1a1aa" font-weight="normal" text-anchor="start" >U at h_compost = 15 W/m²K</text>
+<text x="1360.0" y="320.0" font-size="12.5" fill="#fafafa" font-weight="normal" text-anchor="start" >14.9 W/m²K</text>
+<text x="1470.0" y="320.0" font-size="12.5" fill="#fafafa" font-weight="normal" text-anchor="start" >14.9 W/m²K</text>
+<line x1="1130.0" y1="329.0" x2="1550.0" y2="329.0" stroke="#27272a" stroke-width="0.6" />
+<text x="1130.0" y="348.0" font-size="12" fill="#a1a1aa" font-weight="normal" text-anchor="start" >P at 60 / 40 °C</text>
+<text x="1360.0" y="348.0" font-size="12.5" fill="#fafafa" font-weight="normal" text-anchor="start" >≈ 53 W</text>
+<text x="1470.0" y="348.0" font-size="12.5" fill="#fafafa" font-weight="normal" text-anchor="start" >≈ 107 W</text>
+<line x1="1130.0" y1="357.0" x2="1550.0" y2="357.0" stroke="#27272a" stroke-width="0.6" />
+<text x="1130.0" y="376.0" font-size="12" fill="#a1a1aa" font-weight="normal" text-anchor="start" >2024 sheet (h = 1512.5)</text>
+<text x="1360.0" y="376.0" font-size="12.5" fill="#fafafa" font-weight="normal" text-anchor="start" >3.55 kW</text>
+<text x="1470.0" y="376.0" font-size="12.5" fill="#fafafa" font-weight="normal" text-anchor="start" >-</text>
+<line x1="1130.0" y1="385.0" x2="1550.0" y2="385.0" stroke="#27272a" stroke-width="0.6" />
+<text x="1130.0" y="412.0" font-size="11" fill="#a1a1aa" font-weight="normal" text-anchor="start" >Model: model/compost_energy/heat_exchanger.py</text>
+<text x="110.0" y="784.0" font-size="17" fill="#fafafa" font-weight="bold" text-anchor="start" >Where the resistance is:  1/U = 1/h_compost + wall/k + 1/h_water</text>
+<text x="110.0" y="808.0" font-size="13" fill="#a1a1aa" font-weight="normal" text-anchor="start" >Shares of the total thermal resistance at realistic values (h_compost 15, Al 3 mm, h_water 3000 W/m²K)</text>
+<rect x="110.0" y="830.0" width="994.8" height="46.0" fill="#6b2a22" stroke="#fafafa" stroke-width="0.8" />
+<rect x="1104.8" y="830.0" width="3.0" height="46.0" fill="#52525b" stroke="#fafafa" stroke-width="0.8" />
+<rect x="1107.8" y="830.0" width="5.0" height="46.0" fill="#2dd4bf" stroke="#fafafa" stroke-width="0.8" />
+<text x="130.0" y="859.0" font-size="15" fill="#fafafa" font-weight="bold" text-anchor="start" >compost side: 99.5 %</text>
+<line x1="1108.0" y1="876.0" x2="1108.0" y2="904.0" stroke="#a1a1aa" stroke-width="0.8" />
+<text x="1110.0" y="920.0" font-size="12.5" fill="#a1a1aa" font-weight="normal" text-anchor="end" >aluminium wall 0.02 % · water film 0.5 %</text>
+<text x="110.0" y="920.0" font-size="13" fill="#fafafa" font-weight="normal" text-anchor="start" >So copper or a thinner wall changes nothing. More contact area, or moving air past the tube, does.</text>
+<rect x="1146.0" y="972.0" width="430.0" height="104.0" fill="#050505" stroke="#fafafa" stroke-width="1.4" />
+<line x1="1146.0" y1="1012.0" x2="1576.0" y2="1012.0" stroke="#fafafa" stroke-width="0.8" />
+<line x1="1146.0" y1="1044.0" x2="1576.0" y2="1044.0" stroke="#27272a" stroke-width="0.8" />
+<line x1="1296.0" y1="1012.0" x2="1296.0" y2="1076.0" stroke="#27272a" stroke-width="0.8" />
+<line x1="1436.0" y1="1012.0" x2="1436.0" y2="1076.0" stroke="#27272a" stroke-width="0.8" />
+<text x="1160.0" y="998.0" font-size="15" fill="#fafafa" font-weight="bold" text-anchor="start" >Exchanger coil: P2 vs P3</text>
+<text x="1160.0" y="1026.0" font-size="8.5" fill="#a1a1aa" font-weight="normal" text-anchor="start" letter-spacing="1">DRAWING</text>
+<text x="1160.0" y="1039.0" font-size="11.5" fill="#fafafa" font-weight="normal" text-anchor="start" >CE-03</text>
+<text x="1310.0" y="1026.0" font-size="8.5" fill="#a1a1aa" font-weight="normal" text-anchor="start" letter-spacing="1">REV / DATE</text>
+<text x="1310.0" y="1039.0" font-size="11.5" fill="#fafafa" font-weight="normal" text-anchor="start" >A · 2026-10</text>
+<text x="1450.0" y="1026.0" font-size="8.5" fill="#a1a1aa" font-weight="normal" text-anchor="start" letter-spacing="1">SCALE</text>
+<text x="1450.0" y="1039.0" font-size="11.5" fill="#fafafa" font-weight="normal" text-anchor="start" >NTS, indicative</text>
+<text x="1160.0" y="1058.0" font-size="8.5" fill="#a1a1aa" font-weight="normal" text-anchor="start" letter-spacing="1">AUTHOR</text>
+<text x="1160.0" y="1071.0" font-size="11.5" fill="#fafafa" font-weight="normal" text-anchor="start" >Maxime Kadri</text>
+<text x="1310.0" y="1058.0" font-size="8.5" fill="#a1a1aa" font-weight="normal" text-anchor="start" letter-spacing="1">PROJECT</text>
+<text x="1310.0" y="1071.0" font-size="11.5" fill="#fafafa" font-weight="normal" text-anchor="start" >Compost Energy</text>
+<text x="1450.0" y="1058.0" font-size="8.5" fill="#a1a1aa" font-weight="normal" text-anchor="start" letter-spacing="1">LICENCE</text>
+<text x="1450.0" y="1071.0" font-size="11.5" fill="#fafafa" font-weight="normal" text-anchor="start" >CERN-OHL-P-2.0</text>
+</svg>
