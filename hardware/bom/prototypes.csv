@@ -1,0 +1,42 @@
+prototype,item,spec,qty,unit_eur,line_eur,purpose
+1,Digital thermometer + hygrometer with external probe,3-pack,3,5.33,16.00,core temperature and humidity readout
+1,Timber decking board,2400 x 120 x 24 mm,2,6.40,12.80,box walls
+1,Zinc-plated steel corner bracket,30 x 30 mm (pack),24,,9.40,box assembly
+1,Closed Euro container (water tray),600 x 400 x 420 mm,1,27.29,54.58,solid-bottom moisture retention / rainwater reserve
+1,Polyethylene drip tube,4 mm x 25 m,1,,9.50,irrigation of chamber B
+1,Drip line end cap,,1,2.50,2.50,irrigation
+1,Drip line stake clips,4 mm (pack of 10),1,3.50,3.50,irrigation
+1,PVC conical-seal push-fit connector,4 mm,1,,,irrigation (not priced)
+1,Stainless countersunk screws,3.5 x 20 mm (pack of 25),1,3.90,3.90,assembly
+1,Rigid PVC sheet,1000 x 495 x 2 mm,2,12.00,24.00,chamber dividers
+2,Pressure-treated timber post,1800 x 70 x 70 mm,3,7.90,23.70,raised frame on legs (patent: box on stilts)
+2,Timber decking board,2400 x 120 x 24 mm,6,6.40,38.40,box walls
+2,Plastic mesh,500 x 500 mm,1,17.00,17.00,aerobic inner chambers
+2,Cable ties,pack of 50,50,,2.50,mesh fixing
+2,Fence insulator (ring),80 x 6 mm,25,,24.00,mesh stand-offs
+2,Washers,8 mm,20,0.17,3.40,assembly
+2,Zinc-plated steel corner bracket,30 x 30 mm,32,,9.40,box assembly
+2,Zinc-plated steel corner bracket,50 x 50 mm,8,,5.70,frame assembly
+2,Screw-in hinge pin,80 x 6 mm,8,1.00,8.00,access hatches (nutrient trap doors)
+2,Closed Euro container (water tray),600 x 400 x 420 mm,1,27.29,54.58,moisture retention
+2,Drip line end cap,,1,2.50,2.50,irrigation
+2,Drip line stake clips,4 mm (pack of 10),1,3.50,3.50,irrigation
+2,PVC conical-seal push-fit connector,4 mm,1,,,irrigation (not priced)
+2,Stainless countersunk screws,3.5 x 20 mm (pack of 25),4,3.90,15.60,assembly
+2,Aluminium tube,19 mm OD,1,11.58,11.58,heat exchanger in compost core
+3,Pressure-treated timber post,1800 x 70 x 70 mm,3,7.90,23.70,raised frame on legs
+3,Timber decking board,2400 x 120 x 24 mm,6,6.40,38.40,box walls
+3,Plastic mesh,500 x 500 mm,1,17.00,17.00,aerobic inner chambers
+3,Cable ties,pack of 50,50,,2.50,mesh fixing
+3,Fence insulator (ring),80 x 6 mm,25,,24.00,mesh stand-offs
+3,Washers,8 mm,20,0.17,3.40,assembly
+3,Zinc-plated steel corner bracket,30 x 30 mm,32,,9.40,box assembly
+3,Zinc-plated steel corner bracket,50 x 50 mm,8,,5.70,frame assembly
+3,Screw-in hinge pin,80 x 6 mm,8,1.00,8.00,access hatches
+3,Closed Euro container (water tray),600 x 400 x 420 mm,1,27.29,54.58,moisture retention
+3,Drip line end cap,,1,2.50,2.50,irrigation
+3,Drip line stake clips,4 mm (pack of 10),1,3.50,3.50,irrigation
+3,PVC conical-seal push-fit connector,4 mm,1,,,irrigation (not priced)
+3,Stainless countersunk screws,3.5 x 20 mm (pack of 25),4,3.90,15.60,assembly
+3,Aluminium tube,19 mm OD,2,11.58,23.16,doubled exchanger length (more surface area)
+all,Concrete casing allowance,,1,50.00,50.00,exchanger embedded in high-inertia concrete

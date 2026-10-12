@@ -1,0 +1,130 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 640" font-family="Helvetica, Arial, sans-serif" font-size="13">
+  <title>Compost Energy biological boiler - system schematic</title>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#1f2328"/>
+    </marker>
+    <marker id="arrowHot" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#c2410c"/>
+    </marker>
+    <marker id="arrowCool" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#2563eb"/>
+    </marker>
+    <pattern id="mesh" width="8" height="8" patternUnits="userSpaceOnUse">
+      <path d="M0,8 L8,0" stroke="#9ca3af" stroke-width="0.6"/>
+    </pattern>
+    <pattern id="concrete" width="10" height="10" patternUnits="userSpaceOnUse">
+      <rect width="10" height="10" fill="#e5e7eb"/>
+      <circle cx="3" cy="3" r="1" fill="#9ca3af"/><circle cx="8" cy="7" r="0.8" fill="#9ca3af"/>
+    </pattern>
+  </defs>
+
+  <rect width="960" height="640" fill="#ffffff"/>
+  <text x="24" y="34" font-size="18" font-weight="bold" fill="#1f2328">Biological boiler: stacked phase chambers with a buried heat exchanger</text>
+  <text x="24" y="54" fill="#6e7781">Schematic from the 2024 provisional patent (now open). Not to scale.</text>
+
+  <!-- timber box on stilts -->
+  <rect x="150" y="80" width="300" height="470" fill="#fbf4e8" stroke="#8b5e34" stroke-width="3"/>
+  <line x1="170" y1="550" x2="170" y2="600" stroke="#8b5e34" stroke-width="6"/>
+  <line x1="430" y1="550" x2="430" y2="600" stroke="#8b5e34" stroke-width="6"/>
+  <line x1="120" y1="602" x2="480" y2="602" stroke="#6e7781" stroke-width="1.5" stroke-dasharray="6 4"/>
+  <text x="300" y="622" text-anchor="middle" fill="#6e7781" font-size="11">timber structure on stilts: keeps the pile off wet ground</text>
+
+  <!-- chamber A -->
+  <rect x="170" y="100" width="260" height="95" fill="#fde68a" fill-opacity="0.55" stroke="#1f2328"/>
+  <rect x="170" y="100" width="260" height="95" fill="url(#mesh)"/>
+  <text x="185" y="125" font-weight="bold">A  Mesophilic</text>
+  <text x="185" y="143" fill="#3f3f46" font-size="12">40-45 °C, ~1 week</text>
+  <text x="185" y="160" fill="#3f3f46" font-size="12">fresh waste, C/N 25-30:1</text>
+  <!-- intake hatch -->
+  <rect x="340" y="92" width="70" height="10" fill="#8b5e34"/>
+  <path d="M375,64 L375,94" stroke="#1f2328" stroke-width="2" marker-end="url(#arrow)"/>
+  <text x="383" y="74" font-size="12">intake hatch</text>
+
+  <!-- chamber B with exchanger in concrete -->
+  <rect x="170" y="205" width="260" height="150" fill="#fca5a5" fill-opacity="0.5" stroke="#1f2328"/>
+  <rect x="170" y="205" width="260" height="150" fill="url(#mesh)"/>
+  <text x="185" y="228" font-weight="bold">B  Thermophilic</text>
+  <text x="185" y="245" fill="#3f3f46" font-size="12">55-70 °C, 3-4 weeks</text>
+  <rect x="230" y="262" width="180" height="78" rx="6" fill="url(#concrete)" stroke="#6e7781"/>
+  <path d="M245,275 H395 V290 H245 V305 H395 V320 H245" fill="none" stroke="#9aa5b1" stroke-width="5" stroke-linejoin="round"/>
+  <path d="M245,275 H395 V290 H245 V305 H395 V320 H245" fill="none" stroke="#c2410c" stroke-width="1.5" stroke-linejoin="round"/>
+  <text x="320" y="351" text-anchor="middle" font-size="10" fill="#3f3f46">aluminium coil in concrete (thermal mass)</text>
+  <!-- probe -->
+  <line x1="215" y1="300" x2="215" y2="250" stroke="#15803d" stroke-width="2"/>
+  <circle cx="215" cy="300" r="5" fill="#15803d"/>
+
+  <!-- chamber C (half volume) -->
+  <rect x="170" y="365" width="260" height="75" fill="#bfdbfe" fill-opacity="0.6" stroke="#1f2328"/>
+  <rect x="170" y="365" width="260" height="75" fill="url(#mesh)"/>
+  <text x="185" y="390" font-weight="bold">C  Cooling</text>
+  <text x="185" y="408" fill="#3f3f46" font-size="12">back to 40-45 °C, half volume</text>
+
+  <!-- chamber D -->
+  <rect x="170" y="450" width="260" height="75" fill="#d9f99d" fill-opacity="0.6" stroke="#1f2328"/>
+  <text x="185" y="475" font-weight="bold">D  Maturation</text>
+  <text x="185" y="493" fill="#3f3f46" font-size="12">ambient, half volume</text>
+  <rect x="170" y="515" width="260" height="10" fill="#9ca3af"/>
+  <text x="300" y="542" text-anchor="middle" font-size="11" fill="#3f3f46">solid plastic floors retain moisture · compost drawer</text>
+
+  <!-- gravity flow arrows -->
+  <path d="M440,150 C470,180 470,250 440,270" fill="none" stroke="#1f2328" stroke-width="1.4" marker-end="url(#arrow)"/>
+  <path d="M440,330 C462,355 462,380 440,400" fill="none" stroke="#1f2328" stroke-width="1.4" marker-end="url(#arrow)"/>
+  <path d="M440,415 C462,440 462,465 440,485" fill="none" stroke="#1f2328" stroke-width="1.4" marker-end="url(#arrow)"/>
+  <text x="474" y="215" font-size="11" fill="#6e7781">material moves</text>
+  <text x="474" y="229" font-size="11" fill="#6e7781">down by phase</text>
+
+  <!-- ventilation -->
+  <path d="M100,500 H165" stroke="#2563eb" stroke-width="2" marker-end="url(#arrowCool)"/>
+  <text x="24" y="497" fill="#2563eb" font-size="12">VB low vent</text>
+  <text x="24" y="512" fill="#2563eb" font-size="11">fresh air in</text>
+  <path d="M168,140 H40" stroke="#c2410c" stroke-width="2" marker-end="url(#arrowHot)"/>
+  <text x="24" y="112" fill="#c2410c" font-size="12">VH high vent</text>
+  <text x="24" y="127" fill="#c2410c" font-size="11">warm, moist air out</text>
+
+  <!-- rainwater -->
+  <path d="M60,230 H165" stroke="#2563eb" stroke-width="1.5" stroke-dasharray="5 3" marker-end="url(#arrowCool)"/>
+  <text x="24" y="222" fill="#2563eb" font-size="12">rainwater</text>
+  <text x="24" y="250" fill="#2563eb" font-size="11">keeps B at 50-60 %</text>
+  <text x="24" y="264" fill="#2563eb" font-size="11">moisture</text>
+
+  <!-- probes + display -->
+  <rect x="24" y="300" width="110" height="56" rx="6" fill="#111827"/>
+  <text x="79" y="322" text-anchor="middle" fill="#86efac" font-family="Menlo, monospace" font-size="14">62.4 °C</text>
+  <text x="79" y="342" text-anchor="middle" fill="#86efac" font-family="Menlo, monospace" font-size="12">RH 96 %</text>
+  <path d="M134,328 H210" stroke="#15803d" stroke-width="1.5"/>
+  <text x="24" y="374" fill="#15803d" font-size="11">probe in B,</text>
+  <text x="24" y="388" fill="#15803d" font-size="11">front-panel display</text>
+
+  <!-- heating loop -->
+  <rect x="690" y="240" width="160" height="110" rx="8" fill="#f3f4f6" stroke="#1f2328" stroke-width="1.5"/>
+  <text x="770" y="275" text-anchor="middle" font-weight="bold">Existing boiler</text>
+  <text x="770" y="295" text-anchor="middle" font-size="12" fill="#3f3f46">gas / oil / heat pump</text>
+  <text x="770" y="315" text-anchor="middle" font-size="12" fill="#3f3f46">60/40 or 70/50 °C</text>
+
+  <rect x="690" y="440" width="160" height="60" rx="8" fill="#f3f4f6" stroke="#1f2328" stroke-width="1.5"/>
+  <text x="770" y="468" text-anchor="middle" font-weight="bold">Radiators / DHW</text>
+  <text x="770" y="486" text-anchor="middle" font-size="12" fill="#3f3f46">heat demand</text>
+
+  <!-- supply from boiler to radiators -->
+  <path d="M820,350 V438" stroke="#c2410c" stroke-width="2.5" marker-end="url(#arrowHot)"/>
+  <text x="828" y="400" font-size="11" fill="#c2410c">supply</text>
+
+  <!-- return from radiators, bypass through compost -->
+  <path d="M700,500 V560 H560" stroke="#2563eb" stroke-width="2.5" fill="none"/>
+  <path d="M560,560 H520 V300 H412" stroke="#2563eb" stroke-width="2.5" fill="none" marker-end="url(#arrowCool)"/>
+  <text x="528" y="580" font-size="11" fill="#2563eb">cool return (~40 °C)</text>
+  <path d="M412,285 H600 V300 H688" stroke="#c2410c" stroke-width="2.5" fill="none" marker-end="url(#arrowHot)"/>
+  <text x="604" y="278" font-size="11" fill="#c2410c">pre-heated return</text>
+  <!-- direct return bypass valve -->
+  <path d="M640,560 H660 V350 H688" stroke="#9ca3af" stroke-width="1.5" stroke-dasharray="4 3" fill="none"/>
+  <text x="668" y="420" font-size="10" fill="#6e7781" transform="rotate(-90 668 420)">bypass valve</text>
+
+  <!-- callout -->
+  <rect x="560" y="80" width="370" height="120" rx="8" fill="#f8fafc" stroke="#d8dee4"/>
+  <text x="576" y="104" font-weight="bold" font-size="13">How it plugs in</text>
+  <text x="576" y="126" font-size="12" fill="#3f3f46">Fitted as a by-pass on the heating return, the box</text>
+  <text x="576" y="144" font-size="12" fill="#3f3f46">pre-heats water before it reaches the existing boiler,</text>
+  <text x="576" y="162" font-size="12" fill="#3f3f46">which then burns less fuel. The concrete mass buffers</text>
+  <text x="576" y="180" font-size="12" fill="#3f3f46">heat while chamber B is restocked.</text>
+</svg>

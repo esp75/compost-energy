@@ -1,0 +1,44 @@
+{
+  "cleaning": {
+    "rows_in": 32305,
+    "duplicates_removed": 129,
+    "error_codes_t_core_c": 64,
+    "error_codes_t_mid_c": 64,
+    "error_codes_t_ambient_c": 64,
+    "error_codes_t_water_in_c": 63,
+    "error_codes_t_water_out_c": 62,
+    "spikes_t_core_c": 0,
+    "spikes_t_mid_c": 0,
+    "spikes_t_ambient_c": 0,
+    "spikes_t_water_in_c": 0,
+    "spikes_t_water_out_c": 0,
+    "stuck_t_core_c": 0,
+    "stuck_t_mid_c": 1080,
+    "stuck_t_ambient_c": 0,
+    "stuck_t_water_in_c": 0,
+    "stuck_t_water_out_c": 0,
+    "flow_spikes": 12,
+    "bins": 12960,
+    "empty_bins_before_fill": 88,
+    "empty_bins_after_fill": 83
+  },
+  "summary": {
+    "duration_days": 44.99652777777778,
+    "peak_core_c": 65.47,
+    "days_above_45c": 11.802083333333334,
+    "days_above_55c": 8.520833333333334,
+    "mean_power_while_pumping_w": 83.80743946244115,
+    "peak_power_w": 132.99968500000006,
+    "extracted_kwh_measured": 12.145094768765434,
+    "pump_bin_coverage": 0.9775154581225407,
+    "extracted_kwh_estimated": 12.424452900306905,
+    "mean_outlet_rise_c": 3.431717462142994,
+    "phase_days": {
+      "maturation": 22.78,
+      "thermophilic": 12.01,
+      "cooling": 7.26,
+      "mesophilic": 2.95
+    },
+    "extracted_kwh_true": 12.41177
+  }
+}
