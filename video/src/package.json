@@ -1,0 +1,14 @@
+{
+  "name": "compost-energy-video",
+  "private": true,
+  "type": "module",
+  "description": "Renders the Compost Energy videos frame by frame (Playwright + ffmpeg)",
+  "scripts": {
+    "explainer": "node render.mjs",
+    "demo": "node render-demo.mjs"
+  },
+  "dependencies": {
+    "playwright-core": "1.48.2",
+    "three": "0.169.0"
+  }
+}

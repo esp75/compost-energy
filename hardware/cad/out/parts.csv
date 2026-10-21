@@ -1,0 +1,51 @@
+part,group,material,x_mm,y_mm,z_mm,volume_m3
+slab,civil,precast concrete,16200,17100,300,83.106
+wall-back,civil,concrete + PIR,16200,300,4000,19.44
+wall-1,civil,concrete + PIR,300,16500,4000,19.8
+wall-2,civil,concrete + PIR,300,16500,4000,19.8
+wall-3,civil,concrete + PIR,300,16500,4000,19.8
+wall-4,civil,concrete + PIR,300,16500,4000,19.8
+T-101-roof,civil,concrete + PIR,5300,17100,300,27.189
+T-101-jamb-l,civil,concrete + PIR,250,300,4000,0.3
+T-101-jamb-r,civil,concrete + PIR,250,300,4000,0.3
+T-101-lintel,civil,concrete + PIR,4500,300,400,0.54
+T-101-door,civil,insulated sectional door,4500,80,3600,1.296
+T-102-roof,civil,concrete + PIR,5300,17100,300,27.189
+T-102-jamb-l,civil,concrete + PIR,250,300,4000,0.3
+T-102-jamb-r,civil,concrete + PIR,250,300,4000,0.3
+T-102-lintel,civil,concrete + PIR,4500,300,400,0.54
+T-102-door,civil,insulated sectional door,4500,80,3600,1.296
+T-103-roof,civil,concrete + PIR,5300,17100,300,27.189
+T-103-jamb-l,civil,concrete + PIR,250,300,4000,0.3
+T-103-jamb-r,civil,concrete + PIR,250,300,4000,0.3
+T-103-lintel,civil,concrete + PIR,4500,300,400,0.54
+T-103-door,civil,insulated sectional door,4500,80,3600,1.296
+T-101-spigot-floor,process,HDPE channels with spigots,4080,16100,130,1.507
+T-101-bed,process,"compost, day 12.5",5000,16500,1472,121.437
+T-102-spigot-floor,process,HDPE channels with spigots,4080,16100,130,1.507
+T-102-bed,process,"compost, day 2.5",5000,16500,2458,202.822
+T-103-spigot-floor,process,HDPE channels with spigots,4080,16100,130,1.507
+T-103-bed,process,"compost, day 7.5",5000,16500,1902,156.94
+K-101-blower,air,centrifugal blower 2.7 kW,900,900,900,0.573
+K-101-duct,air,galvanised duct,259,550,259,0.029
+K-102-blower,air,centrifugal blower 2.7 kW,900,900,900,0.573
+K-102-duct,air,galvanised duct,259,550,259,0.029
+K-103-blower,air,centrifugal blower 2.7 kW,900,900,900,0.573
+K-103-duct,air,galvanised duct,259,550,259,0.029
+X-101-stub,air,PP duct Ø315,315,315,900,0.07
+X-102-stub,air,PP duct Ø315,315,315,900,0.07
+X-103-stub,air,PP duct Ø315,315,315,900,0.07
+manifold,air,PP duct Ø500,17200,500,500,3.377
+manifold-drop,air,PP duct Ø500,500,500,2350,0.461
+HX-201-casing,heat,insulated stainless casing,2800,4000,3400,3.973
+HX-201-coil-1,heat,Al fins on stainless tubes,2400,3600,700,6.048
+HX-201-coil-2,heat,Al fins on stainless tubes,2400,3600,700,6.048
+HX-201-coil-3,heat,Al fins on stainless tubes,2400,3600,700,6.048
+K-201-fan,air,booster fan,1200,1400,1600,2.688
+K-201-inlet,air,PP duct,500,450,450,0.08
+K-201-to-biofilter,air,PP duct,450,5200,450,0.827
+F-301-biofilter,air,wood chip bed in concrete bunker,7000,8000,1600,89.6
+TK-401-condensate,heat,PE tank,1000,1000,900,0.707
+condensate-line,heat,PE pipe,2600,80,80,0.013
+water-supply,heat,"steel DN100, insulated",2000,110,110,0.019
+water-return,heat,"steel DN100, insulated",2000,110,110,0.019

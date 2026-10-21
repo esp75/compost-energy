@@ -175,6 +175,45 @@ def size(d: IndustrialDesign = IndustrialDesign()) -> dict:
 
 
 
+
+# ---- buildable layout -----------------------------------------------------
+
+@dataclass(frozen=True)
+class Layout:
+    """Rounded, buildable geometry shared by the drawings and the CAD model.
+
+    Metres. x runs across the tunnels, y along them (doors at y = length),
+    z up from the ground. Boxes are (x0, x1, y0, y1, z0, z1).
+    """
+    wall_m: float = 0.30            # 200 concrete + 100 PIR
+    slab_m: float = 0.30            # plenum slab under the spigot floor
+    door_w_m: float = 4.5
+    door_h_m: float = 3.6
+    spigot_pitch_m: float = 0.5
+    exhaust_y_m: float = 1.2        # exhaust stubs sit near the back wall
+    manifold_rise_m: float = 0.9    # manifold height above the roof
+    hx: tuple = (18.6, 21.4, 0.2, 4.2, 0.0, 3.4)
+    fan: tuple = (21.9, 23.1, 1.4, 2.8, 0.0, 1.6)
+    tank: tuple = (24.0, 25.0, 3.4, 4.4, 0.0, 0.9)
+    biofilter: tuple = (19.0, 26.0, 8.0, 16.0, 0.0, 1.6)
+
+
+def layout(d: IndustrialDesign = IndustrialDesign(), lay: Layout = Layout()) -> dict:
+    m = size(d)
+    length = math.ceil(m["tunnel_length_m"] * 2) / 2           # next 0.5 m
+    bays = [lay.wall_m + i * (d.tunnel_width_m + lay.wall_m) for i in range(d.n_tunnels)]
+    return {
+        "length_m": length,
+        "width_m": d.tunnel_width_m,
+        "height_m": d.tunnel_height_m,
+        "overall_x_m": lay.wall_m + d.n_tunnels * (d.tunnel_width_m + lay.wall_m),
+        "bay_x_m": bays,
+        "roof_z_m": lay.slab_m + d.tunnel_height_m + lay.wall_m,
+        "biofilter_m2": (lay.biofilter[1] - lay.biofilter[0]) * (lay.biofilter[3] - lay.biofilter[2]),
+        "layout": lay,
+    }
+
+
 # ---- operating modes ------------------------------------------------------
 
 @dataclass(frozen=True)

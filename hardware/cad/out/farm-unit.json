@@ -1,0 +1,111 @@
+{
+ "geometry": {
+  "width_m": 5.0,
+  "height_m": 4.0,
+  "length_m": 16.5,
+  "overall_x_m": 16.2,
+  "roof_z_m": 4.6,
+  "bay_x_m": [
+   0.3,
+   5.6,
+   10.9
+  ],
+  "n_tunnels": 3,
+  "hx": [
+   18.6,
+   21.4,
+   0.2,
+   4.2,
+   0.0,
+   3.4
+  ],
+  "fan": [
+   21.9,
+   23.1,
+   1.4,
+   2.8,
+   0.0,
+   1.6
+  ],
+  "tank": [
+   24.0,
+   25.0,
+   3.4,
+   4.4,
+   0.0,
+   0.9
+  ],
+  "biofilter": [
+   19.0,
+   26.0,
+   8.0,
+   16.0,
+   0.0,
+   1.6
+  ],
+  "wall_m": 0.3,
+  "slab_m": 0.3,
+  "door_w_m": 4.5,
+  "door_h_m": 3.6,
+  "exhaust_y_m": 1.2,
+  "manifold_rise_m": 0.9,
+  "spigot_pitch_m": 0.5
+ },
+ "model": {
+  "n_tunnels": 3,
+  "tunnel_width_m": 5.0,
+  "tunnel_height_m": 4.0,
+  "tunnel_length_m": 16.467718559331466,
+  "fill_depth_m": 2.0,
+  "solids_per_tunnel_m3": 164.67718559331465,
+  "gross_per_tunnel_m3": 329.35437118662935,
+  "gross_total_m3": 988.063113559888,
+  "feedstock_t_per_day": 39.12054794520548,
+  "envelope_m2_per_tunnel": 336.4189340679664,
+  "u_wall_w_m2k": 0.20690647163611012,
+  "wall_loss_kw_per_tunnel": 3.8283990051771246,
+  "duty_kw": 547.6876712328767,
+  "wall_loss_share": 0.02097034061343307,
+  "air_dry_kg_s": 1.6618285705488998,
+  "air_m3_h": 7030.105199887574,
+  "air_per_tunnel_m3_h": 2343.3683999625246,
+  "duct_tunnel_mm": 287.88835194659964,
+  "duct_manifold_mm": 498.637252478781,
+  "air_changes_per_h": 7.115036583603288,
+  "fan_kw": 8.13669583320321,
+  "fan_kw_per_tunnel": 2.7122319444010703,
+  "enthalpy_drop_kj_kg": 329.56929549717404,
+  "latent_share": 0.9236882793888315,
+  "condensate_m3_h": 0.6931945657881569,
+  "hx_area_m2": 216.25435945675815,
+  "biofilter_m2": 56.24084159910059,
+  "water_kg_s": 6.541897649699913,
+  "water_m3_h": 23.550831538919688,
+  "pinch_k": 4.999999999999993,
+  "heat_gwh_per_year": 1.99906,
+  "t_exhaust_c": 60.0,
+  "t_air_out_c": 35.0,
+  "t_supply_c": 50.0,
+  "t_return_c": 30.0,
+  "fan_pressure_pa": 2500.0
+ },
+ "operations": {
+  "stage_days": 5.0,
+  "batch_t": 195.6027397260274,
+  "batch_m3": 230.1208702659146,
+  "fill_depth_m": 2.794811794199824,
+  "settled_depth_m": 1.294811794199823,
+  "transfer_released_share": 0.03464528600473555,
+  "transfer_lost_eur": 9234.400725416888,
+  "staggered_net_eur": 156978.3333333333,
+  "transfer_net_eur": 129193.868430699
+ },
+ "farm": {
+  "net_eur": 156978.3333333333,
+  "heat_kwh": 1999060.0,
+  "feedstock_t_per_year": 14279.0
+ },
+ "measured": {
+  "kojima2022_recovery_share": 0.37702265372168287
+ }
+}

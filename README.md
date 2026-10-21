@@ -11,6 +11,14 @@
 
 This repo contains the full engineering record: the (now open) patent, the system design, an energy model at three scales, a physics simulation of a prototype run, the data pipeline that will process real logger data, and the logger firmware.
 
+## Farm-scale unit
+
+[![Farm-scale unit: product demo](video/farm-unit-demo-poster.png)](video/README.md#farm-scale-unit-product-demo-98-s)
+
+Three aerated tunnels with heat recovered from the exhaust air: **548 kW** over the heating season and **2 GWh/yr**. The design is sized from the energy model in [`industrial.py`](model/compost_energy/industrial.py), drawn as [CE-06 to CE-11](hardware/drawings/), modelled in [CadQuery](hardware/cad/) (STEP, GLB, STL), and shown in a 98-second demo rendered from that CAD model. 92 % of the recovered heat is water vapour condensing, and the walls lose 2 %. → [docs/farm-unit.md](docs/farm-unit.md)
+
+![Farm-scale unit cutaway](hardware/drawings/png/farm-unit-cutaway.png)
+
 ## Watch: how Compostito works (2.5 min)
 
 [![How Compostito works: explainer video](video/poster.png)](video/compostito-explainer.mp4)
@@ -72,6 +80,7 @@ docs/
   pivot.md           why home units were dropped for farm scale
   farm-unit.md       the farm-scale unit: tunnels, heat recovery, controls, operating modes
 hardware/
+  cad/               farm-scale unit in CadQuery: STEP, GLB, STL, parts list (generated)
   bom/               prototype 1-3 bill of materials
   drawings/          CE-01..11: home unit, prototype, farm-scale unit, P&IDs, controls (generated)
   logger/            ESP32 + DS18B20 logger firmware and wiring (not yet built)
@@ -79,7 +88,7 @@ model/
   compost_energy/    energy_balance, heat_exchanger, industrial, simulate, clean
   scripts/           run_scenarios, simulate_run, analyze_run
   tests/             28 tests: scenario numbers, energy conservation, cleaning, reference data
-video/               explainer video, subtitles, script; src/ renders it frame by frame
+video/               product demo + explainer: captions, posters; src/ renders both frame by frame
 data/
   simulated/         raw_run_01.csv (noisy log), clean_run_01.csv, truth, ledger, report
   measured/          real runs go here
@@ -96,6 +105,7 @@ python3 -m venv .venv && .venv/bin/pip install -e "model[test]"
 .venv/bin/python model/scripts/analyze_run.py data/simulated/raw_run_01.csv
 .venv/bin/python model/scripts/compare_reference.py             # vs published measurements
 .venv/bin/python -m pytest model/tests
+.venv/bin/pip install -e "model[cad]" && .venv/bin/python hardware/cad/farm_unit.py   # CAD model
 ```
 
 ## Roadmap
@@ -104,7 +114,8 @@ python3 -m venv .venv && .venv/bin/pip install -e "model[test]"
 - [ ] Prototype 3 (double exchanger length): measure how output scales with area
 - [ ] Fit the simulation's kinetic and loss parameters to measured data (start with the Collins bins)
 - [x] Dimensioned drawings and coil layout ([drawings/README](hardware/drawings/README.md)); re-dimension after the first build
-- [ ] Farm-scale concept: reactor and conveyor design, exhaust-air heat recovery
+- [x] Farm-scale concept: tunnels, exhaust-air heat recovery, controls, CAD ([farm-unit.md](docs/farm-unit.md))
+- [ ] Farm pilot: a partner site with a nearby heat user
 
 ## License
 

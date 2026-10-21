@@ -1,4 +1,27 @@
-# Explainer video: how Compostito works
+# Videos
+
+## Farm-scale unit: product demo (98 s)
+
+| File | What |
+|---|---|
+| `farm-unit-demo.mp4` | 1920 × 1080, 30 fps, H.264, captions burned in, no audio. Too large for git: download it from the GitHub release. |
+| [`farm-unit-demo.srt`](farm-unit-demo.srt) / [`.vtt`](farm-unit-demo.vtt) | Captions |
+| [`farm-unit-demo-poster.png`](farm-unit-demo-poster.png) | Thumbnail frame |
+
+Chapters: tunnels · aeration · exhaust · heat recovery · operation (staggered batches) · control · numbers.
+
+The scene is three.js, and it loads the CAD export [`hardware/cad/out/farm-unit.glb`](../hardware/cad/out/). Every number on screen is read from [`farm-unit.json`](../hardware/cad/out/farm-unit.json), which the CAD script writes from the sizing model, and each number is tagged MODEL or MEASURED. The closing card says that nothing at this scale has been built.
+
+```bash
+.venv/bin/python hardware/cad/farm_unit.py     # model files the scene loads
+cd video/src && npm install
+node render-demo.mjs --stills 15,40,70         # preview frames into src/stills/
+node render-demo.mjs                           # full render (about 5 min on an M-series Mac)
+```
+
+`render-demo.mjs` serves the repository on a local port, since the page loads ES modules and the GLB over HTTP. It uses Google Chrome when it finds it; otherwise set `CHROMIUM`.
+
+## Explainer: how Compostito works
 
 | File | What |
 |---|---|
@@ -22,7 +45,7 @@ The video is rendered from code. [`src/scenes.html`](src/scenes.html) draws each
 
 ```bash
 cd video/src
-npm install playwright-core      # once; needs ffmpeg on PATH and a Chromium build
+npm install                      # once; needs ffmpeg on PATH and Chrome or Chromium
 node render.mjs --stills 20,60   # preview frames into src/stills/
 node render.mjs                  # full render: mp4, srt, vtt, poster
 ```

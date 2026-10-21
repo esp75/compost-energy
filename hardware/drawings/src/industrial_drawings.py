@@ -14,23 +14,25 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[3] / "model"))
 
-from compost_energy.industrial import enthalpy_kj_per_kg, operating_modes, size  # noqa: E402
+from compost_energy.industrial import enthalpy_kj_per_kg, layout, operating_modes, size  # noqa: E402
 from make_drawings import Svg, header  # noqa: E402
 
 M = size()
 OPS = operating_modes()
 
-# ---- buildable geometry (m) -----------------------------------------------
-W = M["tunnel_width_m"]                         # 5.0 inner
-H = M["tunnel_height_m"]                        # 4.0 inner
-L = math.ceil(M["tunnel_length_m"] * 2) / 2     # 16.5 inner
-FILL = M["fill_depth_m"]                        # 2.0
-T = 0.30                                        # 200 concrete + 100 PIR
-SLAB = 0.30                                     # plenum slab under the spigot floor
+# ---- buildable geometry (m), shared with hardware/cad ----------------------
+G = layout()
+LAY = G["layout"]
+W = G["width_m"]                                # 5.0 inner
+H = G["height_m"]                               # 4.0 inner
+L = G["length_m"]                               # 16.5 inner, rounded up from the model
+FILL = M["fill_depth_m"]                        # 2.0 average bed
+T = LAY.wall_m                                  # 200 concrete + 100 PIR
+SLAB = LAY.slab_m                               # plenum slab under the spigot floor
 N = M["n_tunnels"]
-X_ALL = T + N * (W + T)                         # 16.2 overall
-DOOR_W, DOOR_H = 4.5, 3.6
-SPIGOT_PITCH = 0.5
+X_ALL = G["overall_x_m"]                        # 16.2 overall
+DOOR_W, DOOR_H = LAY.door_w_m, LAY.door_h_m
+SPIGOT_PITCH = LAY.spigot_pitch_m
 
 
 def bay_x(i: int) -> float:
@@ -146,17 +148,17 @@ def unit_cutaway(p: dict) -> str:
     seg((19.6, 1.2, zm), (19.6, 1.2, 3.4), hot, 7)
 
     # heat-recovery skid: exchanger, fan, biofilter
-    box(18.6, 21.4, 0.2, 4.2, 0, 3.4, p["panel"], p["b"], p["panel"], 1.3, op=0.95)
+    box(*LAY.hx, p["panel"], p["b"], p["panel"], 1.3, op=0.95)
     for j in range(9):   # fin pack lines on the visible side
         yy = 0.6 + j * 0.42
         seg((21.4, yy, 0.5), (21.4, yy, 2.9), p["hot"], 0.6)
-    box(21.9, 23.1, 1.4, 2.8, 0, 1.6, p["panel"], p["panel"], p["panel"], 1.2)          # fan housing
+    box(*LAY.fan, p["panel"], p["panel"], p["panel"], 1.2)          # fan housing
     cx, cy = P(23.1, 2.1, 0.8)
     s.add(f'<ellipse cx="{cx:.1f}" cy="{cy:.1f}" rx="10" ry="13" fill="{p["bg"]}" stroke="{ink}" stroke-width="1.2"/>')
     seg((21.4, 2.1, 0.8), (21.9, 2.1, 0.8), mu, 3)
-    box(24.0, 25.0, 3.4, 4.4, 0, 0.9, p["c"], p["c"], p["c"], 1.1)                        # condensate tank
+    box(*LAY.tank, p["c"], p["c"], p["c"], 1.1)                        # condensate tank
     seg((21.4, 3.9, 0.3), (24.0, 3.9, 0.3), p["cool"], 2, 'stroke-dasharray="4 3"')
-    box(19.0, 26.0, 8.0, 16.0, 0, 1.6, p["d"], p["d"], p["d"], 1.2, op=0.9)               # biofilter
+    box(*LAY.biofilter, p["d"], p["d"], p["d"], 1.2, op=0.9)               # biofilter
     seg((22.5, 2.8, 0.8), (22.5, 8.0, 0.8), mu, 3)
     # water loop leaving the exchanger
     seg((18.6, 3.6, 1.0), (17.2, 3.6, 1.0), hot, 3)
