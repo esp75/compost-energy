@@ -1,0 +1,124 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 1000" font-family="Helvetica Neue, Helvetica, Arial, sans-serif">
+<title>Control and instrumentation</title>
+<defs>
+  <marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#1f2328"/></marker>
+  <marker id="arrHot" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#c2410c"/></marker>
+  <marker id="arrCool" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#2563eb"/></marker>
+  <marker id="arrGreen" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#15803d"/></marker>
+  <marker id="dimA" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,1.5 L10,5 L0,8.5 z" fill="#6e7781"/></marker>
+  <pattern id="mesh" width="7" height="7" patternUnits="userSpaceOnUse"><path d="M0,7 L7,0 M0,0 L7,7" stroke="#9ca3af" stroke-width="0.45" opacity="0.7"/></pattern>
+  <pattern id="concrete" width="12" height="12" patternUnits="userSpaceOnUse"><rect width="12" height="12" fill="#e5e7eb"/><circle cx="3" cy="3" r="1.1" fill="#9ca3af"/><circle cx="9" cy="8" r="0.9" fill="#9ca3af"/><circle cx="7" cy="2" r="0.5" fill="#9ca3af"/></pattern>
+  <pattern id="hatch" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><line x1="0" y1="0" x2="0" y2="6" stroke="#9a6a3a" stroke-width="1"/></pattern>
+  <pattern id="grain" width="40" height="10" patternUnits="userSpaceOnUse"><rect width="40" height="10" fill="#f3e6d6"/><path d="M0,5 C10,3 20,7 40,5" stroke="#9a6a3a" stroke-width="0.4" fill="none" opacity="0.5"/></pattern>
+</defs>
+<rect width="1600" height="1000" fill="#ffffff"/>
+<text x="32.0" y="46.0" font-size="24" fill="#1f2328" font-weight="bold" text-anchor="start" >Control and instrumentation</text>
+<text x="32.0" y="72.0" font-size="14" fill="#6e7781" font-weight="normal" text-anchor="start" >The compost process has priority. Heat recovery takes what the process gives it and never overrides aeration.</text>
+<rect x="60.0" y="130.0" width="330.0" height="230.0" fill="#f6f8fa" stroke="#1f2328" stroke-width="1.4" rx="8"/>
+<text x="76.0" y="158.0" font-size="14" fill="#1f2328" font-weight="bold" text-anchor="start" >Inputs (per tunnel)</text>
+<text x="76.0" y="182.0" font-size="11.5" fill="#6e7781" font-weight="normal" text-anchor="start" >TT-10x a-c   core temperature, 3 probes</text>
+<text x="76.0" y="201.0" font-size="11.5" fill="#6e7781" font-weight="normal" text-anchor="start" >OT-10x       O₂ in the headspace</text>
+<text x="76.0" y="220.0" font-size="11.5" fill="#6e7781" font-weight="normal" text-anchor="start" >PT-10x       plenum pressure</text>
+<text x="76.0" y="239.0" font-size="11.5" fill="#6e7781" font-weight="normal" text-anchor="start" >MT-201       exhaust humidity</text>
+<text x="76.0" y="258.0" font-size="11.5" fill="#6e7781" font-weight="normal" text-anchor="start" >TT-201       exhaust temperature</text>
+<text x="76.0" y="277.0" font-size="11.5" fill="#6e7781" font-weight="normal" text-anchor="start" >TT-202/203   water out / in</text>
+<text x="76.0" y="296.0" font-size="11.5" fill="#6e7781" font-weight="normal" text-anchor="start" >FT-201       water flow</text>
+<text x="76.0" y="315.0" font-size="11.5" fill="#6e7781" font-weight="normal" text-anchor="start" >AT-301       NH₃ after the biofilter</text>
+<text x="76.0" y="334.0" font-size="11.5" fill="#6e7781" font-weight="normal" text-anchor="start" >door switches, blower faults</text>
+<rect x="60.0" y="390.0" width="330.0" height="150.0" fill="#f6f8fa" stroke="#1f2328" stroke-width="1.4" rx="8"/>
+<text x="76.0" y="418.0" font-size="14" fill="#1f2328" font-weight="bold" text-anchor="start" >Outputs</text>
+<text x="76.0" y="442.0" font-size="11.5" fill="#6e7781" font-weight="normal" text-anchor="start" >K-10x       blower speed (VFD)</text>
+<text x="76.0" y="461.0" font-size="11.5" fill="#6e7781" font-weight="normal" text-anchor="start" >RD/FD-10x   recirculation / fresh air</text>
+<text x="76.0" y="480.0" font-size="11.5" fill="#6e7781" font-weight="normal" text-anchor="start" >XD-10x      exhaust damper</text>
+<text x="76.0" y="499.0" font-size="11.5" fill="#6e7781" font-weight="normal" text-anchor="start" >P-201       water pump speed (VFD)</text>
+<text x="76.0" y="518.0" font-size="11.5" fill="#6e7781" font-weight="normal" text-anchor="start" >TV-201      by-pass to the heat users</text>
+<rect x="470.0" y="130.0" width="280.0" height="416.0" fill="#ffffff" stroke="#1f2328" stroke-width="1.4" rx="8"/>
+<text x="486.0" y="158.0" font-size="14" fill="#1f2328" font-weight="bold" text-anchor="start" >PLC</text>
+<text x="486.0" y="182.0" font-size="11.5" fill="#6e7781" font-weight="normal" text-anchor="start" >scan 1 s, log 1 min</text>
+<text x="486.0" y="201.0" font-size="11.5" fill="#6e7781" font-weight="normal" text-anchor="start" ></text>
+<text x="486.0" y="220.0" font-size="11.5" fill="#6e7781" font-weight="normal" text-anchor="start" >Runs one batch per tunnel:</text>
+<text x="486.0" y="239.0" font-size="11.5" fill="#6e7781" font-weight="normal" text-anchor="start" >load → heat-up → sanitise</text>
+<text x="486.0" y="258.0" font-size="11.5" fill="#6e7781" font-weight="normal" text-anchor="start" >→ stabilise → cool → unload</text>
+<text x="486.0" y="277.0" font-size="11.5" fill="#6e7781" font-weight="normal" text-anchor="start" >tunnels staggered 5 days (CE-11)</text>
+<text x="486.0" y="296.0" font-size="11.5" fill="#6e7781" font-weight="normal" text-anchor="start" ></text>
+<text x="486.0" y="315.0" font-size="11.5" fill="#6e7781" font-weight="normal" text-anchor="start" >Same CSV schema and cleaning</text>
+<text x="486.0" y="334.0" font-size="11.5" fill="#6e7781" font-weight="normal" text-anchor="start" >pipeline as the prototype logger</text>
+<text x="486.0" y="353.0" font-size="11.5" fill="#6e7781" font-weight="normal" text-anchor="start" >(model/compost_energy/clean.py)</text>
+<path d="M390,245 L466,245" stroke="#1f2328" stroke-width="1.6" fill="none" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#arr)"/>
+<path d="M466,465 L394,465" stroke="#1f2328" stroke-width="1.6" fill="none" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#arr)"/>
+<rect x="830.0" y="130.0" width="420.0" height="98.0" fill="#fca5a5" stroke="#1f2328" stroke-width="1.4" rx="8" fill-opacity="0.45"/>
+<text x="846.0" y="158.0" font-size="14" fill="#1f2328" font-weight="bold" text-anchor="start" >1  Temperature</text>
+<text x="846.0" y="182.0" font-size="11.5" fill="#1f2328" font-weight="normal" text-anchor="start" >core median → blower speed and recirculation</text>
+<text x="846.0" y="201.0" font-size="11.5" fill="#1f2328" font-weight="normal" text-anchor="start" >setpoint 55 → 65 °C over the batch</text>
+<text x="846.0" y="220.0" font-size="11.5" fill="#1f2328" font-weight="normal" text-anchor="start" >more fresh air when T rises: cools by evaporation</text>
+<path d="M750,176 L826,176" stroke="#1f2328" stroke-width="1.6" fill="none" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#arr)"/>
+<rect x="830.0" y="236.0" width="420.0" height="98.0" fill="#bfdbfe" stroke="#1f2328" stroke-width="1.4" rx="8" fill-opacity="0.45"/>
+<text x="846.0" y="264.0" font-size="14" fill="#1f2328" font-weight="bold" text-anchor="start" >2  Oxygen floor</text>
+<text x="846.0" y="288.0" font-size="11.5" fill="#1f2328" font-weight="normal" text-anchor="start" >O₂ &lt; 5 %: open fresh air, override loop 1</text>
+<text x="846.0" y="307.0" font-size="11.5" fill="#1f2328" font-weight="normal" text-anchor="start" >keeps the bed aerobic: no CH₄, less odour</text>
+<path d="M750,282 L826,282" stroke="#1f2328" stroke-width="1.6" fill="none" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#arr)"/>
+<rect x="830.0" y="342.0" width="420.0" height="98.0" fill="#fde68a" stroke="#1f2328" stroke-width="1.4" rx="8" fill-opacity="0.45"/>
+<text x="846.0" y="370.0" font-size="14" fill="#1f2328" font-weight="bold" text-anchor="start" >3  Sanitisation</text>
+<text x="846.0" y="394.0" font-size="11.5" fill="#1f2328" font-weight="normal" text-anchor="start" >hold ≥ 55 °C for ≥ 3 days (US EPA PFRP,</text>
+<text x="846.0" y="413.0" font-size="11.5" fill="#1f2328" font-weight="normal" text-anchor="start" >in-vessel); timer resets if any probe drops below</text>
+<path d="M750,388 L826,388" stroke="#1f2328" stroke-width="1.6" fill="none" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#arr)"/>
+<rect x="830.0" y="448.0" width="420.0" height="98.0" fill="#d9f99d" stroke="#1f2328" stroke-width="1.4" rx="8" fill-opacity="0.45"/>
+<text x="846.0" y="476.0" font-size="14" fill="#1f2328" font-weight="bold" text-anchor="start" >4  Heat recovery</text>
+<text x="846.0" y="500.0" font-size="11.5" fill="#1f2328" font-weight="normal" text-anchor="start" >pump holds TT-202 ≥ 50 °C; TV-201 by-passes if lower</text>
+<text x="846.0" y="519.0" font-size="11.5" fill="#1f2328" font-weight="normal" text-anchor="start" >exhaust flow is set by loops 1-3, never by heat demand</text>
+<path d="M750,494 L826,494" stroke="#1f2328" stroke-width="1.6" fill="none" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#arr)"/>
+<path d="M1250,176 L1300,176 L1300,282 L1254,282" stroke="#15803d" stroke-width="1.4" fill="none" stroke-linejoin="round" stroke-linecap="round" stroke-dasharray="4 3" marker-end="url(#arrGreen)"/>
+<text x="1310.0" y="232.0" font-size="11" fill="#15803d" font-weight="normal" text-anchor="start" >loop 2 overrides 1</text>
+<path d="M1250,388 L1300,388 L1300,494 L1254,494" stroke="#15803d" stroke-width="1.4" fill="none" stroke-linejoin="round" stroke-linecap="round" stroke-dasharray="4 3" marker-end="url(#arrGreen)"/>
+<text x="1310.0" y="432.0" font-size="11" fill="#15803d" font-weight="normal" text-anchor="start" >1-3 set the air</text>
+<text x="1310.0" y="448.0" font-size="11" fill="#15803d" font-weight="normal" text-anchor="start" >that 4 receives</text>
+<text x="470.0" y="596.0" font-size="10" fill="#6e7781" font-weight="normal" text-anchor="start" letter-spacing="1.5">BATCH SETPOINT, ONE TUNNEL (15 DAYS)</text>
+<rect x="470.0" y="610.0" width="780.0" height="200.0" fill="#ffffff" stroke="#d0d7de" stroke-width="1" />
+<line x1="470.0" y1="779.2" x2="1250.0" y2="779.2" stroke="#d0d7de" stroke-width="0.6" />
+<text x="462.0" y="783.2" font-size="10.5" fill="#6e7781" font-weight="normal" text-anchor="end" >20</text>
+<line x1="470.0" y1="717.7" x2="1250.0" y2="717.7" stroke="#d0d7de" stroke-width="0.6" />
+<text x="462.0" y="721.7" font-size="10.5" fill="#6e7781" font-weight="normal" text-anchor="end" >40</text>
+<line x1="470.0" y1="671.5" x2="1250.0" y2="671.5" stroke="#d0d7de" stroke-width="0.6" />
+<text x="462.0" y="675.5" font-size="10.5" fill="#6e7781" font-weight="normal" text-anchor="end" >55</text>
+<line x1="470.0" y1="640.8" x2="1250.0" y2="640.8" stroke="#d0d7de" stroke-width="0.6" />
+<text x="462.0" y="644.8" font-size="10.5" fill="#6e7781" font-weight="normal" text-anchor="end" >65</text>
+<text x="470.0" y="826.0" font-size="10.5" fill="#6e7781" font-weight="normal" text-anchor="middle" >d0</text>
+<text x="626.0" y="826.0" font-size="10.5" fill="#6e7781" font-weight="normal" text-anchor="middle" >d3</text>
+<text x="782.0" y="826.0" font-size="10.5" fill="#6e7781" font-weight="normal" text-anchor="middle" >d6</text>
+<text x="938.0" y="826.0" font-size="10.5" fill="#6e7781" font-weight="normal" text-anchor="middle" >d9</text>
+<text x="1094.0" y="826.0" font-size="10.5" fill="#6e7781" font-weight="normal" text-anchor="middle" >d12</text>
+<text x="1250.0" y="826.0" font-size="10.5" fill="#6e7781" font-weight="normal" text-anchor="middle" >d15</text>
+<path d="M470.0,779.2 L548.0,702.3 L600.0,671.5 L756.0,671.5 L782.0,650.0 L1042.0,650.0 L1146.0,702.3 L1250.0,742.3" stroke="#c2410c" stroke-width="2.4" fill="none" stroke-linejoin="round" stroke-linecap="round" />
+<rect x="600.0" y="610.0" width="156.0" height="200.0" fill="#fde68a" stroke="none" stroke-width="0" fill-opacity="0.35"/>
+<text x="678.0" y="628.0" font-size="11" fill="#1f2328" font-weight="bold" text-anchor="middle" >sanitise</text>
+<text x="912.0" y="635.8" font-size="11" fill="#c2410c" font-weight="normal" text-anchor="middle" >stabilise: max heat to HX-201</text>
+<text x="1198.0" y="709.7" font-size="11" fill="#2563eb" font-weight="normal" text-anchor="middle" >cool, unload</text>
+<text x="1260.0" y="710.0" font-size="11" fill="#6e7781" font-weight="normal" text-anchor="start" >°C</text>
+<rect x="60.0" y="570.0" width="330.0" height="175.0" fill="#f6f8fa" stroke="#1f2328" stroke-width="1.4" rx="8"/>
+<text x="76.0" y="598.0" font-size="14" fill="#1f2328" font-weight="bold" text-anchor="start" >Alarms and trips</text>
+<text x="76.0" y="622.0" font-size="11.5" fill="#6e7781" font-weight="normal" text-anchor="start" >probe disagreement > 10 K</text>
+<text x="76.0" y="641.0" font-size="11.5" fill="#6e7781" font-weight="normal" text-anchor="start" >O₂ &lt; 3 % for 30 min</text>
+<text x="76.0" y="660.0" font-size="11.5" fill="#6e7781" font-weight="normal" text-anchor="start" >plenum ΔP high (blocked floor)</text>
+<text x="76.0" y="679.0" font-size="11.5" fill="#6e7781" font-weight="normal" text-anchor="start" >NH₃ high after biofilter</text>
+<text x="76.0" y="698.0" font-size="11.5" fill="#6e7781" font-weight="normal" text-anchor="start" >door open: blower to minimum</text>
+<text x="76.0" y="717.0" font-size="11.5" fill="#6e7781" font-weight="normal" text-anchor="start" >frost: pump runs, TV-201 to by-pass</text>
+<text x="32.0" y="970.0" font-size="12" fill="#6e7781" font-weight="normal" text-anchor="start" >Setpoints are starting values from composting practice; they are tuned on the pilot. The temperature profile is illustrative, not simulated.</text>
+<rect x="1146.0" y="872.0" width="430.0" height="104.0" fill="#ffffff" stroke="#1f2328" stroke-width="1.4" />
+<line x1="1146.0" y1="912.0" x2="1576.0" y2="912.0" stroke="#1f2328" stroke-width="0.8" />
+<line x1="1146.0" y1="944.0" x2="1576.0" y2="944.0" stroke="#d0d7de" stroke-width="0.8" />
+<line x1="1296.0" y1="912.0" x2="1296.0" y2="976.0" stroke="#d0d7de" stroke-width="0.8" />
+<line x1="1436.0" y1="912.0" x2="1436.0" y2="976.0" stroke="#d0d7de" stroke-width="0.8" />
+<text x="1160.0" y="898.0" font-size="15" fill="#1f2328" font-weight="bold" text-anchor="start" >Control and instrumentation</text>
+<text x="1160.0" y="926.0" font-size="8.5" fill="#6e7781" font-weight="normal" text-anchor="start" letter-spacing="1">DRAWING</text>
+<text x="1160.0" y="939.0" font-size="11.5" fill="#1f2328" font-weight="normal" text-anchor="start" >CE-10</text>
+<text x="1310.0" y="926.0" font-size="8.5" fill="#6e7781" font-weight="normal" text-anchor="start" letter-spacing="1">REV / DATE</text>
+<text x="1310.0" y="939.0" font-size="11.5" fill="#1f2328" font-weight="normal" text-anchor="start" >A · 2026-10</text>
+<text x="1450.0" y="926.0" font-size="8.5" fill="#6e7781" font-weight="normal" text-anchor="start" letter-spacing="1">SCALE</text>
+<text x="1450.0" y="939.0" font-size="11.5" fill="#1f2328" font-weight="normal" text-anchor="start" >NTS, indicative</text>
+<text x="1160.0" y="958.0" font-size="8.5" fill="#6e7781" font-weight="normal" text-anchor="start" letter-spacing="1">AUTHOR</text>
+<text x="1160.0" y="971.0" font-size="11.5" fill="#1f2328" font-weight="normal" text-anchor="start" >Maxime Kadri</text>
+<text x="1310.0" y="958.0" font-size="8.5" fill="#6e7781" font-weight="normal" text-anchor="start" letter-spacing="1">PROJECT</text>
+<text x="1310.0" y="971.0" font-size="11.5" fill="#1f2328" font-weight="normal" text-anchor="start" >Compost Energy</text>
+<text x="1450.0" y="958.0" font-size="8.5" fill="#6e7781" font-weight="normal" text-anchor="start" letter-spacing="1">LICENCE</text>
+<text x="1450.0" y="971.0" font-size="11.5" fill="#1f2328" font-weight="normal" text-anchor="start" >CERN-OHL-P-2.0</text>
+</svg>

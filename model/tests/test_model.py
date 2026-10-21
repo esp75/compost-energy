@@ -173,3 +173,63 @@ def test_kojima_heat_balance():
     assert hb["microbial_heat_kw"] == pytest.approx(61.8)
     assert hb["water_heat_gain_kw"] / hb["microbial_heat_kw"] == pytest.approx(0.377, abs=0.002)
     assert load_kojima_daily_exchanger()["extracted_from_gas_kw"].mean() == pytest.approx(22.6, abs=0.1)
+
+
+# ---- farm-scale unit ------------------------------------------------------
+
+from compost_energy.industrial import enthalpy_kj_per_kg, humidity_ratio, size  # noqa: E402
+
+
+def test_psychrometrics_match_tables():
+    # ASHRAE: saturated air at 60 °C holds 0.1521 kg/kg; at 35 °C, 0.03666 kg/kg
+    assert humidity_ratio(60) == pytest.approx(0.1521, rel=0.01)
+    assert humidity_ratio(35) == pytest.approx(0.03666, rel=0.01)
+    assert enthalpy_kj_per_kg(35) == pytest.approx(129.2, rel=0.01)
+
+
+def test_tunnels_hold_the_model_volume():
+    m = size()
+    assert m["gross_total_m3"] == pytest.approx(farm_sizing()["reactor_volume_m3"], rel=1e-9)
+    assert 15 < m["tunnel_length_m"] < 18
+
+
+def test_heat_recovery_balances():
+    m = size()
+    # air side and water side carry the same duty
+    air_kw = m["air_dry_kg_s"] * m["enthalpy_drop_kj_kg"]
+    water_kw = m["water_kg_s"] * 4.186 * (m["t_supply_c"] - m["t_return_c"])
+    assert air_kw == pytest.approx(m["duty_kw"], rel=1e-9)
+    assert water_kw == pytest.approx(m["duty_kw"], rel=1e-9)
+    # duty x heating hours gives back the farm scenario's 2 GWh
+    assert m["duty_kw"] * 5 * 730 / 1e6 == pytest.approx(m["heat_gwh_per_year"], rel=1e-9)
+
+
+def test_exhaust_heat_is_mostly_latent_and_walls_are_small():
+    m = size()
+    assert m["latent_share"] > 0.9
+    assert m["wall_loss_share"] < 0.05
+
+
+def test_counterflow_exchanger_is_feasible():
+    assert size()["pinch_k"] > 3.0
+
+
+def test_farm_auxiliaries_include_the_sized_fans():
+    from compost_energy.energy_balance import FARM as farm
+    assert farm.aux_power_w == pytest.approx(5000 + size()["fan_kw"] * 1000, abs=100)
+
+
+def test_staggered_batches_fill_and_settle_inside_the_tunnel():
+    from compost_energy.industrial import operating_modes
+    ops = operating_modes()
+    assert ops["fill_depth_m"] < size()["tunnel_height_m"] - 1.0      # headspace left at fill
+    assert ops["settled_depth_m"] < ops["fill_depth_m"]
+    # the average of the settling bed is the model's 2 m design depth
+    assert ops["batch_t"] == pytest.approx(5 * farm_sizing()["feedstock_t_per_day"])
+
+
+def test_transfer_mode_doubles_handling_and_costs_more():
+    from compost_energy.industrial import operating_modes
+    a, b = operating_modes()["staggered"], operating_modes()["transfer"]
+    assert 1.8 < b["t_per_day"] / a["t_per_day"] < 2.2
+    assert b["net_eur"] < a["net_eur"]

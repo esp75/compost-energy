@@ -104,7 +104,8 @@ FARM = Scenario(
     # Heat only sells in the heating season: 5 months of use, fed by
     # 7 months of feedstock (2 months stockpiled before winter).
     usable_fraction=7 / 12,
-    aux_power_w=10_000.0,  # conveying ~5 kW + aeration/heating 3-5 kW
+    # conveying ~5 kW + aeration fans 8.1 kW (sized in industrial.py: 7,030 m³/h at 2.5 kPa)
+    aux_power_w=13_100.0,
     aux_hours=5 * 730.0,
     boiler_efficiency=0.9,
     fixed_opex_eur=100_000.0,

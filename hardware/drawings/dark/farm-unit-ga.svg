@@ -1,0 +1,228 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 1000" font-family="Helvetica Neue, Helvetica, Arial, sans-serif">
+<title>Farm-scale unit - general arrangement</title>
+<defs>
+  <marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#fafafa"/></marker>
+  <marker id="arrHot" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#f7c72f"/></marker>
+  <marker id="arrCool" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#2dd4bf"/></marker>
+  <marker id="arrGreen" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#2dd4bf"/></marker>
+  <marker id="dimA" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,1.5 L10,5 L0,8.5 z" fill="#a1a1aa"/></marker>
+  <pattern id="mesh" width="7" height="7" patternUnits="userSpaceOnUse"><path d="M0,7 L7,0 M0,0 L7,7" stroke="#52525b" stroke-width="0.45" opacity="0.7"/></pattern>
+  <pattern id="concrete" width="12" height="12" patternUnits="userSpaceOnUse"><rect width="12" height="12" fill="#2a2a2e"/><circle cx="3" cy="3" r="1.1" fill="#52525b"/><circle cx="9" cy="8" r="0.9" fill="#52525b"/><circle cx="7" cy="2" r="0.5" fill="#52525b"/></pattern>
+  <pattern id="hatch" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><line x1="0" y1="0" x2="0" y2="6" stroke="#c08a55" stroke-width="1"/></pattern>
+  <pattern id="grain" width="40" height="10" patternUnits="userSpaceOnUse"><rect width="40" height="10" fill="#1a1510"/><path d="M0,5 C10,3 20,7 40,5" stroke="#c08a55" stroke-width="0.4" fill="none" opacity="0.5"/></pattern>
+</defs>
+<rect width="1600" height="1000" fill="#050505"/>
+<text x="32.0" y="46.0" font-size="24" fill="#fafafa" font-weight="bold" text-anchor="start" >Farm-scale unit: general arrangement</text>
+<text x="32.0" y="72.0" font-size="14" fill="#a1a1aa" font-weight="normal" text-anchor="start" >Plan, cross-section A-A and long section B-B. Dimensions in metres; inner sizes unless marked.</text>
+<text x="80.0" y="132.0" font-size="12" fill="#a1a1aa" font-weight="bold" text-anchor="start" letter-spacing="1.5">PLAN</text>
+<rect x="80.0" y="150.0" width="324.0" height="336.0" fill="url(#concrete)" stroke="#fafafa" stroke-width="1.4" />
+<rect x="86.0" y="156.0" width="100.0" height="330.0" fill="#050505" stroke="#fafafa" stroke-width="1.2" />
+<line x1="96.0" y1="162.0" x2="96.0" y2="480.0" stroke="#2dd4bf" stroke-width="0.6" stroke-dasharray="2 3"/>
+<line x1="106.0" y1="162.0" x2="106.0" y2="480.0" stroke="#2dd4bf" stroke-width="0.6" stroke-dasharray="2 3"/>
+<line x1="116.0" y1="162.0" x2="116.0" y2="480.0" stroke="#2dd4bf" stroke-width="0.6" stroke-dasharray="2 3"/>
+<line x1="126.0" y1="162.0" x2="126.0" y2="480.0" stroke="#2dd4bf" stroke-width="0.6" stroke-dasharray="2 3"/>
+<line x1="136.0" y1="162.0" x2="136.0" y2="480.0" stroke="#2dd4bf" stroke-width="0.6" stroke-dasharray="2 3"/>
+<line x1="146.0" y1="162.0" x2="146.0" y2="480.0" stroke="#2dd4bf" stroke-width="0.6" stroke-dasharray="2 3"/>
+<line x1="156.0" y1="162.0" x2="156.0" y2="480.0" stroke="#2dd4bf" stroke-width="0.6" stroke-dasharray="2 3"/>
+<line x1="166.0" y1="162.0" x2="166.0" y2="480.0" stroke="#2dd4bf" stroke-width="0.6" stroke-dasharray="2 3"/>
+<line x1="176.0" y1="162.0" x2="176.0" y2="480.0" stroke="#2dd4bf" stroke-width="0.6" stroke-dasharray="2 3"/>
+<rect x="91.0" y="485.0" width="90.0" height="3.0" fill="#050505" stroke="#050505" stroke-width="0" />
+<line x1="91.0" y1="492.0" x2="181.0" y2="492.0" stroke="#fafafa" stroke-width="1.2" stroke-dasharray="6 3"/>
+<text x="136.0" y="321.0" font-size="13" fill="#fafafa" font-weight="bold" text-anchor="middle" >T-101</text>
+<text x="136.0" y="338.0" font-size="11" fill="#a1a1aa" font-weight="normal" text-anchor="middle" >330 m³</text>
+<circle cx="136.0" cy="180.0" r="5" fill="none" stroke="#f7c72f" stroke-width="1.6"/>
+<rect x="192.0" y="156.0" width="100.0" height="330.0" fill="#050505" stroke="#fafafa" stroke-width="1.2" />
+<line x1="202.0" y1="162.0" x2="202.0" y2="480.0" stroke="#2dd4bf" stroke-width="0.6" stroke-dasharray="2 3"/>
+<line x1="212.0" y1="162.0" x2="212.0" y2="480.0" stroke="#2dd4bf" stroke-width="0.6" stroke-dasharray="2 3"/>
+<line x1="222.0" y1="162.0" x2="222.0" y2="480.0" stroke="#2dd4bf" stroke-width="0.6" stroke-dasharray="2 3"/>
+<line x1="232.0" y1="162.0" x2="232.0" y2="480.0" stroke="#2dd4bf" stroke-width="0.6" stroke-dasharray="2 3"/>
+<line x1="242.0" y1="162.0" x2="242.0" y2="480.0" stroke="#2dd4bf" stroke-width="0.6" stroke-dasharray="2 3"/>
+<line x1="252.0" y1="162.0" x2="252.0" y2="480.0" stroke="#2dd4bf" stroke-width="0.6" stroke-dasharray="2 3"/>
+<line x1="262.0" y1="162.0" x2="262.0" y2="480.0" stroke="#2dd4bf" stroke-width="0.6" stroke-dasharray="2 3"/>
+<line x1="272.0" y1="162.0" x2="272.0" y2="480.0" stroke="#2dd4bf" stroke-width="0.6" stroke-dasharray="2 3"/>
+<line x1="282.0" y1="162.0" x2="282.0" y2="480.0" stroke="#2dd4bf" stroke-width="0.6" stroke-dasharray="2 3"/>
+<rect x="197.0" y="485.0" width="90.0" height="3.0" fill="#050505" stroke="#050505" stroke-width="0" />
+<line x1="197.0" y1="492.0" x2="287.0" y2="492.0" stroke="#fafafa" stroke-width="1.2" stroke-dasharray="6 3"/>
+<text x="242.0" y="321.0" font-size="13" fill="#fafafa" font-weight="bold" text-anchor="middle" >T-102</text>
+<text x="242.0" y="338.0" font-size="11" fill="#a1a1aa" font-weight="normal" text-anchor="middle" >330 m³</text>
+<circle cx="242.0" cy="180.0" r="5" fill="none" stroke="#f7c72f" stroke-width="1.6"/>
+<rect x="298.0" y="156.0" width="100.0" height="330.0" fill="#050505" stroke="#fafafa" stroke-width="1.2" />
+<line x1="308.0" y1="162.0" x2="308.0" y2="480.0" stroke="#2dd4bf" stroke-width="0.6" stroke-dasharray="2 3"/>
+<line x1="318.0" y1="162.0" x2="318.0" y2="480.0" stroke="#2dd4bf" stroke-width="0.6" stroke-dasharray="2 3"/>
+<line x1="328.0" y1="162.0" x2="328.0" y2="480.0" stroke="#2dd4bf" stroke-width="0.6" stroke-dasharray="2 3"/>
+<line x1="338.0" y1="162.0" x2="338.0" y2="480.0" stroke="#2dd4bf" stroke-width="0.6" stroke-dasharray="2 3"/>
+<line x1="348.0" y1="162.0" x2="348.0" y2="480.0" stroke="#2dd4bf" stroke-width="0.6" stroke-dasharray="2 3"/>
+<line x1="358.0" y1="162.0" x2="358.0" y2="480.0" stroke="#2dd4bf" stroke-width="0.6" stroke-dasharray="2 3"/>
+<line x1="368.0" y1="162.0" x2="368.0" y2="480.0" stroke="#2dd4bf" stroke-width="0.6" stroke-dasharray="2 3"/>
+<line x1="378.0" y1="162.0" x2="378.0" y2="480.0" stroke="#2dd4bf" stroke-width="0.6" stroke-dasharray="2 3"/>
+<line x1="388.0" y1="162.0" x2="388.0" y2="480.0" stroke="#2dd4bf" stroke-width="0.6" stroke-dasharray="2 3"/>
+<rect x="303.0" y="485.0" width="90.0" height="3.0" fill="#050505" stroke="#050505" stroke-width="0" />
+<line x1="303.0" y1="492.0" x2="393.0" y2="492.0" stroke="#fafafa" stroke-width="1.2" stroke-dasharray="6 3"/>
+<text x="348.0" y="321.0" font-size="13" fill="#fafafa" font-weight="bold" text-anchor="middle" >T-103</text>
+<text x="348.0" y="338.0" font-size="11" fill="#a1a1aa" font-weight="normal" text-anchor="middle" >330 m³</text>
+<circle cx="348.0" cy="180.0" r="5" fill="none" stroke="#f7c72f" stroke-width="1.6"/>
+<line x1="136.0" y1="180.0" x2="472.0" y2="180.0" stroke="#f7c72f" stroke-width="3" />
+<rect x="452.0" y="160.0" width="56.0" height="80.0" fill="#6b2a22" stroke="#fafafa" stroke-width="1.3" fill-opacity="0.6"/>
+<text x="480.0" y="202.0" font-size="10" fill="#fafafa" font-weight="bold" text-anchor="middle" >HX-201</text>
+<rect x="518.0" y="184.0" width="24.0" height="28.0" fill="#0d0d0f" stroke="#fafafa" stroke-width="1.2" />
+<text x="530.0" y="201.0" font-size="10" fill="#fafafa" font-weight="bold" text-anchor="middle" >K</text>
+<rect x="460.0" y="316.0" width="140.0" height="160.0" fill="#33501f" stroke="#fafafa" stroke-width="1.2" />
+<text x="530.0" y="400.0" font-size="11" fill="#fafafa" font-weight="bold" text-anchor="middle" >Biofilter F-301</text>
+<line x1="58.0" y1="393.6" x2="426.0" y2="393.6" stroke="#fafafa" stroke-width="0.9" stroke-dasharray="14 4 3 4"/>
+<text x="50.0" y="397.6" font-size="13" fill="#fafafa" font-weight="bold" text-anchor="end" >A</text>
+<text x="434.0" y="397.6" font-size="13" fill="#fafafa" font-weight="bold" text-anchor="start" >A</text>
+<line x1="348.0" y1="144.0" x2="348.0" y2="502.0" stroke="#fafafa" stroke-width="0.9" stroke-dasharray="14 4 3 4"/>
+<text x="356.0" y="146.0" font-size="13" fill="#fafafa" font-weight="bold" text-anchor="start" >B</text>
+<line x1="80.0" y1="492.0" x2="80.0" y2="531.1" stroke="#a1a1aa" stroke-width="0.7" />
+<line x1="404.0" y1="492.0" x2="404.0" y2="531.1" stroke="#a1a1aa" stroke-width="0.7" />
+<line x1="80.0" y1="526.0" x2="404.0" y2="526.0" stroke="#a1a1aa" stroke-width="0.9" marker-start="url(#dimA)" marker-end="url(#dimA)"/>
+<text x="242.0" y="521.0" font-size="12" fill="#fafafa" text-anchor="middle" transform="rotate(0.0 242.0 526.0)">16.2 overall</text>
+<line x1="86.0" y1="486.0" x2="86.0" y2="506.7" stroke="#a1a1aa" stroke-width="0.7" />
+<line x1="186.0" y1="486.0" x2="186.0" y2="506.7" stroke="#a1a1aa" stroke-width="0.7" />
+<line x1="86.0" y1="504.0" x2="186.0" y2="504.0" stroke="#a1a1aa" stroke-width="0.9" marker-start="url(#dimA)" marker-end="url(#dimA)"/>
+<text x="136.0" y="499.0" font-size="11" fill="#fafafa" text-anchor="middle" transform="rotate(0.0 136.0 504.0)">5.0</text>
+<line x1="80.0" y1="156.0" x2="45.5" y2="156.0" stroke="#a1a1aa" stroke-width="0.7" />
+<line x1="80.0" y1="486.0" x2="45.5" y2="486.0" stroke="#a1a1aa" stroke-width="0.7" />
+<line x1="50.0" y1="156.0" x2="50.0" y2="486.0" stroke="#a1a1aa" stroke-width="0.9" marker-start="url(#dimA)" marker-end="url(#dimA)"/>
+<text x="50.0" y="316.0" font-size="12" fill="#fafafa" text-anchor="middle" transform="rotate(90.0 50.0 321.0)">16.5 inner</text>
+<line x1="197.0" y1="492.0" x2="197.0" y2="512.7" stroke="#a1a1aa" stroke-width="0.7" />
+<line x1="287.0" y1="492.0" x2="287.0" y2="512.7" stroke="#a1a1aa" stroke-width="0.7" />
+<line x1="197.0" y1="510.0" x2="287.0" y2="510.0" stroke="#a1a1aa" stroke-width="0.9" marker-start="url(#dimA)" marker-end="url(#dimA)"/>
+<text x="242.0" y="505.0" font-size="11" fill="#fafafa" text-anchor="middle" transform="rotate(0.0 242.0 510.0)">door 4.5</text>
+<text x="740.0" y="262.8" font-size="12" fill="#a1a1aa" font-weight="bold" text-anchor="start" letter-spacing="1.5">SECTION A-A</text>
+<line x1="720.8" y1="440.0" x2="1277.6" y2="440.0" stroke="#fafafa" stroke-width="1.4" />
+<rect x="740.0" y="430.4" width="518.4" height="9.6" fill="url(#concrete)" stroke="#fafafa" stroke-width="1.2" />
+<rect x="740.0" y="302.4" width="9.6" height="128.0" fill="url(#concrete)" stroke="#fafafa" stroke-width="1.2" />
+<rect x="909.6" y="302.4" width="9.6" height="128.0" fill="url(#concrete)" stroke="#fafafa" stroke-width="1.2" />
+<rect x="1079.2" y="302.4" width="9.6" height="128.0" fill="url(#concrete)" stroke="#fafafa" stroke-width="1.2" />
+<rect x="1248.8" y="302.4" width="9.6" height="128.0" fill="url(#concrete)" stroke="#fafafa" stroke-width="1.2" />
+<rect x="740.0" y="292.8" width="518.4" height="9.6" fill="url(#concrete)" stroke="#fafafa" stroke-width="1.2" />
+<rect x="749.6" y="366.4" width="160.0" height="64.0" fill="#1a1510" stroke="#c08a55" stroke-width="1" />
+<rect x="763.1" y="430.4" width="5.0" height="5.8" fill="#050505" stroke="#2dd4bf" stroke-width="0.8" />
+<rect x="779.1" y="430.4" width="5.0" height="5.8" fill="#050505" stroke="#2dd4bf" stroke-width="0.8" />
+<rect x="795.1" y="430.4" width="5.0" height="5.8" fill="#050505" stroke="#2dd4bf" stroke-width="0.8" />
+<rect x="811.1" y="430.4" width="5.0" height="5.8" fill="#050505" stroke="#2dd4bf" stroke-width="0.8" />
+<rect x="827.1" y="430.4" width="5.0" height="5.8" fill="#050505" stroke="#2dd4bf" stroke-width="0.8" />
+<rect x="843.1" y="430.4" width="5.0" height="5.8" fill="#050505" stroke="#2dd4bf" stroke-width="0.8" />
+<rect x="859.1" y="430.4" width="5.0" height="5.8" fill="#050505" stroke="#2dd4bf" stroke-width="0.8" />
+<rect x="875.1" y="430.4" width="5.0" height="5.8" fill="#050505" stroke="#2dd4bf" stroke-width="0.8" />
+<rect x="891.1" y="430.4" width="5.0" height="5.8" fill="#050505" stroke="#2dd4bf" stroke-width="0.8" />
+<line x1="800.8" y1="424.0" x2="800.8" y2="344.0" stroke="#2dd4bf" stroke-width="1.2" marker-end="url(#arrCool)"/>
+<line x1="829.6" y1="424.0" x2="829.6" y2="344.0" stroke="#2dd4bf" stroke-width="1.2" marker-end="url(#arrCool)"/>
+<line x1="858.4" y1="424.0" x2="858.4" y2="344.0" stroke="#2dd4bf" stroke-width="1.2" marker-end="url(#arrCool)"/>
+<line x1="825.6" y1="292.8" x2="825.6" y2="266.8" stroke="#f7c72f" stroke-width="1.4" />
+<line x1="833.6" y1="292.8" x2="833.6" y2="266.8" stroke="#f7c72f" stroke-width="1.4" />
+<rect x="919.2" y="366.4" width="160.0" height="64.0" fill="#1a1510" stroke="#c08a55" stroke-width="1" />
+<rect x="932.7" y="430.4" width="5.0" height="5.8" fill="#050505" stroke="#2dd4bf" stroke-width="0.8" />
+<rect x="948.7" y="430.4" width="5.0" height="5.8" fill="#050505" stroke="#2dd4bf" stroke-width="0.8" />
+<rect x="964.7" y="430.4" width="5.0" height="5.8" fill="#050505" stroke="#2dd4bf" stroke-width="0.8" />
+<rect x="980.7" y="430.4" width="5.0" height="5.8" fill="#050505" stroke="#2dd4bf" stroke-width="0.8" />
+<rect x="996.7" y="430.4" width="5.0" height="5.8" fill="#050505" stroke="#2dd4bf" stroke-width="0.8" />
+<rect x="1012.7" y="430.4" width="5.0" height="5.8" fill="#050505" stroke="#2dd4bf" stroke-width="0.8" />
+<rect x="1028.7" y="430.4" width="5.0" height="5.8" fill="#050505" stroke="#2dd4bf" stroke-width="0.8" />
+<rect x="1044.7" y="430.4" width="5.0" height="5.8" fill="#050505" stroke="#2dd4bf" stroke-width="0.8" />
+<rect x="1060.7" y="430.4" width="5.0" height="5.8" fill="#050505" stroke="#2dd4bf" stroke-width="0.8" />
+<line x1="970.4" y1="424.0" x2="970.4" y2="344.0" stroke="#2dd4bf" stroke-width="1.2" marker-end="url(#arrCool)"/>
+<line x1="999.2" y1="424.0" x2="999.2" y2="344.0" stroke="#2dd4bf" stroke-width="1.2" marker-end="url(#arrCool)"/>
+<line x1="1028.0" y1="424.0" x2="1028.0" y2="344.0" stroke="#2dd4bf" stroke-width="1.2" marker-end="url(#arrCool)"/>
+<line x1="995.2" y1="292.8" x2="995.2" y2="266.8" stroke="#f7c72f" stroke-width="1.4" />
+<line x1="1003.2" y1="292.8" x2="1003.2" y2="266.8" stroke="#f7c72f" stroke-width="1.4" />
+<rect x="1088.8" y="366.4" width="160.0" height="64.0" fill="#1a1510" stroke="#c08a55" stroke-width="1" />
+<rect x="1102.3" y="430.4" width="5.0" height="5.8" fill="#050505" stroke="#2dd4bf" stroke-width="0.8" />
+<rect x="1118.3" y="430.4" width="5.0" height="5.8" fill="#050505" stroke="#2dd4bf" stroke-width="0.8" />
+<rect x="1134.3" y="430.4" width="5.0" height="5.8" fill="#050505" stroke="#2dd4bf" stroke-width="0.8" />
+<rect x="1150.3" y="430.4" width="5.0" height="5.8" fill="#050505" stroke="#2dd4bf" stroke-width="0.8" />
+<rect x="1166.3" y="430.4" width="5.0" height="5.8" fill="#050505" stroke="#2dd4bf" stroke-width="0.8" />
+<rect x="1182.3" y="430.4" width="5.0" height="5.8" fill="#050505" stroke="#2dd4bf" stroke-width="0.8" />
+<rect x="1198.3" y="430.4" width="5.0" height="5.8" fill="#050505" stroke="#2dd4bf" stroke-width="0.8" />
+<rect x="1214.3" y="430.4" width="5.0" height="5.8" fill="#050505" stroke="#2dd4bf" stroke-width="0.8" />
+<rect x="1230.3" y="430.4" width="5.0" height="5.8" fill="#050505" stroke="#2dd4bf" stroke-width="0.8" />
+<line x1="1140.0" y1="424.0" x2="1140.0" y2="344.0" stroke="#2dd4bf" stroke-width="1.2" marker-end="url(#arrCool)"/>
+<line x1="1168.8" y1="424.0" x2="1168.8" y2="344.0" stroke="#2dd4bf" stroke-width="1.2" marker-end="url(#arrCool)"/>
+<line x1="1197.6" y1="424.0" x2="1197.6" y2="344.0" stroke="#2dd4bf" stroke-width="1.2" marker-end="url(#arrCool)"/>
+<line x1="1164.8" y1="292.8" x2="1164.8" y2="266.8" stroke="#f7c72f" stroke-width="1.4" />
+<line x1="1172.8" y1="292.8" x2="1172.8" y2="266.8" stroke="#f7c72f" stroke-width="1.4" />
+<line x1="740.0" y1="440.0" x2="705.5" y2="440.0" stroke="#a1a1aa" stroke-width="0.7" />
+<line x1="740.0" y1="292.8" x2="705.5" y2="292.8" stroke="#a1a1aa" stroke-width="0.7" />
+<line x1="710.0" y1="440.0" x2="710.0" y2="292.8" stroke="#a1a1aa" stroke-width="0.9" marker-start="url(#dimA)" marker-end="url(#dimA)"/>
+<text x="710.0" y="361.4" font-size="11" fill="#fafafa" text-anchor="middle" transform="rotate(-90.0 710.0 366.4)">4.6</text>
+<line x1="749.6" y1="430.4" x2="774.9" y2="430.4" stroke="#a1a1aa" stroke-width="0.7" />
+<line x1="749.6" y1="302.4" x2="774.9" y2="302.4" stroke="#a1a1aa" stroke-width="0.7" />
+<line x1="771.6" y1="430.4" x2="771.6" y2="302.4" stroke="#a1a1aa" stroke-width="0.9" marker-start="url(#dimA)" marker-end="url(#dimA)"/>
+<text x="771.6" y="361.4" font-size="11" fill="#fafafa" text-anchor="middle" transform="rotate(-90.0 771.6 366.4)">4.0 clear</text>
+<line x1="919.2" y1="430.4" x2="944.5" y2="430.4" stroke="#a1a1aa" stroke-width="0.7" />
+<line x1="919.2" y1="366.4" x2="944.5" y2="366.4" stroke="#a1a1aa" stroke-width="0.7" />
+<line x1="941.2" y1="430.4" x2="941.2" y2="366.4" stroke="#a1a1aa" stroke-width="0.9" marker-start="url(#dimA)" marker-end="url(#dimA)"/>
+<text x="941.2" y="393.4" font-size="11" fill="#fafafa" text-anchor="middle" transform="rotate(-90.0 941.2 398.4)">bed 2.0 avg</text>
+<line x1="1088.8" y1="440.0" x2="1088.8" y2="474.5" stroke="#a1a1aa" stroke-width="0.7" />
+<line x1="1248.8" y1="440.0" x2="1248.8" y2="474.5" stroke="#a1a1aa" stroke-width="0.7" />
+<line x1="1088.8" y1="470.0" x2="1248.8" y2="470.0" stroke="#a1a1aa" stroke-width="0.9" marker-start="url(#dimA)" marker-end="url(#dimA)"/>
+<text x="1168.8" y="465.0" font-size="11" fill="#fafafa" text-anchor="middle" transform="rotate(0.0 1168.8 470.0)">5.0</text>
+<text x="1278.4" y="439.2" font-size="11" fill="#a1a1aa" font-weight="normal" text-anchor="start" >plenum slab, channels at 0.5</text>
+<text x="1278.4" y="301.6" font-size="11" fill="#a1a1aa" font-weight="normal" text-anchor="start" >200 concrete + 100 PIR</text>
+<text x="1278.4" y="317.6" font-size="11" fill="#a1a1aa" font-weight="normal" text-anchor="start" >U = 0.21 W/m²K</text>
+<text x="740.0" y="586.4" font-size="12" fill="#a1a1aa" font-weight="bold" text-anchor="start" letter-spacing="1.5">SECTION B-B  (T-103)</text>
+<line x1="720.8" y1="790.0" x2="1309.6" y2="790.0" stroke="#fafafa" stroke-width="1.4" />
+<rect x="740.0" y="780.4" width="537.6" height="9.6" fill="url(#concrete)" stroke="#fafafa" stroke-width="1.2" />
+<rect x="740.0" y="642.8" width="9.6" height="137.6" fill="url(#concrete)" stroke="#fafafa" stroke-width="1.2" />
+<rect x="740.0" y="642.8" width="537.6" height="9.6" fill="url(#concrete)" stroke="#fafafa" stroke-width="1.2" />
+<rect x="1276.0" y="652.4" width="3.2" height="12.8" fill="url(#concrete)" stroke="#fafafa" stroke-width="1" />
+<rect x="1276.0" y="665.2" width="3.2" height="115.2" fill="#1f3a57" stroke="#fafafa" stroke-width="1" />
+<rect x="749.6" y="716.4" width="528.0" height="64.0" fill="#1a1510" stroke="#c08a55" stroke-width="1" />
+<line x1="749.6" y1="778.4" x2="1277.6" y2="778.4" stroke="#2dd4bf" stroke-width="1.2" stroke-dasharray="2 4"/>
+<line x1="749.6" y1="691.0" x2="1277.6" y2="691.0" stroke="#c08a55" stroke-width="1.2" stroke-dasharray="8 4"/>
+<text x="1077.0" y="686.0" font-size="11" fill="#c08a55" font-weight="normal" text-anchor="start" >fill, day 0: 2.8 m</text>
+<line x1="749.6" y1="739.0" x2="1277.6" y2="739.0" stroke="#c08a55" stroke-width="1.2" stroke-dasharray="8 4"/>
+<text x="1077.0" y="734.0" font-size="11" fill="#c08a55" font-weight="normal" text-anchor="start" >day 15: 1.3 m</text>
+<rect x="783.0" y="610.8" width="10.0" height="32.0" fill="#f7c72f" stroke="#f7c72f" stroke-width="1" />
+<text x="800.0" y="620.4" font-size="11" fill="#f7c72f" font-weight="normal" text-anchor="start" >exhaust Ø315</text>
+<line x1="727.2" y1="775.6" x2="749.6" y2="775.6" stroke="#2dd4bf" stroke-width="2" marker-end="url(#arrCool)"/>
+<text x="721.2" y="779.6" font-size="11" fill="#2dd4bf" font-weight="normal" text-anchor="end" >K-103 2,343 m³/h</text>
+<line x1="749.6" y1="790.0" x2="749.6" y2="824.5" stroke="#a1a1aa" stroke-width="0.7" />
+<line x1="1277.6" y1="790.0" x2="1277.6" y2="824.5" stroke="#a1a1aa" stroke-width="0.7" />
+<line x1="749.6" y1="820.0" x2="1277.6" y2="820.0" stroke="#a1a1aa" stroke-width="0.9" marker-start="url(#dimA)" marker-end="url(#dimA)"/>
+<text x="1013.6" y="815.0" font-size="11" fill="#fafafa" text-anchor="middle" transform="rotate(0.0 1013.6 820.0)">16.5</text>
+<line x1="1277.6" y1="780.4" x2="1298.3" y2="780.4" stroke="#a1a1aa" stroke-width="0.7" />
+<line x1="1277.6" y1="665.2" x2="1298.3" y2="665.2" stroke="#a1a1aa" stroke-width="0.7" />
+<line x1="1295.6" y1="780.4" x2="1295.6" y2="665.2" stroke="#a1a1aa" stroke-width="0.9" marker-start="url(#dimA)" marker-end="url(#dimA)"/>
+<text x="1295.6" y="717.8" font-size="11" fill="#fafafa" text-anchor="middle" transform="rotate(-90.0 1295.6 722.8)">door 3.6</text>
+<rect x="68.0" y="618.0" width="520.0" height="246.0" fill="#050505" stroke="#27272a" stroke-width="1" rx="6"/>
+<text x="80.0" y="640.0" font-size="10" fill="#a1a1aa" font-weight="normal" text-anchor="start" letter-spacing="1.5">DESIGN DATA</text>
+<text x="80.0" y="664.0" font-size="12" fill="#a1a1aa" font-weight="normal" text-anchor="start" >Feedstock</text>
+<text x="250.0" y="664.0" font-size="12" fill="#fafafa" font-weight="normal" text-anchor="start" >39.1 t/day, 15-day residence</text>
+<text x="80.0" y="688.0" font-size="12" fill="#a1a1aa" font-weight="normal" text-anchor="start" >Tunnels</text>
+<text x="250.0" y="688.0" font-size="12" fill="#fafafa" font-weight="normal" text-anchor="start" >3 × 5.0 × 4.0 × 16.5 m inner</text>
+<text x="80.0" y="712.0" font-size="12" fill="#a1a1aa" font-weight="normal" text-anchor="start" >Material in tunnels</text>
+<text x="250.0" y="712.0" font-size="12" fill="#fafafa" font-weight="normal" text-anchor="start" >494 m³ (model 988 m³ gross)</text>
+<text x="80.0" y="736.0" font-size="12" fill="#a1a1aa" font-weight="normal" text-anchor="start" >Aeration</text>
+<text x="250.0" y="736.0" font-size="12" fill="#fafafa" font-weight="normal" text-anchor="start" >7,030 m³/h, 7.1 vol/h</text>
+<text x="80.0" y="760.0" font-size="12" fill="#a1a1aa" font-weight="normal" text-anchor="start" >Blowers</text>
+<text x="250.0" y="760.0" font-size="12" fill="#fafafa" font-weight="normal" text-anchor="start" >3 × 2.7 kW at 2,500 Pa</text>
+<text x="80.0" y="784.0" font-size="12" fill="#a1a1aa" font-weight="normal" text-anchor="start" >Exhaust ducts</text>
+<text x="250.0" y="784.0" font-size="12" fill="#fafafa" font-weight="normal" text-anchor="start" >Ø315 per tunnel, Ø500 manifold</text>
+<text x="80.0" y="808.0" font-size="12" fill="#a1a1aa" font-weight="normal" text-anchor="start" >Envelope loss</text>
+<text x="250.0" y="808.0" font-size="12" fill="#fafafa" font-weight="normal" text-anchor="start" >3.8 kW per tunnel</text>
+<text x="80.0" y="832.0" font-size="12" fill="#a1a1aa" font-weight="normal" text-anchor="start" >Heat-recovery duty</text>
+<text x="250.0" y="832.0" font-size="12" fill="#fafafa" font-weight="normal" text-anchor="start" >548 kW, 2.0 GWh/yr</text>
+<text x="80.0" y="856.0" font-size="12" fill="#a1a1aa" font-weight="normal" text-anchor="start" >Operation</text>
+<text x="250.0" y="856.0" font-size="12" fill="#fafafa" font-weight="normal" text-anchor="start" >staggered: one tunnel refilled every 5 days (CE-11)</text>
+<text x="32.0" y="970.0" font-size="12" fill="#a1a1aa" font-weight="normal" text-anchor="start" >Indicative. Tunnel length rounded up from the model to the next 0.5 m; doors and slab are typical, not designed.</text>
+<rect x="1146.0" y="872.0" width="430.0" height="104.0" fill="#050505" stroke="#fafafa" stroke-width="1.4" />
+<line x1="1146.0" y1="912.0" x2="1576.0" y2="912.0" stroke="#fafafa" stroke-width="0.8" />
+<line x1="1146.0" y1="944.0" x2="1576.0" y2="944.0" stroke="#27272a" stroke-width="0.8" />
+<line x1="1296.0" y1="912.0" x2="1296.0" y2="976.0" stroke="#27272a" stroke-width="0.8" />
+<line x1="1436.0" y1="912.0" x2="1436.0" y2="976.0" stroke="#27272a" stroke-width="0.8" />
+<text x="1160.0" y="898.0" font-size="15" fill="#fafafa" font-weight="bold" text-anchor="start" >General arrangement</text>
+<text x="1160.0" y="926.0" font-size="8.5" fill="#a1a1aa" font-weight="normal" text-anchor="start" letter-spacing="1">DRAWING</text>
+<text x="1160.0" y="939.0" font-size="11.5" fill="#fafafa" font-weight="normal" text-anchor="start" >CE-07</text>
+<text x="1310.0" y="926.0" font-size="8.5" fill="#a1a1aa" font-weight="normal" text-anchor="start" letter-spacing="1">REV / DATE</text>
+<text x="1310.0" y="939.0" font-size="11.5" fill="#fafafa" font-weight="normal" text-anchor="start" >A · 2026-10</text>
+<text x="1450.0" y="926.0" font-size="8.5" fill="#a1a1aa" font-weight="normal" text-anchor="start" letter-spacing="1">SCALE</text>
+<text x="1450.0" y="939.0" font-size="11.5" fill="#fafafa" font-weight="normal" text-anchor="start" >NTS, indicative</text>
+<text x="1160.0" y="958.0" font-size="8.5" fill="#a1a1aa" font-weight="normal" text-anchor="start" letter-spacing="1">AUTHOR</text>
+<text x="1160.0" y="971.0" font-size="11.5" fill="#fafafa" font-weight="normal" text-anchor="start" >Maxime Kadri</text>
+<text x="1310.0" y="958.0" font-size="8.5" fill="#a1a1aa" font-weight="normal" text-anchor="start" letter-spacing="1">PROJECT</text>
+<text x="1310.0" y="971.0" font-size="11.5" fill="#fafafa" font-weight="normal" text-anchor="start" >Compost Energy</text>
+<text x="1450.0" y="958.0" font-size="8.5" fill="#a1a1aa" font-weight="normal" text-anchor="start" letter-spacing="1">LICENCE</text>
+<text x="1450.0" y="971.0" font-size="11.5" fill="#fafafa" font-weight="normal" text-anchor="start" >CERN-OHL-P-2.0</text>
+</svg>

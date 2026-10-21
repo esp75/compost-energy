@@ -25,7 +25,7 @@ More drawings (build drawing, exchanger coil, P&ID, farm layout): [`hardware/dra
 
 1. **2024:** designed a home unit that turns food scraps into heating and fertiliser. Wrote a provisional patent, specified three prototypes (~€640 BOM) and sized the heat exchanger.
 2. **The numbers didn't work for homes.** A household's waste is worth **~59 W** of heat on average. A 50 W fan and controller make it net-negative, and the exchanger had been over-estimated ~70× by one wrong assumption ([details](docs/heat-exchanger.md)).
-3. **They do work at farm scale.** About 14,000 t/yr of farm feedstock yields **~2 GWh/yr** of heat, worth **~€159k/yr net**. Microbial heat grows with volume while losses grow with surface area. → [pivot.md](docs/pivot.md)
+3. **They do work at farm scale.** About 14,000 t/yr of farm feedstock yields **~2 GWh/yr** of heat, worth **~€157k/yr net**. Microbial heat grows with volume while losses grow with surface area. → [pivot.md](docs/pivot.md)
 
 ![Net value by scale](figures/scenarios_net_value.png)
 
@@ -70,14 +70,15 @@ docs/
   energy-model.md    house / apartment block / farm energy balance
   heat-exchanger.md  the 2024 calculation, what was wrong, design consequences
   pivot.md           why home units were dropped for farm scale
+  farm-unit.md       the farm-scale unit: tunnels, heat recovery, controls, operating modes
 hardware/
   bom/               prototype 1-3 bill of materials
-  drawings/          CE-01..05: cutaway, build drawing, exchanger coil, P&ID, farm layout (generated)
+  drawings/          CE-01..11: home unit, prototype, farm-scale unit, P&IDs, controls (generated)
   logger/            ESP32 + DS18B20 logger firmware and wiring (not yet built)
 model/
-  compost_energy/    energy_balance, heat_exchanger, simulate, clean
+  compost_energy/    energy_balance, heat_exchanger, industrial, simulate, clean
   scripts/           run_scenarios, simulate_run, analyze_run
-  tests/             20 tests: scenario numbers, energy conservation, cleaning, reference data
+  tests/             28 tests: scenario numbers, energy conservation, cleaning, reference data
 video/               explainer video, subtitles, script; src/ renders it frame by frame
 data/
   simulated/         raw_run_01.csv (noisy log), clean_run_01.csv, truth, ledger, report

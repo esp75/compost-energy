@@ -24,7 +24,7 @@ net saving (EUR/yr)       = fuel displaced x fuel price - auxiliary electricity 
 | Gas price | €0.12/kWh | France, Jan 2025 |
 | Electricity price | €0.20/kWh | France, Jan 2025 |
 | Boiler efficiency | 0.90 (house, farm) / 0.95 (block) | |
-| Auxiliaries | 0 / 50 W (house), 0 / 200 W (block), 10 kW for 5 months (farm) | |
+| Auxiliaries | 0 / 50 W (house), 0 / 200 W (block), 13 kW for 5 months (farm): 5 kW conveying + 8 kW fans | fans sized in [farm-unit.md](farm-unit.md) |
 
 ## Results
 
@@ -36,13 +36,13 @@ net saving (EUR/yr)       = fuel displaced x fuel price - auxiliary electricity 
 | House, 4 people (realistic) | 364 | 42 W | **−39** |
 | Apartment block, 48 people (ideal) | 6,240 | 712 W | +788 |
 | Apartment block, 48 people (realistic) | 4,368 | 499 W | +201 |
-| Farm cooperative, 14,279 t/yr | 2,000,000 | 228 kW (winter avg) | **+159,000** |
+| Farm cooperative, 14,279 t/yr | 2,000,000 | 228 kW (year mean; 548 kW over the heating season) | **+157,000** |
 
 ## Reading the numbers
 
 - **A house produces about 59 W on average**, less than one person at rest (~100 W). Spending 50 W on a fan and controls already makes it net-negative, before the hardware is paid for. Against a heat pump (COP 3) it's worse still, because the heat it displaces was cheap to begin with.
 - **An apartment block saves ~€200/yr.** To pay back in 10 years the unit would have to sell for ~€2,000 and cost ~€1,000 to build. A box sized for 6 t/yr of waste can't be built for that.
-- **A farm is a different regime.** About 14,000 t/yr of manure, silage and straw yields ~2 GWh of heat over a 5-month heating season. That's roughly €266k/yr of gas, or ~€159k/yr net after electricity and €100k of operating costs, which can repay ~€1.6M of capex over 10 years.
+- **A farm is a different regime.** About 14,000 t/yr of manure, silage and straw yields ~2 GWh of heat over a 5-month heating season. That's roughly €266k/yr of gas, or ~€157k/yr net after electricity and €100k of operating costs, which can repay ~€1.6M of capex over 10 years.
 
 The farm case still has open questions:
 

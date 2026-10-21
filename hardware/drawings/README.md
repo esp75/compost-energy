@@ -8,6 +8,8 @@ python hardware/drawings/src/make_drawings.py
 
 It writes the light SVGs here (for GitHub) and night-theme copies in [`dark/`](dark/) (for the website). PNG exports are in [`png/`](png/) (`rsvg-convert -w 2400 <name>.svg`).
 
+CE-06 to CE-11 are drawn from [`industrial_drawings.py`](src/industrial_drawings.py), which reads every number from [`model/compost_energy/industrial.py`](../../model/compost_energy/industrial.py). The design is described in [docs/farm-unit.md](../../docs/farm-unit.md).
+
 **Dimensions are indicative.** The patent gives no dimensions. They come from the prototype bill of materials ([`bom/prototypes.csv`](../bom/prototypes.csv)): 500 × 500 mesh and PVC dividers, 120 × 24 decking boards, 70 × 70 posts, a 600 × 400 × 420 Euro container. Nothing here has been checked against a physical build.
 
 | No. | File | What |
@@ -17,6 +19,12 @@ It writes the light SVGs here (for GitHub) and night-theme copies in [`dark/`](d
 | CE-03 | [`exchanger-coil.svg`](exchanger-coil.svg) | Coil in its concrete block: prototype 2 (one 3 m tube) against prototype 3 (two tubes), sections, expected output, and where the thermal resistance sits |
 | CE-04 | [`water-loop-pid.svg`](water-loop-pid.svg) | P&ID of the by-pass on the heating return, with sensor tags matching the [logger firmware](../logger/) |
 | CE-05 | [`farm-plant-layout.svg`](farm-plant-layout.svg) | First-pass farm plant: reception → reactors A/B/C → exhaust-air exchanger → farm heat users, then maturation → storage → fields |
+| CE-06 | [`farm-unit-cutaway.svg`](farm-unit-cutaway.svg) | Farm-scale unit, isometric cutaway: three aerated tunnels, exhaust manifold, heat-recovery skid, biofilter |
+| CE-07 | [`farm-unit-ga.svg`](farm-unit-ga.svg) | General arrangement: plan, cross-section, long section with fill levels, design data |
+| CE-08 | [`heat-recovery-module.svg`](heat-recovery-module.svg) | Exhaust-air plate-fin exchanger, condensate trap, and the enthalpy chart that sizes it |
+| CE-09 | [`farm-process-pid.svg`](farm-process-pid.svg) | Air and water P&ID with instrument tags |
+| CE-10 | [`farm-control.svg`](farm-control.svg) | Control loops, alarms and the batch setpoint profile |
+| CE-11 | [`farm-operating-modes.svg`](farm-operating-modes.svg) | Staggered batches against transfer between tunnels, with the numbers |
 | - | [`system-schematic.svg`](system-schematic.svg) | The original stacked-chamber schematic from the 2024 patent |
 
 ![Compostito cutaway](png/compostito-cutaway.png)

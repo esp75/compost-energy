@@ -1,0 +1,416 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 1000" font-family="Helvetica Neue, Helvetica, Arial, sans-serif">
+<title>Exhaust-air heat-recovery module</title>
+<defs>
+  <marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#1f2328"/></marker>
+  <marker id="arrHot" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#c2410c"/></marker>
+  <marker id="arrCool" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#2563eb"/></marker>
+  <marker id="arrGreen" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#15803d"/></marker>
+  <marker id="dimA" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,1.5 L10,5 L0,8.5 z" fill="#6e7781"/></marker>
+  <pattern id="mesh" width="7" height="7" patternUnits="userSpaceOnUse"><path d="M0,7 L7,0 M0,0 L7,7" stroke="#9ca3af" stroke-width="0.45" opacity="0.7"/></pattern>
+  <pattern id="concrete" width="12" height="12" patternUnits="userSpaceOnUse"><rect width="12" height="12" fill="#e5e7eb"/><circle cx="3" cy="3" r="1.1" fill="#9ca3af"/><circle cx="9" cy="8" r="0.9" fill="#9ca3af"/><circle cx="7" cy="2" r="0.5" fill="#9ca3af"/></pattern>
+  <pattern id="hatch" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><line x1="0" y1="0" x2="0" y2="6" stroke="#9a6a3a" stroke-width="1"/></pattern>
+  <pattern id="grain" width="40" height="10" patternUnits="userSpaceOnUse"><rect width="40" height="10" fill="#f3e6d6"/><path d="M0,5 C10,3 20,7 40,5" stroke="#9a6a3a" stroke-width="0.4" fill="none" opacity="0.5"/></pattern>
+</defs>
+<rect width="1600" height="1000" fill="#ffffff"/>
+<text x="32.0" y="46.0" font-size="24" fill="#1f2328" font-weight="bold" text-anchor="start" >Exhaust-air heat-recovery module HX-201</text>
+<text x="32.0" y="72.0" font-size="14" fill="#6e7781" font-weight="normal" text-anchor="start" >Saturated exhaust cools from 60 to 35 °C on plate-fin coils; most of the heat is the water vapour condensing.</text>
+<rect x="300.0" y="210.0" width="420.0" height="540.0" fill="#f6f8fa" stroke="#1f2328" stroke-width="1.8" rx="4"/>
+<rect x="290.0" y="200.0" width="440.0" height="560.0" fill="none" stroke="#1f2328" stroke-width="1" stroke-dasharray="2 4"/>
+<text x="286.0" y="194.0" font-size="11" fill="#6e7781" font-weight="normal" text-anchor="end" >insulated casing</text>
+<rect x="340.0" y="150.0" width="120.0" height="60.0" fill="#fca5a5" stroke="#1f2328" stroke-width="1.4" fill-opacity="0.55"/>
+<text x="472.0" y="176.0" font-size="12" fill="#c2410c" font-weight="normal" text-anchor="start" >exhaust in, Ø500, 60 °C saturated</text>
+<path d="M400,160 L400,236" stroke="#c2410c" stroke-width="2.2" fill="none" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#arrHot)"/>
+<line x1="320.0" y1="254.0" x2="700.0" y2="254.0" stroke="#2563eb" stroke-width="2" />
+<path d="M345,256 L335,274 M345,256 L355,274" stroke="#2563eb" stroke-width="0.8" fill="none" stroke-linejoin="round" stroke-linecap="round" />
+<path d="M400,256 L390,274 M400,256 L410,274" stroke="#2563eb" stroke-width="0.8" fill="none" stroke-linejoin="round" stroke-linecap="round" />
+<path d="M455,256 L445,274 M455,256 L465,274" stroke="#2563eb" stroke-width="0.8" fill="none" stroke-linejoin="round" stroke-linecap="round" />
+<path d="M510,256 L500,274 M510,256 L520,274" stroke="#2563eb" stroke-width="0.8" fill="none" stroke-linejoin="round" stroke-linecap="round" />
+<path d="M565,256 L555,274 M565,256 L575,274" stroke="#2563eb" stroke-width="0.8" fill="none" stroke-linejoin="round" stroke-linecap="round" />
+<path d="M620,256 L610,274 M620,256 L630,274" stroke="#2563eb" stroke-width="0.8" fill="none" stroke-linejoin="round" stroke-linecap="round" />
+<path d="M675,256 L665,274 M675,256 L685,274" stroke="#2563eb" stroke-width="0.8" fill="none" stroke-linejoin="round" stroke-linecap="round" />
+<text x="736.0" y="258.0" font-size="11" fill="#6e7781" font-weight="normal" text-anchor="start" >wash spray bar (fouling: dust, NH₃ salts)</text>
+<rect x="320.0" y="300.0" width="380.0" height="100.0" fill="#ffffff" stroke="#1f2328" stroke-width="1.3" />
+<line x1="326.0" y1="304.0" x2="326.0" y2="396.0" stroke="#6e7781" stroke-width="0.4" />
+<line x1="332.2" y1="304.0" x2="332.2" y2="396.0" stroke="#6e7781" stroke-width="0.4" />
+<line x1="338.5" y1="304.0" x2="338.5" y2="396.0" stroke="#6e7781" stroke-width="0.4" />
+<line x1="344.7" y1="304.0" x2="344.7" y2="396.0" stroke="#6e7781" stroke-width="0.4" />
+<line x1="350.9" y1="304.0" x2="350.9" y2="396.0" stroke="#6e7781" stroke-width="0.4" />
+<line x1="357.2" y1="304.0" x2="357.2" y2="396.0" stroke="#6e7781" stroke-width="0.4" />
+<line x1="363.4" y1="304.0" x2="363.4" y2="396.0" stroke="#6e7781" stroke-width="0.4" />
+<line x1="369.7" y1="304.0" x2="369.7" y2="396.0" stroke="#6e7781" stroke-width="0.4" />
+<line x1="375.9" y1="304.0" x2="375.9" y2="396.0" stroke="#6e7781" stroke-width="0.4" />
+<line x1="382.1" y1="304.0" x2="382.1" y2="396.0" stroke="#6e7781" stroke-width="0.4" />
+<line x1="388.4" y1="304.0" x2="388.4" y2="396.0" stroke="#6e7781" stroke-width="0.4" />
+<line x1="394.6" y1="304.0" x2="394.6" y2="396.0" stroke="#6e7781" stroke-width="0.4" />
+<line x1="400.8" y1="304.0" x2="400.8" y2="396.0" stroke="#6e7781" stroke-width="0.4" />
+<line x1="407.1" y1="304.0" x2="407.1" y2="396.0" stroke="#6e7781" stroke-width="0.4" />
+<line x1="413.3" y1="304.0" x2="413.3" y2="396.0" stroke="#6e7781" stroke-width="0.4" />
+<line x1="419.6" y1="304.0" x2="419.6" y2="396.0" stroke="#6e7781" stroke-width="0.4" />
+<line x1="425.8" y1="304.0" x2="425.8" y2="396.0" stroke="#6e7781" stroke-width="0.4" />
+<line x1="432.0" y1="304.0" x2="432.0" y2="396.0" stroke="#6e7781" stroke-width="0.4" />
+<line x1="438.3" y1="304.0" x2="438.3" y2="396.0" stroke="#6e7781" stroke-width="0.4" />
+<line x1="444.5" y1="304.0" x2="444.5" y2="396.0" stroke="#6e7781" stroke-width="0.4" />
+<line x1="450.7" y1="304.0" x2="450.7" y2="396.0" stroke="#6e7781" stroke-width="0.4" />
+<line x1="457.0" y1="304.0" x2="457.0" y2="396.0" stroke="#6e7781" stroke-width="0.4" />
+<line x1="463.2" y1="304.0" x2="463.2" y2="396.0" stroke="#6e7781" stroke-width="0.4" />
+<line x1="469.5" y1="304.0" x2="469.5" y2="396.0" stroke="#6e7781" stroke-width="0.4" />
+<line x1="475.7" y1="304.0" x2="475.7" y2="396.0" stroke="#6e7781" stroke-width="0.4" />
+<line x1="481.9" y1="304.0" x2="481.9" y2="396.0" stroke="#6e7781" stroke-width="0.4" />
+<line x1="488.2" y1="304.0" x2="488.2" y2="396.0" stroke="#6e7781" stroke-width="0.4" />
+<line x1="494.4" y1="304.0" x2="494.4" y2="396.0" stroke="#6e7781" stroke-width="0.4" />
+<line x1="500.6" y1="304.0" x2="500.6" y2="396.0" stroke="#6e7781" stroke-width="0.4" />
+<line x1="506.9" y1="304.0" x2="506.9" y2="396.0" stroke="#6e7781" stroke-width="0.4" />
+<line x1="513.1" y1="304.0" x2="513.1" y2="396.0" stroke="#6e7781" stroke-width="0.4" />
+<line x1="519.4" y1="304.0" x2="519.4" y2="396.0" stroke="#6e7781" stroke-width="0.4" />
+<line x1="525.6" y1="304.0" x2="525.6" y2="396.0" stroke="#6e7781" stroke-width="0.4" />
+<line x1="531.8" y1="304.0" x2="531.8" y2="396.0" stroke="#6e7781" stroke-width="0.4" />
+<line x1="538.1" y1="304.0" x2="538.1" y2="396.0" stroke="#6e7781" stroke-width="0.4" />
+<line x1="544.3" y1="304.0" x2="544.3" y2="396.0" stroke="#6e7781" stroke-width="0.4" />
+<line x1="550.5" y1="304.0" x2="550.5" y2="396.0" stroke="#6e7781" stroke-width="0.4" />
+<line x1="556.8" y1="304.0" x2="556.8" y2="396.0" stroke="#6e7781" stroke-width="0.4" />
+<line x1="563.0" y1="304.0" x2="563.0" y2="396.0" stroke="#6e7781" stroke-width="0.4" />
+<line x1="569.3" y1="304.0" x2="569.3" y2="396.0" stroke="#6e7781" stroke-width="0.4" />
+<line x1="575.5" y1="304.0" x2="575.5" y2="396.0" stroke="#6e7781" stroke-width="0.4" />
+<line x1="581.7" y1="304.0" x2="581.7" y2="396.0" stroke="#6e7781" stroke-width="0.4" />
+<line x1="588.0" y1="304.0" x2="588.0" y2="396.0" stroke="#6e7781" stroke-width="0.4" />
+<line x1="594.2" y1="304.0" x2="594.2" y2="396.0" stroke="#6e7781" stroke-width="0.4" />
+<line x1="600.4" y1="304.0" x2="600.4" y2="396.0" stroke="#6e7781" stroke-width="0.4" />
+<line x1="606.7" y1="304.0" x2="606.7" y2="396.0" stroke="#6e7781" stroke-width="0.4" />
+<line x1="612.9" y1="304.0" x2="612.9" y2="396.0" stroke="#6e7781" stroke-width="0.4" />
+<line x1="619.2" y1="304.0" x2="619.2" y2="396.0" stroke="#6e7781" stroke-width="0.4" />
+<line x1="625.4" y1="304.0" x2="625.4" y2="396.0" stroke="#6e7781" stroke-width="0.4" />
+<line x1="631.6" y1="304.0" x2="631.6" y2="396.0" stroke="#6e7781" stroke-width="0.4" />
+<line x1="637.9" y1="304.0" x2="637.9" y2="396.0" stroke="#6e7781" stroke-width="0.4" />
+<line x1="644.1" y1="304.0" x2="644.1" y2="396.0" stroke="#6e7781" stroke-width="0.4" />
+<line x1="650.3" y1="304.0" x2="650.3" y2="396.0" stroke="#6e7781" stroke-width="0.4" />
+<line x1="656.6" y1="304.0" x2="656.6" y2="396.0" stroke="#6e7781" stroke-width="0.4" />
+<line x1="662.8" y1="304.0" x2="662.8" y2="396.0" stroke="#6e7781" stroke-width="0.4" />
+<line x1="669.1" y1="304.0" x2="669.1" y2="396.0" stroke="#6e7781" stroke-width="0.4" />
+<line x1="675.3" y1="304.0" x2="675.3" y2="396.0" stroke="#6e7781" stroke-width="0.4" />
+<line x1="681.5" y1="304.0" x2="681.5" y2="396.0" stroke="#6e7781" stroke-width="0.4" />
+<line x1="687.8" y1="304.0" x2="687.8" y2="396.0" stroke="#6e7781" stroke-width="0.4" />
+<line x1="694.0" y1="304.0" x2="694.0" y2="396.0" stroke="#6e7781" stroke-width="0.4" />
+<circle cx="350.0" cy="317.0" r="5" fill="#ffffff" stroke="#c2410c" stroke-width="1.4"/>
+<circle cx="396.0" cy="317.0" r="5" fill="#ffffff" stroke="#c2410c" stroke-width="1.4"/>
+<circle cx="442.0" cy="317.0" r="5" fill="#ffffff" stroke="#c2410c" stroke-width="1.4"/>
+<circle cx="488.0" cy="317.0" r="5" fill="#ffffff" stroke="#c2410c" stroke-width="1.4"/>
+<circle cx="534.0" cy="317.0" r="5" fill="#ffffff" stroke="#c2410c" stroke-width="1.4"/>
+<circle cx="580.0" cy="317.0" r="5" fill="#ffffff" stroke="#c2410c" stroke-width="1.4"/>
+<circle cx="626.0" cy="317.0" r="5" fill="#ffffff" stroke="#c2410c" stroke-width="1.4"/>
+<circle cx="672.0" cy="317.0" r="5" fill="#ffffff" stroke="#c2410c" stroke-width="1.4"/>
+<circle cx="350.0" cy="339.0" r="5" fill="#ffffff" stroke="#c2410c" stroke-width="1.4"/>
+<circle cx="396.0" cy="339.0" r="5" fill="#ffffff" stroke="#c2410c" stroke-width="1.4"/>
+<circle cx="442.0" cy="339.0" r="5" fill="#ffffff" stroke="#c2410c" stroke-width="1.4"/>
+<circle cx="488.0" cy="339.0" r="5" fill="#ffffff" stroke="#c2410c" stroke-width="1.4"/>
+<circle cx="534.0" cy="339.0" r="5" fill="#ffffff" stroke="#c2410c" stroke-width="1.4"/>
+<circle cx="580.0" cy="339.0" r="5" fill="#ffffff" stroke="#c2410c" stroke-width="1.4"/>
+<circle cx="626.0" cy="339.0" r="5" fill="#ffffff" stroke="#c2410c" stroke-width="1.4"/>
+<circle cx="672.0" cy="339.0" r="5" fill="#ffffff" stroke="#c2410c" stroke-width="1.4"/>
+<circle cx="350.0" cy="361.0" r="5" fill="#ffffff" stroke="#c2410c" stroke-width="1.4"/>
+<circle cx="396.0" cy="361.0" r="5" fill="#ffffff" stroke="#c2410c" stroke-width="1.4"/>
+<circle cx="442.0" cy="361.0" r="5" fill="#ffffff" stroke="#c2410c" stroke-width="1.4"/>
+<circle cx="488.0" cy="361.0" r="5" fill="#ffffff" stroke="#c2410c" stroke-width="1.4"/>
+<circle cx="534.0" cy="361.0" r="5" fill="#ffffff" stroke="#c2410c" stroke-width="1.4"/>
+<circle cx="580.0" cy="361.0" r="5" fill="#ffffff" stroke="#c2410c" stroke-width="1.4"/>
+<circle cx="626.0" cy="361.0" r="5" fill="#ffffff" stroke="#c2410c" stroke-width="1.4"/>
+<circle cx="672.0" cy="361.0" r="5" fill="#ffffff" stroke="#c2410c" stroke-width="1.4"/>
+<circle cx="350.0" cy="383.0" r="5" fill="#ffffff" stroke="#c2410c" stroke-width="1.4"/>
+<circle cx="396.0" cy="383.0" r="5" fill="#ffffff" stroke="#c2410c" stroke-width="1.4"/>
+<circle cx="442.0" cy="383.0" r="5" fill="#ffffff" stroke="#c2410c" stroke-width="1.4"/>
+<circle cx="488.0" cy="383.0" r="5" fill="#ffffff" stroke="#c2410c" stroke-width="1.4"/>
+<circle cx="534.0" cy="383.0" r="5" fill="#ffffff" stroke="#c2410c" stroke-width="1.4"/>
+<circle cx="580.0" cy="383.0" r="5" fill="#ffffff" stroke="#c2410c" stroke-width="1.4"/>
+<circle cx="626.0" cy="383.0" r="5" fill="#ffffff" stroke="#c2410c" stroke-width="1.4"/>
+<circle cx="672.0" cy="383.0" r="5" fill="#ffffff" stroke="#c2410c" stroke-width="1.4"/>
+<text x="736.0" y="355.0" font-size="12" fill="#1f2328" font-weight="bold" text-anchor="start" >coil 1</text>
+<path d="M700,412 L712,412" stroke="#c2410c" stroke-width="0" fill="none" stroke-linejoin="round" stroke-linecap="round" />
+<rect x="320.0" y="425.0" width="380.0" height="100.0" fill="#ffffff" stroke="#1f2328" stroke-width="1.3" />
+<line x1="326.0" y1="429.0" x2="326.0" y2="521.0" stroke="#6e7781" stroke-width="0.4" />
+<line x1="332.2" y1="429.0" x2="332.2" y2="521.0" stroke="#6e7781" stroke-width="0.4" />
+<line x1="338.5" y1="429.0" x2="338.5" y2="521.0" stroke="#6e7781" stroke-width="0.4" />
+<line x1="344.7" y1="429.0" x2="344.7" y2="521.0" stroke="#6e7781" stroke-width="0.4" />
+<line x1="350.9" y1="429.0" x2="350.9" y2="521.0" stroke="#6e7781" stroke-width="0.4" />
+<line x1="357.2" y1="429.0" x2="357.2" y2="521.0" stroke="#6e7781" stroke-width="0.4" />
+<line x1="363.4" y1="429.0" x2="363.4" y2="521.0" stroke="#6e7781" stroke-width="0.4" />
+<line x1="369.7" y1="429.0" x2="369.7" y2="521.0" stroke="#6e7781" stroke-width="0.4" />
+<line x1="375.9" y1="429.0" x2="375.9" y2="521.0" stroke="#6e7781" stroke-width="0.4" />
+<line x1="382.1" y1="429.0" x2="382.1" y2="521.0" stroke="#6e7781" stroke-width="0.4" />
+<line x1="388.4" y1="429.0" x2="388.4" y2="521.0" stroke="#6e7781" stroke-width="0.4" />
+<line x1="394.6" y1="429.0" x2="394.6" y2="521.0" stroke="#6e7781" stroke-width="0.4" />
+<line x1="400.8" y1="429.0" x2="400.8" y2="521.0" stroke="#6e7781" stroke-width="0.4" />
+<line x1="407.1" y1="429.0" x2="407.1" y2="521.0" stroke="#6e7781" stroke-width="0.4" />
+<line x1="413.3" y1="429.0" x2="413.3" y2="521.0" stroke="#6e7781" stroke-width="0.4" />
+<line x1="419.6" y1="429.0" x2="419.6" y2="521.0" stroke="#6e7781" stroke-width="0.4" />
+<line x1="425.8" y1="429.0" x2="425.8" y2="521.0" stroke="#6e7781" stroke-width="0.4" />
+<line x1="432.0" y1="429.0" x2="432.0" y2="521.0" stroke="#6e7781" stroke-width="0.4" />
+<line x1="438.3" y1="429.0" x2="438.3" y2="521.0" stroke="#6e7781" stroke-width="0.4" />
+<line x1="444.5" y1="429.0" x2="444.5" y2="521.0" stroke="#6e7781" stroke-width="0.4" />
+<line x1="450.7" y1="429.0" x2="450.7" y2="521.0" stroke="#6e7781" stroke-width="0.4" />
+<line x1="457.0" y1="429.0" x2="457.0" y2="521.0" stroke="#6e7781" stroke-width="0.4" />
+<line x1="463.2" y1="429.0" x2="463.2" y2="521.0" stroke="#6e7781" stroke-width="0.4" />
+<line x1="469.5" y1="429.0" x2="469.5" y2="521.0" stroke="#6e7781" stroke-width="0.4" />
+<line x1="475.7" y1="429.0" x2="475.7" y2="521.0" stroke="#6e7781" stroke-width="0.4" />
+<line x1="481.9" y1="429.0" x2="481.9" y2="521.0" stroke="#6e7781" stroke-width="0.4" />
+<line x1="488.2" y1="429.0" x2="488.2" y2="521.0" stroke="#6e7781" stroke-width="0.4" />
+<line x1="494.4" y1="429.0" x2="494.4" y2="521.0" stroke="#6e7781" stroke-width="0.4" />
+<line x1="500.6" y1="429.0" x2="500.6" y2="521.0" stroke="#6e7781" stroke-width="0.4" />
+<line x1="506.9" y1="429.0" x2="506.9" y2="521.0" stroke="#6e7781" stroke-width="0.4" />
+<line x1="513.1" y1="429.0" x2="513.1" y2="521.0" stroke="#6e7781" stroke-width="0.4" />
+<line x1="519.4" y1="429.0" x2="519.4" y2="521.0" stroke="#6e7781" stroke-width="0.4" />
+<line x1="525.6" y1="429.0" x2="525.6" y2="521.0" stroke="#6e7781" stroke-width="0.4" />
+<line x1="531.8" y1="429.0" x2="531.8" y2="521.0" stroke="#6e7781" stroke-width="0.4" />
+<line x1="538.1" y1="429.0" x2="538.1" y2="521.0" stroke="#6e7781" stroke-width="0.4" />
+<line x1="544.3" y1="429.0" x2="544.3" y2="521.0" stroke="#6e7781" stroke-width="0.4" />
+<line x1="550.5" y1="429.0" x2="550.5" y2="521.0" stroke="#6e7781" stroke-width="0.4" />
+<line x1="556.8" y1="429.0" x2="556.8" y2="521.0" stroke="#6e7781" stroke-width="0.4" />
+<line x1="563.0" y1="429.0" x2="563.0" y2="521.0" stroke="#6e7781" stroke-width="0.4" />
+<line x1="569.3" y1="429.0" x2="569.3" y2="521.0" stroke="#6e7781" stroke-width="0.4" />
+<line x1="575.5" y1="429.0" x2="575.5" y2="521.0" stroke="#6e7781" stroke-width="0.4" />
+<line x1="581.7" y1="429.0" x2="581.7" y2="521.0" stroke="#6e7781" stroke-width="0.4" />
+<line x1="588.0" y1="429.0" x2="588.0" y2="521.0" stroke="#6e7781" stroke-width="0.4" />
+<line x1="594.2" y1="429.0" x2="594.2" y2="521.0" stroke="#6e7781" stroke-width="0.4" />
+<line x1="600.4" y1="429.0" x2="600.4" y2="521.0" stroke="#6e7781" stroke-width="0.4" />
+<line x1="606.7" y1="429.0" x2="606.7" y2="521.0" stroke="#6e7781" stroke-width="0.4" />
+<line x1="612.9" y1="429.0" x2="612.9" y2="521.0" stroke="#6e7781" stroke-width="0.4" />
+<line x1="619.2" y1="429.0" x2="619.2" y2="521.0" stroke="#6e7781" stroke-width="0.4" />
+<line x1="625.4" y1="429.0" x2="625.4" y2="521.0" stroke="#6e7781" stroke-width="0.4" />
+<line x1="631.6" y1="429.0" x2="631.6" y2="521.0" stroke="#6e7781" stroke-width="0.4" />
+<line x1="637.9" y1="429.0" x2="637.9" y2="521.0" stroke="#6e7781" stroke-width="0.4" />
+<line x1="644.1" y1="429.0" x2="644.1" y2="521.0" stroke="#6e7781" stroke-width="0.4" />
+<line x1="650.3" y1="429.0" x2="650.3" y2="521.0" stroke="#6e7781" stroke-width="0.4" />
+<line x1="656.6" y1="429.0" x2="656.6" y2="521.0" stroke="#6e7781" stroke-width="0.4" />
+<line x1="662.8" y1="429.0" x2="662.8" y2="521.0" stroke="#6e7781" stroke-width="0.4" />
+<line x1="669.1" y1="429.0" x2="669.1" y2="521.0" stroke="#6e7781" stroke-width="0.4" />
+<line x1="675.3" y1="429.0" x2="675.3" y2="521.0" stroke="#6e7781" stroke-width="0.4" />
+<line x1="681.5" y1="429.0" x2="681.5" y2="521.0" stroke="#6e7781" stroke-width="0.4" />
+<line x1="687.8" y1="429.0" x2="687.8" y2="521.0" stroke="#6e7781" stroke-width="0.4" />
+<line x1="694.0" y1="429.0" x2="694.0" y2="521.0" stroke="#6e7781" stroke-width="0.4" />
+<circle cx="350.0" cy="442.0" r="5" fill="#ffffff" stroke="#c2410c" stroke-width="1.4"/>
+<circle cx="396.0" cy="442.0" r="5" fill="#ffffff" stroke="#c2410c" stroke-width="1.4"/>
+<circle cx="442.0" cy="442.0" r="5" fill="#ffffff" stroke="#c2410c" stroke-width="1.4"/>
+<circle cx="488.0" cy="442.0" r="5" fill="#ffffff" stroke="#c2410c" stroke-width="1.4"/>
+<circle cx="534.0" cy="442.0" r="5" fill="#ffffff" stroke="#c2410c" stroke-width="1.4"/>
+<circle cx="580.0" cy="442.0" r="5" fill="#ffffff" stroke="#c2410c" stroke-width="1.4"/>
+<circle cx="626.0" cy="442.0" r="5" fill="#ffffff" stroke="#c2410c" stroke-width="1.4"/>
+<circle cx="672.0" cy="442.0" r="5" fill="#ffffff" stroke="#c2410c" stroke-width="1.4"/>
+<circle cx="350.0" cy="464.0" r="5" fill="#ffffff" stroke="#c2410c" stroke-width="1.4"/>
+<circle cx="396.0" cy="464.0" r="5" fill="#ffffff" stroke="#c2410c" stroke-width="1.4"/>
+<circle cx="442.0" cy="464.0" r="5" fill="#ffffff" stroke="#c2410c" stroke-width="1.4"/>
+<circle cx="488.0" cy="464.0" r="5" fill="#ffffff" stroke="#c2410c" stroke-width="1.4"/>
+<circle cx="534.0" cy="464.0" r="5" fill="#ffffff" stroke="#c2410c" stroke-width="1.4"/>
+<circle cx="580.0" cy="464.0" r="5" fill="#ffffff" stroke="#c2410c" stroke-width="1.4"/>
+<circle cx="626.0" cy="464.0" r="5" fill="#ffffff" stroke="#c2410c" stroke-width="1.4"/>
+<circle cx="672.0" cy="464.0" r="5" fill="#ffffff" stroke="#c2410c" stroke-width="1.4"/>
+<circle cx="350.0" cy="486.0" r="5" fill="#ffffff" stroke="#c2410c" stroke-width="1.4"/>
+<circle cx="396.0" cy="486.0" r="5" fill="#ffffff" stroke="#c2410c" stroke-width="1.4"/>
+<circle cx="442.0" cy="486.0" r="5" fill="#ffffff" stroke="#c2410c" stroke-width="1.4"/>
+<circle cx="488.0" cy="486.0" r="5" fill="#ffffff" stroke="#c2410c" stroke-width="1.4"/>
+<circle cx="534.0" cy="486.0" r="5" fill="#ffffff" stroke="#c2410c" stroke-width="1.4"/>
+<circle cx="580.0" cy="486.0" r="5" fill="#ffffff" stroke="#c2410c" stroke-width="1.4"/>
+<circle cx="626.0" cy="486.0" r="5" fill="#ffffff" stroke="#c2410c" stroke-width="1.4"/>
+<circle cx="672.0" cy="486.0" r="5" fill="#ffffff" stroke="#c2410c" stroke-width="1.4"/>
+<circle cx="350.0" cy="508.0" r="5" fill="#ffffff" stroke="#c2410c" stroke-width="1.4"/>
+<circle cx="396.0" cy="508.0" r="5" fill="#ffffff" stroke="#c2410c" stroke-width="1.4"/>
+<circle cx="442.0" cy="508.0" r="5" fill="#ffffff" stroke="#c2410c" stroke-width="1.4"/>
+<circle cx="488.0" cy="508.0" r="5" fill="#ffffff" stroke="#c2410c" stroke-width="1.4"/>
+<circle cx="534.0" cy="508.0" r="5" fill="#ffffff" stroke="#c2410c" stroke-width="1.4"/>
+<circle cx="580.0" cy="508.0" r="5" fill="#ffffff" stroke="#c2410c" stroke-width="1.4"/>
+<circle cx="626.0" cy="508.0" r="5" fill="#ffffff" stroke="#c2410c" stroke-width="1.4"/>
+<circle cx="672.0" cy="508.0" r="5" fill="#ffffff" stroke="#c2410c" stroke-width="1.4"/>
+<text x="736.0" y="480.0" font-size="12" fill="#1f2328" font-weight="bold" text-anchor="start" >coil 2</text>
+<path d="M700,537 L712,537" stroke="#c2410c" stroke-width="0" fill="none" stroke-linejoin="round" stroke-linecap="round" />
+<rect x="320.0" y="550.0" width="380.0" height="100.0" fill="#ffffff" stroke="#1f2328" stroke-width="1.3" />
+<line x1="326.0" y1="554.0" x2="326.0" y2="646.0" stroke="#6e7781" stroke-width="0.4" />
+<line x1="332.2" y1="554.0" x2="332.2" y2="646.0" stroke="#6e7781" stroke-width="0.4" />
+<line x1="338.5" y1="554.0" x2="338.5" y2="646.0" stroke="#6e7781" stroke-width="0.4" />
+<line x1="344.7" y1="554.0" x2="344.7" y2="646.0" stroke="#6e7781" stroke-width="0.4" />
+<line x1="350.9" y1="554.0" x2="350.9" y2="646.0" stroke="#6e7781" stroke-width="0.4" />
+<line x1="357.2" y1="554.0" x2="357.2" y2="646.0" stroke="#6e7781" stroke-width="0.4" />
+<line x1="363.4" y1="554.0" x2="363.4" y2="646.0" stroke="#6e7781" stroke-width="0.4" />
+<line x1="369.7" y1="554.0" x2="369.7" y2="646.0" stroke="#6e7781" stroke-width="0.4" />
+<line x1="375.9" y1="554.0" x2="375.9" y2="646.0" stroke="#6e7781" stroke-width="0.4" />
+<line x1="382.1" y1="554.0" x2="382.1" y2="646.0" stroke="#6e7781" stroke-width="0.4" />
+<line x1="388.4" y1="554.0" x2="388.4" y2="646.0" stroke="#6e7781" stroke-width="0.4" />
+<line x1="394.6" y1="554.0" x2="394.6" y2="646.0" stroke="#6e7781" stroke-width="0.4" />
+<line x1="400.8" y1="554.0" x2="400.8" y2="646.0" stroke="#6e7781" stroke-width="0.4" />
+<line x1="407.1" y1="554.0" x2="407.1" y2="646.0" stroke="#6e7781" stroke-width="0.4" />
+<line x1="413.3" y1="554.0" x2="413.3" y2="646.0" stroke="#6e7781" stroke-width="0.4" />
+<line x1="419.6" y1="554.0" x2="419.6" y2="646.0" stroke="#6e7781" stroke-width="0.4" />
+<line x1="425.8" y1="554.0" x2="425.8" y2="646.0" stroke="#6e7781" stroke-width="0.4" />
+<line x1="432.0" y1="554.0" x2="432.0" y2="646.0" stroke="#6e7781" stroke-width="0.4" />
+<line x1="438.3" y1="554.0" x2="438.3" y2="646.0" stroke="#6e7781" stroke-width="0.4" />
+<line x1="444.5" y1="554.0" x2="444.5" y2="646.0" stroke="#6e7781" stroke-width="0.4" />
+<line x1="450.7" y1="554.0" x2="450.7" y2="646.0" stroke="#6e7781" stroke-width="0.4" />
+<line x1="457.0" y1="554.0" x2="457.0" y2="646.0" stroke="#6e7781" stroke-width="0.4" />
+<line x1="463.2" y1="554.0" x2="463.2" y2="646.0" stroke="#6e7781" stroke-width="0.4" />
+<line x1="469.5" y1="554.0" x2="469.5" y2="646.0" stroke="#6e7781" stroke-width="0.4" />
+<line x1="475.7" y1="554.0" x2="475.7" y2="646.0" stroke="#6e7781" stroke-width="0.4" />
+<line x1="481.9" y1="554.0" x2="481.9" y2="646.0" stroke="#6e7781" stroke-width="0.4" />
+<line x1="488.2" y1="554.0" x2="488.2" y2="646.0" stroke="#6e7781" stroke-width="0.4" />
+<line x1="494.4" y1="554.0" x2="494.4" y2="646.0" stroke="#6e7781" stroke-width="0.4" />
+<line x1="500.6" y1="554.0" x2="500.6" y2="646.0" stroke="#6e7781" stroke-width="0.4" />
+<line x1="506.9" y1="554.0" x2="506.9" y2="646.0" stroke="#6e7781" stroke-width="0.4" />
+<line x1="513.1" y1="554.0" x2="513.1" y2="646.0" stroke="#6e7781" stroke-width="0.4" />
+<line x1="519.4" y1="554.0" x2="519.4" y2="646.0" stroke="#6e7781" stroke-width="0.4" />
+<line x1="525.6" y1="554.0" x2="525.6" y2="646.0" stroke="#6e7781" stroke-width="0.4" />
+<line x1="531.8" y1="554.0" x2="531.8" y2="646.0" stroke="#6e7781" stroke-width="0.4" />
+<line x1="538.1" y1="554.0" x2="538.1" y2="646.0" stroke="#6e7781" stroke-width="0.4" />
+<line x1="544.3" y1="554.0" x2="544.3" y2="646.0" stroke="#6e7781" stroke-width="0.4" />
+<line x1="550.5" y1="554.0" x2="550.5" y2="646.0" stroke="#6e7781" stroke-width="0.4" />
+<line x1="556.8" y1="554.0" x2="556.8" y2="646.0" stroke="#6e7781" stroke-width="0.4" />
+<line x1="563.0" y1="554.0" x2="563.0" y2="646.0" stroke="#6e7781" stroke-width="0.4" />
+<line x1="569.3" y1="554.0" x2="569.3" y2="646.0" stroke="#6e7781" stroke-width="0.4" />
+<line x1="575.5" y1="554.0" x2="575.5" y2="646.0" stroke="#6e7781" stroke-width="0.4" />
+<line x1="581.7" y1="554.0" x2="581.7" y2="646.0" stroke="#6e7781" stroke-width="0.4" />
+<line x1="588.0" y1="554.0" x2="588.0" y2="646.0" stroke="#6e7781" stroke-width="0.4" />
+<line x1="594.2" y1="554.0" x2="594.2" y2="646.0" stroke="#6e7781" stroke-width="0.4" />
+<line x1="600.4" y1="554.0" x2="600.4" y2="646.0" stroke="#6e7781" stroke-width="0.4" />
+<line x1="606.7" y1="554.0" x2="606.7" y2="646.0" stroke="#6e7781" stroke-width="0.4" />
+<line x1="612.9" y1="554.0" x2="612.9" y2="646.0" stroke="#6e7781" stroke-width="0.4" />
+<line x1="619.2" y1="554.0" x2="619.2" y2="646.0" stroke="#6e7781" stroke-width="0.4" />
+<line x1="625.4" y1="554.0" x2="625.4" y2="646.0" stroke="#6e7781" stroke-width="0.4" />
+<line x1="631.6" y1="554.0" x2="631.6" y2="646.0" stroke="#6e7781" stroke-width="0.4" />
+<line x1="637.9" y1="554.0" x2="637.9" y2="646.0" stroke="#6e7781" stroke-width="0.4" />
+<line x1="644.1" y1="554.0" x2="644.1" y2="646.0" stroke="#6e7781" stroke-width="0.4" />
+<line x1="650.3" y1="554.0" x2="650.3" y2="646.0" stroke="#6e7781" stroke-width="0.4" />
+<line x1="656.6" y1="554.0" x2="656.6" y2="646.0" stroke="#6e7781" stroke-width="0.4" />
+<line x1="662.8" y1="554.0" x2="662.8" y2="646.0" stroke="#6e7781" stroke-width="0.4" />
+<line x1="669.1" y1="554.0" x2="669.1" y2="646.0" stroke="#6e7781" stroke-width="0.4" />
+<line x1="675.3" y1="554.0" x2="675.3" y2="646.0" stroke="#6e7781" stroke-width="0.4" />
+<line x1="681.5" y1="554.0" x2="681.5" y2="646.0" stroke="#6e7781" stroke-width="0.4" />
+<line x1="687.8" y1="554.0" x2="687.8" y2="646.0" stroke="#6e7781" stroke-width="0.4" />
+<line x1="694.0" y1="554.0" x2="694.0" y2="646.0" stroke="#6e7781" stroke-width="0.4" />
+<circle cx="350.0" cy="567.0" r="5" fill="#ffffff" stroke="#c2410c" stroke-width="1.4"/>
+<circle cx="396.0" cy="567.0" r="5" fill="#ffffff" stroke="#c2410c" stroke-width="1.4"/>
+<circle cx="442.0" cy="567.0" r="5" fill="#ffffff" stroke="#c2410c" stroke-width="1.4"/>
+<circle cx="488.0" cy="567.0" r="5" fill="#ffffff" stroke="#c2410c" stroke-width="1.4"/>
+<circle cx="534.0" cy="567.0" r="5" fill="#ffffff" stroke="#c2410c" stroke-width="1.4"/>
+<circle cx="580.0" cy="567.0" r="5" fill="#ffffff" stroke="#c2410c" stroke-width="1.4"/>
+<circle cx="626.0" cy="567.0" r="5" fill="#ffffff" stroke="#c2410c" stroke-width="1.4"/>
+<circle cx="672.0" cy="567.0" r="5" fill="#ffffff" stroke="#c2410c" stroke-width="1.4"/>
+<circle cx="350.0" cy="589.0" r="5" fill="#ffffff" stroke="#c2410c" stroke-width="1.4"/>
+<circle cx="396.0" cy="589.0" r="5" fill="#ffffff" stroke="#c2410c" stroke-width="1.4"/>
+<circle cx="442.0" cy="589.0" r="5" fill="#ffffff" stroke="#c2410c" stroke-width="1.4"/>
+<circle cx="488.0" cy="589.0" r="5" fill="#ffffff" stroke="#c2410c" stroke-width="1.4"/>
+<circle cx="534.0" cy="589.0" r="5" fill="#ffffff" stroke="#c2410c" stroke-width="1.4"/>
+<circle cx="580.0" cy="589.0" r="5" fill="#ffffff" stroke="#c2410c" stroke-width="1.4"/>
+<circle cx="626.0" cy="589.0" r="5" fill="#ffffff" stroke="#c2410c" stroke-width="1.4"/>
+<circle cx="672.0" cy="589.0" r="5" fill="#ffffff" stroke="#c2410c" stroke-width="1.4"/>
+<circle cx="350.0" cy="611.0" r="5" fill="#ffffff" stroke="#c2410c" stroke-width="1.4"/>
+<circle cx="396.0" cy="611.0" r="5" fill="#ffffff" stroke="#c2410c" stroke-width="1.4"/>
+<circle cx="442.0" cy="611.0" r="5" fill="#ffffff" stroke="#c2410c" stroke-width="1.4"/>
+<circle cx="488.0" cy="611.0" r="5" fill="#ffffff" stroke="#c2410c" stroke-width="1.4"/>
+<circle cx="534.0" cy="611.0" r="5" fill="#ffffff" stroke="#c2410c" stroke-width="1.4"/>
+<circle cx="580.0" cy="611.0" r="5" fill="#ffffff" stroke="#c2410c" stroke-width="1.4"/>
+<circle cx="626.0" cy="611.0" r="5" fill="#ffffff" stroke="#c2410c" stroke-width="1.4"/>
+<circle cx="672.0" cy="611.0" r="5" fill="#ffffff" stroke="#c2410c" stroke-width="1.4"/>
+<circle cx="350.0" cy="633.0" r="5" fill="#ffffff" stroke="#c2410c" stroke-width="1.4"/>
+<circle cx="396.0" cy="633.0" r="5" fill="#ffffff" stroke="#c2410c" stroke-width="1.4"/>
+<circle cx="442.0" cy="633.0" r="5" fill="#ffffff" stroke="#c2410c" stroke-width="1.4"/>
+<circle cx="488.0" cy="633.0" r="5" fill="#ffffff" stroke="#c2410c" stroke-width="1.4"/>
+<circle cx="534.0" cy="633.0" r="5" fill="#ffffff" stroke="#c2410c" stroke-width="1.4"/>
+<circle cx="580.0" cy="633.0" r="5" fill="#ffffff" stroke="#c2410c" stroke-width="1.4"/>
+<circle cx="626.0" cy="633.0" r="5" fill="#ffffff" stroke="#c2410c" stroke-width="1.4"/>
+<circle cx="672.0" cy="633.0" r="5" fill="#ffffff" stroke="#c2410c" stroke-width="1.4"/>
+<text x="736.0" y="605.0" font-size="12" fill="#1f2328" font-weight="bold" text-anchor="start" >coil 3</text>
+<text x="800.0" y="480.0" font-size="11" fill="#6e7781" font-weight="normal" text-anchor="start" >216 m² total</text>
+<text x="800.0" y="496.0" font-size="11" fill="#6e7781" font-weight="normal" text-anchor="start" >Al fins on stainless tubes</text>
+<path d="M660,688 L870,688" stroke="#2563eb" stroke-width="2.2" fill="none" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#arrCool)"/>
+<text x="750.0" y="676.0" font-size="12" fill="#2563eb" font-weight="normal" text-anchor="start" >35 °C saturated → fan → biofilter</text>
+<rect x="310.0" y="720.0" width="400.0" height="20.0" fill="#bfdbfe" stroke="#1f2328" stroke-width="1.2" />
+<path d="M510.0,740 L510.0,790 Q510.0,820 540.0,820 Q570.0,820 570.0,790 L570.0,780 L650.0,780" stroke="#2563eb" stroke-width="2" fill="none" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#arrCool)"/>
+<text x="660.0" y="776.0" font-size="12" fill="#2563eb" font-weight="normal" text-anchor="start" >condensate ≈ 0.69 m³/h</text>
+<text x="660.0" y="794.0" font-size="12" fill="#2563eb" font-weight="normal" text-anchor="start" >→ TK-401, re-used to wet the beds</text>
+<text x="500.0" y="842.0" font-size="11" fill="#6e7781" font-weight="normal" text-anchor="end" >water-seal trap</text>
+<text x="710.0" y="710.0" font-size="11" fill="#6e7781" font-weight="normal" text-anchor="end" >access door</text>
+<path d="M190,600 L320,600" stroke="#2563eb" stroke-width="3" fill="none" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#arrCool)"/>
+<text x="186.0" y="604.0" font-size="12" fill="#2563eb" font-weight="normal" text-anchor="end" >30 °C in</text>
+<path d="M320,350 L190,350" stroke="#c2410c" stroke-width="3" fill="none" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#arrHot)"/>
+<text x="186.0" y="354.0" font-size="12" fill="#c2410c" font-weight="normal" text-anchor="end" >50 °C out</text>
+<text x="260.0" y="470.0" font-size="12" fill="#6e7781" font-weight="normal" text-anchor="end" >23.6 m³/h</text>
+<text x="260.0" y="486.0" font-size="12" fill="#6e7781" font-weight="normal" text-anchor="end" >water counterflow</text>
+<path d="M270,570 L270,380" stroke="#6e7781" stroke-width="1" fill="none" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#arr)"/>
+<path d="M500,280 L500,296" stroke="#1f2328" stroke-width="1" fill="none" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#arr)"/>
+<text x="512.0" y="292.0" font-size="10.5" fill="#6e7781" font-weight="normal" text-anchor="start" >air down</text>
+<text x="1000.0" y="164.0" font-size="11" fill="#6e7781" font-weight="bold" text-anchor="start" letter-spacing="1.5">WHY LATENT HEAT DOMINATES</text>
+<rect x="1000.0" y="190.0" width="480.0" height="360.0" fill="#ffffff" stroke="#d0d7de" stroke-width="1" />
+<line x1="1000.0" y1="190.0" x2="1000.0" y2="550.0" stroke="#d0d7de" stroke-width="0.6" />
+<text x="1000.0" y="568.0" font-size="11" fill="#6e7781" font-weight="normal" text-anchor="middle" >20</text>
+<line x1="1053.3" y1="190.0" x2="1053.3" y2="550.0" stroke="#d0d7de" stroke-width="0.6" />
+<text x="1053.3" y="568.0" font-size="11" fill="#6e7781" font-weight="normal" text-anchor="middle" >25</text>
+<line x1="1106.7" y1="190.0" x2="1106.7" y2="550.0" stroke="#d0d7de" stroke-width="0.6" />
+<text x="1106.7" y="568.0" font-size="11" fill="#6e7781" font-weight="normal" text-anchor="middle" >30</text>
+<line x1="1160.0" y1="190.0" x2="1160.0" y2="550.0" stroke="#d0d7de" stroke-width="0.6" />
+<text x="1160.0" y="568.0" font-size="11" fill="#6e7781" font-weight="normal" text-anchor="middle" >35</text>
+<line x1="1213.3" y1="190.0" x2="1213.3" y2="550.0" stroke="#d0d7de" stroke-width="0.6" />
+<text x="1213.3" y="568.0" font-size="11" fill="#6e7781" font-weight="normal" text-anchor="middle" >40</text>
+<line x1="1266.7" y1="190.0" x2="1266.7" y2="550.0" stroke="#d0d7de" stroke-width="0.6" />
+<text x="1266.7" y="568.0" font-size="11" fill="#6e7781" font-weight="normal" text-anchor="middle" >45</text>
+<line x1="1320.0" y1="190.0" x2="1320.0" y2="550.0" stroke="#d0d7de" stroke-width="0.6" />
+<text x="1320.0" y="568.0" font-size="11" fill="#6e7781" font-weight="normal" text-anchor="middle" >50</text>
+<line x1="1373.3" y1="190.0" x2="1373.3" y2="550.0" stroke="#d0d7de" stroke-width="0.6" />
+<text x="1373.3" y="568.0" font-size="11" fill="#6e7781" font-weight="normal" text-anchor="middle" >55</text>
+<line x1="1426.7" y1="190.0" x2="1426.7" y2="550.0" stroke="#d0d7de" stroke-width="0.6" />
+<text x="1426.7" y="568.0" font-size="11" fill="#6e7781" font-weight="normal" text-anchor="middle" >60</text>
+<line x1="1480.0" y1="190.0" x2="1480.0" y2="550.0" stroke="#d0d7de" stroke-width="0.6" />
+<text x="1480.0" y="568.0" font-size="11" fill="#6e7781" font-weight="normal" text-anchor="middle" >65</text>
+<line x1="1000.0" y1="550.0" x2="1480.0" y2="550.0" stroke="#d0d7de" stroke-width="0.6" />
+<text x="992.0" y="554.0" font-size="11" fill="#6e7781" font-weight="normal" text-anchor="end" >0</text>
+<line x1="1000.0" y1="490.0" x2="1480.0" y2="490.0" stroke="#d0d7de" stroke-width="0.6" />
+<text x="992.0" y="494.0" font-size="11" fill="#6e7781" font-weight="normal" text-anchor="end" >100</text>
+<line x1="1000.0" y1="430.0" x2="1480.0" y2="430.0" stroke="#d0d7de" stroke-width="0.6" />
+<text x="992.0" y="434.0" font-size="11" fill="#6e7781" font-weight="normal" text-anchor="end" >200</text>
+<line x1="1000.0" y1="370.0" x2="1480.0" y2="370.0" stroke="#d0d7de" stroke-width="0.6" />
+<text x="992.0" y="374.0" font-size="11" fill="#6e7781" font-weight="normal" text-anchor="end" >300</text>
+<line x1="1000.0" y1="310.0" x2="1480.0" y2="310.0" stroke="#d0d7de" stroke-width="0.6" />
+<text x="992.0" y="314.0" font-size="11" fill="#6e7781" font-weight="normal" text-anchor="end" >400</text>
+<line x1="1000.0" y1="250.0" x2="1480.0" y2="250.0" stroke="#d0d7de" stroke-width="0.6" />
+<text x="992.0" y="254.0" font-size="11" fill="#6e7781" font-weight="normal" text-anchor="end" >500</text>
+<line x1="1000.0" y1="190.0" x2="1480.0" y2="190.0" stroke="#d0d7de" stroke-width="0.6" />
+<text x="992.0" y="194.0" font-size="11" fill="#6e7781" font-weight="normal" text-anchor="end" >600</text>
+<text x="1240.0" y="590.0" font-size="12" fill="#6e7781" font-weight="normal" text-anchor="middle" >air temperature, °C</text>
+<text x="954.0" y="370.0" font-size="12" fill="#6e7781" font-weight="normal" text-anchor="middle" transform="rotate(-90 954 370.0)">kJ per kg dry air</text>
+<path d="M1000.0,515.6 L1005.3,514.5 L1010.7,513.5 L1016.0,512.4 L1021.3,511.3 L1026.7,510.2 L1032.0,509.0 L1037.3,507.9 L1042.7,506.7 L1048.0,505.5 L1053.3,504.2 L1058.7,503.0 L1064.0,501.7 L1069.3,500.3 L1074.7,499.0 L1080.0,497.6 L1085.3,496.2 L1090.7,494.7 L1096.0,493.2 L1101.3,491.7 L1106.7,490.2 L1112.0,488.6 L1117.3,487.0 L1122.7,485.3 L1128.0,483.6 L1133.3,481.9 L1138.7,480.1 L1144.0,478.3 L1149.3,476.4 L1154.7,474.5 L1160.0,472.6 L1165.3,470.6 L1170.7,468.5 L1176.0,466.4 L1181.3,464.3 L1186.7,462.1 L1192.0,459.9 L1197.3,457.6 L1202.7,455.2 L1208.0,452.8 L1213.3,450.3 L1218.7,447.8 L1224.0,445.2 L1229.3,442.5 L1234.7,439.8 L1240.0,437.0 L1245.3,434.2 L1250.7,431.2 L1256.0,428.2 L1261.3,425.1 L1266.7,422.0 L1272.0,418.7 L1277.3,415.4 L1282.7,412.0 L1288.0,408.5 L1293.3,404.9 L1298.7,401.2 L1304.0,397.4 L1309.3,393.5 L1314.7,389.6 L1320.0,385.5 L1325.3,381.3 L1330.7,376.9 L1336.0,372.5 L1341.3,368.0 L1346.7,363.3 L1352.0,358.5 L1357.3,353.5 L1362.7,348.4 L1368.0,343.2 L1373.3,337.9 L1378.7,332.3 L1384.0,326.7 L1389.3,320.8 L1394.7,314.8 L1400.0,308.6 L1405.3,302.3 L1410.7,295.7 L1416.0,288.9 L1421.3,282.0 L1426.7,274.8 L1432.0,267.4 L1437.3,259.8 L1442.7,252.0 L1448.0,243.9 L1453.3,235.5 L1458.7,226.9 L1464.0,218.0 L1469.3,208.9 L1474.7,199.4 L1480.0,189.6" stroke="#c2410c" stroke-width="2.4" fill="none" stroke-linejoin="round" stroke-linecap="round" />
+<line x1="1160.0" y1="472.6" x2="1426.7" y2="457.5" stroke="#6e7781" stroke-width="1.4" stroke-dasharray="5 4"/>
+<circle cx="1426.7" cy="274.8" r="5" fill="#c2410c"/>
+<circle cx="1160.0" cy="472.6" r="5" fill="#2563eb"/>
+<line x1="1440.7" y1="274.8" x2="1440.7" y2="472.6" stroke="#1f2328" stroke-width="1.2" marker-start="url(#arr)" marker-end="url(#arr)"/>
+<line x1="1160.0" y1="472.6" x2="1440.7" y2="472.6" stroke="#1f2328" stroke-width="0.6" stroke-dasharray="3 3"/>
+<text x="1450.7" y="367.7" font-size="12" fill="#1f2328" font-weight="bold" text-anchor="start" >Δh = 330 kJ/kg</text>
+<text x="1450.7" y="385.7" font-size="12" fill="#1f2328" font-weight="normal" text-anchor="start" >92 % latent</text>
+<text x="1085.3" y="385.5" font-size="12" fill="#c2410c" font-weight="normal" text-anchor="start" >saturated air</text>
+<text x="1422.7" y="498.6" font-size="11.5" fill="#6e7781" font-weight="normal" text-anchor="end" >the same cooling of dry air:</text>
+<text x="1422.7" y="514.6" font-size="11.5" fill="#6e7781" font-weight="normal" text-anchor="end" >sensible only, 25 kJ/kg</text>
+<text x="1000.0" y="650.0" font-size="10" fill="#6e7781" font-weight="normal" text-anchor="start" letter-spacing="1.5">DESIGN POINT</text>
+<text x="1000.0" y="674.0" font-size="12" fill="#6e7781" font-weight="normal" text-anchor="start" >Duty</text>
+<text x="1070.0" y="674.0" font-size="12" fill="#1f2328" font-weight="normal" text-anchor="start" >548 kW (heating-season mean)</text>
+<text x="1000.0" y="696.0" font-size="12" fill="#6e7781" font-weight="normal" text-anchor="start" >Air</text>
+<text x="1070.0" y="696.0" font-size="12" fill="#1f2328" font-weight="normal" text-anchor="start" >1.66 kg/s dry, 7,030 m³/h</text>
+<text x="1000.0" y="718.0" font-size="12" fill="#6e7781" font-weight="normal" text-anchor="start" >Water</text>
+<text x="1070.0" y="718.0" font-size="12" fill="#1f2328" font-weight="normal" text-anchor="start" >30 → 50 °C, 23.6 m³/h</text>
+<text x="1000.0" y="740.0" font-size="12" fill="#6e7781" font-weight="normal" text-anchor="start" >Pinch</text>
+<text x="1070.0" y="740.0" font-size="12" fill="#1f2328" font-weight="normal" text-anchor="start" >5.0 K at the cold end</text>
+<text x="1000.0" y="762.0" font-size="12" fill="#6e7781" font-weight="normal" text-anchor="start" >Area</text>
+<text x="1070.0" y="762.0" font-size="12" fill="#1f2328" font-weight="normal" text-anchor="start" >216 m², scaled from 23.3 kW / 9.2 m²</text>
+<text x="1000.0" y="784.0" font-size="12" fill="#6e7781" font-weight="normal" text-anchor="start" ></text>
+<text x="1070.0" y="784.0" font-size="12" fill="#1f2328" font-weight="normal" text-anchor="start" >measured on a dairy-farm composter (Kojima 2022)</text>
+<text x="32.0" y="970.0" font-size="12" fill="#6e7781" font-weight="normal" text-anchor="start" >Indicative. Plate-fin area scaled from one measured farm; a vendor selection replaces it at detail design.</text>
+<rect x="1146.0" y="872.0" width="430.0" height="104.0" fill="#ffffff" stroke="#1f2328" stroke-width="1.4" />
+<line x1="1146.0" y1="912.0" x2="1576.0" y2="912.0" stroke="#1f2328" stroke-width="0.8" />
+<line x1="1146.0" y1="944.0" x2="1576.0" y2="944.0" stroke="#d0d7de" stroke-width="0.8" />
+<line x1="1296.0" y1="912.0" x2="1296.0" y2="976.0" stroke="#d0d7de" stroke-width="0.8" />
+<line x1="1436.0" y1="912.0" x2="1436.0" y2="976.0" stroke="#d0d7de" stroke-width="0.8" />
+<text x="1160.0" y="898.0" font-size="15" fill="#1f2328" font-weight="bold" text-anchor="start" >Heat-recovery module</text>
+<text x="1160.0" y="926.0" font-size="8.5" fill="#6e7781" font-weight="normal" text-anchor="start" letter-spacing="1">DRAWING</text>
+<text x="1160.0" y="939.0" font-size="11.5" fill="#1f2328" font-weight="normal" text-anchor="start" >CE-08</text>
+<text x="1310.0" y="926.0" font-size="8.5" fill="#6e7781" font-weight="normal" text-anchor="start" letter-spacing="1">REV / DATE</text>
+<text x="1310.0" y="939.0" font-size="11.5" fill="#1f2328" font-weight="normal" text-anchor="start" >A · 2026-10</text>
+<text x="1450.0" y="926.0" font-size="8.5" fill="#6e7781" font-weight="normal" text-anchor="start" letter-spacing="1">SCALE</text>
+<text x="1450.0" y="939.0" font-size="11.5" fill="#1f2328" font-weight="normal" text-anchor="start" >NTS, indicative</text>
+<text x="1160.0" y="958.0" font-size="8.5" fill="#6e7781" font-weight="normal" text-anchor="start" letter-spacing="1">AUTHOR</text>
+<text x="1160.0" y="971.0" font-size="11.5" fill="#1f2328" font-weight="normal" text-anchor="start" >Maxime Kadri</text>
+<text x="1310.0" y="958.0" font-size="8.5" fill="#6e7781" font-weight="normal" text-anchor="start" letter-spacing="1">PROJECT</text>
+<text x="1310.0" y="971.0" font-size="11.5" fill="#1f2328" font-weight="normal" text-anchor="start" >Compost Energy</text>
+<text x="1450.0" y="958.0" font-size="8.5" fill="#6e7781" font-weight="normal" text-anchor="start" letter-spacing="1">LICENCE</text>
+<text x="1450.0" y="971.0" font-size="11.5" fill="#1f2328" font-weight="normal" text-anchor="start" >CERN-OHL-P-2.0</text>
+</svg>

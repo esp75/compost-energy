@@ -753,7 +753,7 @@ def farm(p: dict) -> str:
     block(60, 170, 220, 120, "1  Reception", ["39 t/day manure, silage,", "straw ≈ 46 m³/day", "optional shredding"], p["panel"])
     # reactors
     s.rect(340, 140, 640, 330, "none", ink, 1.2, 'rx="14" stroke-dasharray="8 6"')
-    s.text(360, 166, "Enclosed reactors · ~490 m³ of material", 13, p["muted"])
+    s.text(360, 166, "Enclosed tunnels · ~490 m³ · phases shown in order (operation: CE-11)", 13, p["muted"])
     block(360, 190, 180, 150, "2  Reactor A", ["mesophilic", "seeded, mixed", "~40-45 °C"], p["a"])
     block(570, 190, 190, 150, "3  Reactor B", ["thermophilic", "55-70 °C, aerated", "sanitises the compost"], p["b"])
     block(790, 190, 170, 150, "4  Reactor C", ["mesophilic", "cooling", "~40 °C"], p["c"])
@@ -763,14 +763,14 @@ def farm(p: dict) -> str:
     # aeration fan
     s.add(f'<circle cx="665" cy="420" r="26" fill="{p["bg"]}" stroke="{ink}" stroke-width="1.5"/>')
     s.path("M650,410 L680,420 L650,430 Z", ink, 1, fill=ink)
-    s.text(705, 425, "aeration fan (in the 10 kW auxiliaries)", 12, p["muted"])
+    s.text(705, 425, "aeration fans (in the 13 kW auxiliaries)", 12, p["muted"])
     flow("M665,394 L665,344", p["cool"], "arrCool")
     # exhaust air -> exchanger
     flow("M665,190 L665,110 L1060,110 L1060,166", p["hot"], "arrHot")
     s.text(700, 100, "hot, moist exhaust air", 12, p["hot"])
     block(1010, 170, 250, 130, "5  Air-to-water exchanger", ["plate-fin, in the exhaust", "≈ 2.5 kW/m² measured on", "a dairy farm (Kojima 2022)"], p["panel"])
     flow("M1260,235 L1310,235", p["hot"], "arrHot")
-    block(1314, 140, 240, 200, "6  Farm heat users", ["dairy hot water", "barn / greenhouse", "grain or hay drying", "~230 kW winter average", "≈ 2 GWh/yr (model)"], p["panel"])
+    block(1314, 140, 240, 200, "6  Farm heat users", ["dairy hot water", "barn / greenhouse", "grain or hay drying", "548 kW over the heating season", "≈ 2 GWh/yr (model)"], p["panel"])
     flow("M1135,300 L1135,380", p["muted"])
     block(1010, 384, 250, 80, "7  Biofilter", ["cooled air, odour treated"], p["panel"])
     # down to maturation
@@ -798,8 +798,10 @@ DRAWINGS = {
 
 
 def main() -> None:
+    from industrial_drawings import DRAWINGS as FARM_UNIT  # CE-06..CE-10
+
     (OUT / "dark").mkdir(exist_ok=True)
-    for name, fn in DRAWINGS.items():
+    for name, fn in {**DRAWINGS, **FARM_UNIT}.items():
         (OUT / f"{name}.svg").write_text(fn(PALETTES["light"]))
         (OUT / "dark" / f"{name}.svg").write_text(fn(PALETTES["dark"]))
         print("wrote", name)

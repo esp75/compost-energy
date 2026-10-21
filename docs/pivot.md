@@ -18,9 +18,9 @@ The value proposition for homes is year-round, controlled composting, not energy
 
 - **Volume beats surface area.** Microbial heat grows with volume, wall losses with surface area. Small boxes lose most of their heat; big reactors keep it.
 - **Feedstock is free and huge.** A mid-size farm cooperative handles ~14,000 t/yr of manure, silage and straw.
-- **Auxiliaries get diluted.** 10 kW of conveying and aeration against ~230 kW of recovered heat (winter average).
+- **Auxiliaries get diluted.** 13 kW of conveying and aeration fans against ~550 kW of recovered heat over the heating season ([farm unit](farm-unit.md)).
 - **Measured elsewhere, too.** On an enclosed farm composter in Japan, 38% of the microbial heat reached the water, against ~9% in a simulated 200 kg box ([reference data](../data/reference/README.md)).
-- **Result:** ~2 GWh/yr of heat, ~€159k/yr net, and enough to repay ~€1.6M of capex over 10 years. Mid-size anaerobic digesters cost ~€3.2M, so this sits in a different, cheaper class.
+- **Result:** ~2 GWh/yr of heat, ~€157k/yr net, and enough to repay ~€1.6M of capex over 10 years. Mid-size anaerobic digesters cost ~€3.2M, so this sits in a different, cheaper class.
 
 ## What is still unproven
 

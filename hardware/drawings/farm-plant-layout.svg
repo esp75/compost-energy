@@ -20,7 +20,7 @@
 <text x="76.0" y="240.0" font-size="12" fill="#6e7781" font-weight="normal" text-anchor="start" >straw ≈ 46 m³/day</text>
 <text x="76.0" y="258.0" font-size="12" fill="#6e7781" font-weight="normal" text-anchor="start" >optional shredding</text>
 <rect x="340.0" y="140.0" width="640.0" height="330.0" fill="none" stroke="#1f2328" stroke-width="1.2" rx="14" stroke-dasharray="8 6"/>
-<text x="360.0" y="166.0" font-size="13" fill="#6e7781" font-weight="normal" text-anchor="start" >Enclosed reactors · ~490 m³ of material</text>
+<text x="360.0" y="166.0" font-size="13" fill="#6e7781" font-weight="normal" text-anchor="start" >Enclosed tunnels · ~490 m³ · phases shown in order (operation: CE-11)</text>
 <rect x="360.0" y="190.0" width="180.0" height="150.0" fill="#fde68a" stroke="#1f2328" stroke-width="1.6" rx="10" fill-opacity="0.9"/>
 <text x="376.0" y="220.0" font-size="15" fill="#1f2328" font-weight="bold" text-anchor="start" >2  Reactor A</text>
 <text x="376.0" y="242.0" font-size="12" fill="#1f2328" font-weight="normal" text-anchor="start" >mesophilic</text>
@@ -41,7 +41,7 @@
 <path d="M760,265 L786,265" stroke="#1f2328" stroke-width="3" fill="none" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#arr)"/>
 <circle cx="665" cy="420" r="26" fill="#ffffff" stroke="#1f2328" stroke-width="1.5"/>
 <path d="M650,410 L680,420 L650,430 Z" stroke="#1f2328" stroke-width="1" fill="#1f2328" stroke-linejoin="round" stroke-linecap="round" />
-<text x="705.0" y="425.0" font-size="12" fill="#6e7781" font-weight="normal" text-anchor="start" >aeration fan (in the 10 kW auxiliaries)</text>
+<text x="705.0" y="425.0" font-size="12" fill="#6e7781" font-weight="normal" text-anchor="start" >aeration fans (in the 13 kW auxiliaries)</text>
 <path d="M665,394 L665,344" stroke="#2563eb" stroke-width="3" fill="none" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#arrCool)"/>
 <path d="M665,190 L665,110 L1060,110 L1060,166" stroke="#c2410c" stroke-width="3" fill="none" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#arrHot)"/>
 <text x="700.0" y="100.0" font-size="12" fill="#c2410c" font-weight="normal" text-anchor="start" >hot, moist exhaust air</text>
@@ -56,7 +56,7 @@
 <text x="1330.0" y="192.0" font-size="12" fill="#1f2328" font-weight="normal" text-anchor="start" >dairy hot water</text>
 <text x="1330.0" y="210.0" font-size="12" fill="#6e7781" font-weight="normal" text-anchor="start" >barn / greenhouse</text>
 <text x="1330.0" y="228.0" font-size="12" fill="#6e7781" font-weight="normal" text-anchor="start" >grain or hay drying</text>
-<text x="1330.0" y="246.0" font-size="12" fill="#6e7781" font-weight="normal" text-anchor="start" >~230 kW winter average</text>
+<text x="1330.0" y="246.0" font-size="12" fill="#6e7781" font-weight="normal" text-anchor="start" >548 kW over the heating season</text>
 <text x="1330.0" y="264.0" font-size="12" fill="#6e7781" font-weight="normal" text-anchor="start" >≈ 2 GWh/yr (model)</text>
 <path d="M1135,300 L1135,380" stroke="#6e7781" stroke-width="3" fill="none" stroke-linejoin="round" stroke-linecap="round" marker-end="url(#arr)"/>
 <rect x="1010.0" y="384.0" width="250.0" height="80.0" fill="#f6f8fa" stroke="#1f2328" stroke-width="1.6" rx="10" fill-opacity="0.9"/>
