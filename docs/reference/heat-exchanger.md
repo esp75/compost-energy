@@ -1,4 +1,4 @@
-# Heat exchanger: the 2024 calculation and what was wrong with it
+# Heat exchanger
 
 Code: [`model/compost_energy/heat_exchanger.py`](../../model/compost_energy/heat_exchanger.py)
 

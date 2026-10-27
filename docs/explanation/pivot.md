@@ -6,7 +6,7 @@ A box for a house or a shared building: food scraps go in at the top, a water lo
 
 ## Running the numbers
 
-Working through the full energy balance at each scale ([energy-model.md](energy-model.md)) and re-checking the exchanger physics ([heat-exchanger.md](../reference/heat-exchanger.md)) gave three results that ended the home product:
+Working through the full energy balance at each scale ([Energy model](energy-model.md)) and re-checking the exchanger physics ([Heat exchanger](../reference/heat-exchanger.md)) gave three results that ended the home product:
 
 1. **A household's waste is only ~59 W of heat** on average (520 kg/yr × ~1 kWh/kg ÷ 8760 h).
 2. **The auxiliaries cost about as much as the heat is worth.** A 50 W fan/pump/controller turns the balance negative (−€39/yr). A 48-person building nets ~€200/yr, which can't pay back any box you could build.
@@ -18,7 +18,7 @@ The value proposition for homes is year-round, controlled composting, not energy
 
 - **Volume beats surface area.** Microbial heat grows with volume, wall losses with surface area. Small boxes lose most of their heat; big reactors keep it.
 - **Feedstock is free and huge.** A mid-size farm cooperative handles ~14,000 t/yr of manure, silage and straw.
-- **Auxiliaries get diluted.** 13 kW of conveying and aeration fans against ~550 kW of recovered heat over the heating season ([farm unit](../reference/farm-unit.md)).
+- **Auxiliaries get diluted.** 13 kW of conveying and aeration fans against ~550 kW of recovered heat over the heating season ([Farm-scale unit](../reference/farm-unit.md)).
 - **Measured elsewhere, too.** On an enclosed farm composter in Japan, 38% of the microbial heat reached the water, against ~9% in a simulated 200 kg box ([reference data](../../data/reference/README.md)).
 - **Result:** ~2 GWh/yr of heat and ~€157k/yr net before capital. Four aerated tunnels with heat recovery cost about €0.68M (MODEL, €0.51–0.91M), which leaves ~€42k/yr after repaying them over 10 years at 6 % ([configuration study](configuration-study.md)). Mid-size anaerobic digesters cost ~€3.2M, so this sits in a different, cheaper class.
 

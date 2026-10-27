@@ -30,4 +30,4 @@ Use this guide when you have a real logger run from a compost heat-recovery pile
 - Do not edit `clean_<run>.csv` by hand. If the cleaning is wrong, change the rules in `clean.py` and rerun the script.
 - Do not put simulated or synthetic data in `data/measured/`. Those files live in `data/simulated/`.
 
-Once a measured run is in the repository, the model can be compared with it. See the [energy model](../explanation/energy-model.md) for what the comparison should show.
+Once a measured run is in the repository, the model can be compared with it. See the [Energy model](../explanation/energy-model.md) for what the comparison should show.

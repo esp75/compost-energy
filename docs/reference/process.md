@@ -1,4 +1,4 @@
-# The composting process: recipe, phases, water
+# Composting process
 
 The tunnels are a composting plant first and a heat source second. This page is the process sheet for one batch: what goes in, which phase the bed is in and for how long, and how its moisture is held. It all comes from [`process.py`](../../model/compost_energy/process.py); [`run_process.py`](../../model/scripts/run_process.py) writes [`data/model/process.json`](../../data/model/process.json) and the figure below. Drawing [CE-14](../../hardware/drawings/farm-process-sheet.svg) puts it on one sheet.
 

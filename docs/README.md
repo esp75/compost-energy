@@ -34,7 +34,7 @@ The docs follow the [Diátaxis](https://diataxis.fr/) framework: four kinds of p
 **Explanation**
 - [Energy model](explanation/energy-model.md): does compost heat pay, at three scales
 - [From home units to farm scale](explanation/pivot.md)
-- [Which reactor? The configuration study](explanation/configuration-study.md): why four tunnels
+- [Configuration study](explanation/configuration-study.md): why four tunnels
 - [Timeline](explanation/timeline.md)
 
 ## Labels

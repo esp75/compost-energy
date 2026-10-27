@@ -1,6 +1,6 @@
-# Which reactor? The configuration study
+# Configuration study
 
-The farm scenario ([energy-model.md](energy-model.md)) fixes how much heat there is: about 2 GWh a year, 548 kW on average over the heating season. This page compares the ways of building the reactor that recovers it. All of it is in [`configurations.py`](../../model/compost_energy/configurations.py) and the run script [`run_configurations.py`](../../model/scripts/run_configurations.py), which writes [`data/model/configurations.json`](../../data/model/configurations.json).
+The farm scenario ([Energy model](energy-model.md)) fixes how much heat there is: about 2 GWh a year, 548 kW on average over the heating season. This page compares the ways of building the reactor that recovers it. All of it is in [`configurations.py`](../../model/compost_energy/configurations.py) and the run script [`run_configurations.py`](../../model/scripts/run_configurations.py), which writes [`data/model/configurations.json`](../../data/model/configurations.json).
 
 **Everything here is MODEL.** The capital costs are first-pass estimates with low/base/high values, not quotes. Nothing at this scale has been built.
 

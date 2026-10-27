@@ -17,7 +17,7 @@ python3 -m venv .venv
 .venv/bin/python model/scripts/run_scenarios.py
 ```
 
-This prints one row per scenario (heat per year, mean power, auxiliary energy and net value) for the house, the apartment block and the farm, and rebuilds the figures in [`figures/`](../../figures/). The farm row is the one the [farm-scale unit](../reference/farm-unit.md) is sized from.
+This prints one row per scenario (heat per year, mean power, auxiliary energy and net value) for the house, the apartment block and the farm, and rebuilds the figures in [`figures/`](../../figures/). The farm row is the one the [Farm-scale unit](../reference/farm-unit.md) is sized from.
 
 Open [`figures/scenarios_net_value.png`](../../figures/scenarios_net_value.png). It shows why the home scale was dropped: the net value per year is negative there, and positive at farm scale.
 

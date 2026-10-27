@@ -14,37 +14,38 @@
 
 > **Start here:** [docs/](docs/README.md) is organised as [Diátaxis](https://diataxis.fr/): [tutorials](docs/tutorials/run-the-model.md) to run the model, [how-to guides](docs/how-to/), [reference](docs/reference/farm-unit.md) for the numbers, and [explanation](docs/explanation/pivot.md) for why the design is what it is.
 
+## Watch
+
+| | |
+|---|---|
+| [![Farm-scale unit: product demo](video/farm-unit-demo-poster.png)](video/README.md#farm-scale-unit-product-demo-98-s) | [![How compost makes heat: explainer](video/poster.png)](video/compostito-explainer.mp4) |
+| **Farm-scale unit, 98 s.** Tunnels, aeration, exhaust, heat recovery, staggered batches, control and the numbers. Rendered from the CAD model; every figure on screen is read from the model. The 67 MB file is a [release download](https://github.com/esp75/compost-energy/releases/tag/video-2026-10). | **How compost makes heat, 3.5 min.** What compost is, why the microbes heat it, the four phases, where the project started, and the farm tunnel. Captioned, no voice. |
+
+Captions: [farm unit](video/farm-unit-demo.srt) · [explainer](video/compostito-explainer.srt). Narration script: [explainer](video/narration-script.md). Both videos are built from code in [`video/`](video/README.md).
+
+![Compostito cutaway](hardware/drawings/png/compostito-cutaway.png)
+
 It started in 2024 as a home "biological boiler" with one chamber per composting phase. The numbers didn't add up for homes, so it moved to farm scale. This repo is the full engineering record: the (now open) patent, the energy model at three scales, the configuration study that chose the farm layout, drawings, a CAD model, a physics simulation of a prototype run, the data pipeline for real logger data, and the logger firmware. Every number is labelled MODEL, SIMULATED or MEASURED.
 
 ## Farm-scale unit
 
-[![Farm-scale unit: product demo](video/farm-unit-demo-poster.png)](video/README.md#farm-scale-unit-product-demo-98-s)
+Four aerated tunnels, each running a whole 15-day batch in place, started 3.75 days apart, with heat recovered from the exhaust air: **548 kW** mean (630 kW peak) over the heating season, **2 GWh/yr**, through an 85 m³ buffer tank. The design is sized from the energy model in [`industrial.py`](model/compost_energy/industrial.py), drawn as [CE-06 to CE-14](hardware/drawings/), modelled in [CadQuery](hardware/cad/) (STEP, GLB, STL), and shown in a demo rendered from that CAD model. 92 % of the recovered heat is water vapour condensing, and the walls lose 2 %. → [Farm-scale unit](docs/reference/farm-unit.md)
 
-Four aerated tunnels, each running a whole 15-day batch in place, started 3.75 days apart, with heat recovered from the exhaust air: **548 kW** mean (630 kW peak) over the heating season, **2 GWh/yr**, through an 85 m³ buffer tank. The design is sized from the energy model in [`industrial.py`](model/compost_energy/industrial.py), drawn as [CE-06 to CE-14](hardware/drawings/), modelled in [CadQuery](hardware/cad/) (STEP, GLB, STL), and shown in a demo rendered from that CAD model. 92 % of the recovered heat is water vapour condensing, and the walls lose 2 %. → [docs/farm-unit.md](docs/reference/farm-unit.md)
+**Why four tunnels?** A [Configuration study](docs/explanation/configuration-study.md) compared 2, 3 and 4 tunnels, moving batches between tunnels with a loader, an automatic transfer train (walking floors or a winch-pulled floor net, fill only tunnel 1), and the patent's stacked chambers built as a tower. Four tunnels whole-cycle-in-place came out best at low, base and high costs: about **€0.68M capex** and **€42k/yr after repaying it** over 10 years (MODEL). The automatic train is engineered and kept on record ([CE-13](hardware/drawings/farm-transfer-train.svg)); it loses about €100k/yr because the loader work it replaces is small.
 
-**Why four tunnels?** A [configuration study](docs/explanation/configuration-study.md) compared 2, 3 and 4 tunnels, moving batches between tunnels with a loader, an automatic transfer train (walking floors or a winch-pulled floor net, fill only tunnel 1), and the patent's stacked chambers built as a tower. Four tunnels whole-cycle-in-place came out best at low, base and high costs: about **€0.68M capex** and **€42k/yr after repaying it** over 10 years (MODEL). The automatic train is engineered and kept on record ([CE-13](hardware/drawings/farm-transfer-train.svg)); it loses about €100k/yr because the loader work it replaces is small.
-
-**Why only 15 days in a tunnel?** The tunnel holds the stage that has to be enclosed: about 4 mesophilic days, then about 11 thermophilic days (held at 60 °C, sanitised by 72 h at ≥ 55 °C, then cooled to 45 °C). That is where two thirds of the organic matter breaks down, where the heat is and where the smell is. The batch then matures for 8 weeks in windrows. Roof spray bars hold the bed at 50–60 % moisture, with condensate until the batch is sanitised and farm water after it. Recipe, process window and water per batch: [docs/process.md](docs/reference/process.md), [CE-14](hardware/drawings/farm-process-sheet.svg).
+**Why only 15 days in a tunnel?** The tunnel holds the stage that has to be enclosed: about 4 mesophilic days, then about 11 thermophilic days (held at 60 °C, sanitised by 72 h at ≥ 55 °C, then cooled to 45 °C). That is where two thirds of the organic matter breaks down, where the heat is and where the smell is. The batch then matures for 8 weeks in windrows. Roof spray bars hold the bed at 50–60 % moisture, with condensate until the batch is sanitised and farm water after it. Recipe, process window and water per batch: [Composting process](docs/reference/process.md), [CE-14](hardware/drawings/farm-process-sheet.svg).
 
 ![Configuration study](figures/config_comparison.png)
 
 ![Farm-scale unit cutaway](hardware/drawings/png/farm-unit-cutaway.png)
-
-## Watch: how compost makes heat (3.5 min)
-
-[![How compost makes heat: explainer video](video/poster.png)](video/compostito-explainer.mp4)
-
-What compost is, aerobic vs anaerobic, what the microbes need (C:N, moisture, air, size), why they get hot, the four phases, where the project started (Compostito, the home unit), the farm tunnel and its 15-day batch, heat and water, and why aerobic compost makes a better fertiliser. Captioned, no voice ([script](video/narration-script.md), [subtitles](video/compostito-explainer.srt)). Rendered from code in [`video/src/`](video/src/).
-
-![Compostito cutaway](hardware/drawings/png/compostito-cutaway.png)
 
 More drawings (build drawing, exchanger coil, P&ID, farm layout): [`hardware/drawings/`](hardware/drawings/).
 
 ## The short version
 
 1. **2024:** designed a home unit that turns food scraps into heating and fertiliser. Wrote a provisional patent, specified three prototypes (~€640 BOM) and sized the heat exchanger.
-2. **The numbers didn't work for homes.** A household's waste is worth **~59 W** of heat on average. A 50 W fan and controller make it net-negative, and the exchanger had been over-estimated ~70× by one wrong assumption ([details](docs/reference/heat-exchanger.md)).
-3. **They do work at farm scale.** About 14,000 t/yr of farm feedstock yields **~2 GWh/yr** of heat, worth **~€157k/yr net** before capital, and four tunnels with heat recovery cost about €0.68M (MODEL). Microbial heat grows with volume while losses grow with surface area. → [pivot.md](docs/explanation/pivot.md)
+2. **The numbers didn't work for homes.** A household's waste is worth **~59 W** of heat on average. A 50 W fan and controller make it net-negative, and the exchanger had been over-estimated ~70× by one wrong assumption ([Heat exchanger](docs/reference/heat-exchanger.md)).
+3. **They do work at farm scale.** About 14,000 t/yr of farm feedstock yields **~2 GWh/yr** of heat, worth **~€157k/yr net** before capital, and four tunnels with heat recovery cost about €0.68M (MODEL). Microbial heat grows with volume while losses grow with surface area. → [From home units to farm scale](docs/explanation/pivot.md)
 
 ![Net value by scale](figures/scenarios_net_value.png)
 
@@ -76,7 +77,7 @@ The simulation is only useful if it matches reality, so this repo also includes 
 
 ![measured bins vs simulation](figures/reference_bins_vs_simulation.png)
 
-**Farm scale.** This is an enclosed composter on a 150-cow dairy farm with an exhaust-air heat exchanger (Kojima et al., 2022). **38% of the microbial heat reached the water** (23.3 of 61.8 kW), against ~9% in the simulated 200 kg box. That measured gap is the scale effect behind the [pivot](docs/explanation/pivot.md). The facility also drew 13.3 kW of electricity for aeration and agitation, which is the cost side the energy model accounts for.
+**Farm scale.** This is an enclosed composter on a 150-cow dairy farm with an exhaust-air heat exchanger (Kojima et al., 2022). **38% of the microbial heat reached the water** (23.3 of 61.8 kW), against ~9% in the simulated 200 kg box. That measured gap is the scale effect behind the [move to farm scale](docs/explanation/pivot.md). The facility also drew 13.3 kW of electricity for aeration and agitation, which is the cost side the energy model accounts for.
 
 ![measured farm heat recovery](figures/reference_farm_heat_recovery.png)
 
@@ -128,9 +129,9 @@ python3 -m venv .venv && .venv/bin/pip install -e "model[test]"
 - [ ] Prototype 3 (double exchanger length): measure how output scales with area
 - [ ] Fit the simulation's kinetic and loss parameters to measured data (start with the Collins bins)
 - [x] Dimensioned drawings and coil layout ([drawings/README](hardware/drawings/README.md)); re-dimension after the first build
-- [x] Farm-scale concept: tunnels, exhaust-air heat recovery, controls, CAD ([farm-unit.md](docs/reference/farm-unit.md))
-- [x] Configuration study: 2-4 tunnels, loader and automatic transfer, stacked tower ([configurations.md](docs/explanation/configuration-study.md))
-- [x] Process sheet: recipe, mesophilic/thermophilic/maturation phases, sanitisation, moisture and spray water ([process.md](docs/reference/process.md))
+- [x] Farm-scale concept: tunnels, exhaust-air heat recovery, controls, CAD ([Farm-scale unit](docs/reference/farm-unit.md))
+- [x] Configuration study: 2-4 tunnels, loader and automatic transfer, stacked tower ([Configuration study](docs/explanation/configuration-study.md))
+- [x] Process sheet: recipe, mesophilic/thermophilic/maturation phases, sanitisation, moisture and spray water ([Composting process](docs/reference/process.md))
 - [ ] Log one full-scale batch's exhaust heat hour by hour: it settles 3 vs 4 tunnels
 - [ ] Farm pilot: a partner site with a nearby heat user
 

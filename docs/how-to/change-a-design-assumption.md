@@ -37,7 +37,7 @@ The farm-scale drawings, the CAD model and the demo video are all generated from
 
 5. Check the diff. `git diff --stat` should list only the files that really changed. If a drawing changed that you did not expect, the value you changed is used somewhere you did not think of. Look for it with `grep -rn "<name>" model/`.
 
-6. Update the reference page if a number in the text changed: [farm-unit.md](../reference/farm-unit.md) quotes many of them.
+6. Update the reference page if a number in the text changed: [Farm-scale unit](../reference/farm-unit.md) quotes many of them.
 
 ## Why this is strict
 

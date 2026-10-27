@@ -237,4 +237,4 @@ In summary, the invention offers a new answer to today's challenges of organic w
 
 ---
 
-*Engineering note (2026): later modelling in this repository showed that the exchanger's heat output was far lower than the 2024 design calculation assumed, and that household-scale units do not pay back. See [heat-exchanger.md](../heat-exchanger.md) and [pivot.md](../../explanation/pivot.md).*
+*Engineering note (2026): later modelling in this repository showed that the exchanger's heat output was far lower than the 2024 design calculation assumed, and that household-scale units do not pay back. See [Heat exchanger](../heat-exchanger.md) and [From home units to farm scale](../../explanation/pivot.md).*
