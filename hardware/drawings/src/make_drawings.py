@@ -863,14 +863,29 @@ def export_png(svg: Path, out: Path) -> None:
                    check=True, stdout=subprocess.DEVNULL)
 
 
+def stable(svg: str) -> str:
+    """Round coordinates to 0.001 so the SVG text is the same on every platform.
+
+    Float arithmetic differs in the last digit between machines, which would
+    make the CI diff fail for no visible reason. 0.001 mm is far below anything
+    drawn."""
+    import re
+
+    def r(m: re.Match) -> str:
+        s = f"{float(m.group(0)):.3f}".rstrip("0").rstrip(".")
+        return s if s not in ("", "-0") else "0"
+
+    return re.sub(r"-?\d+\.\d{4,}", r, svg)
+
+
 def main(png: bool = True) -> None:
     from industrial_drawings import DRAWINGS as FARM_UNIT  # CE-06..CE-14
 
     (OUT / "dark").mkdir(exist_ok=True)
     (OUT / "png").mkdir(exist_ok=True)
     for name, fn in {**DRAWINGS, **FARM_UNIT}.items():
-        (OUT / f"{name}.svg").write_text(fn(PALETTES["light"]))
-        (OUT / "dark" / f"{name}.svg").write_text(fn(PALETTES["dark"]))
+        (OUT / f"{name}.svg").write_text(stable(fn(PALETTES["light"])))
+        (OUT / "dark" / f"{name}.svg").write_text(stable(fn(PALETTES["dark"])))
         if png:
             export_png(OUT / f"{name}.svg", OUT / "png" / f"{name}.png")
         print("wrote", name)
