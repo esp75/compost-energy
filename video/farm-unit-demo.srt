@@ -4,11 +4,11 @@ A farm co-op handles about 39 tonnes of manure, silage and straw a day.
 
 2
 00:00:09,200 --> 00:00:19,600
-Composting it releases heat. This unit is designed to capture it: three insulated tunnels, 988 m³ in all.
+Composting it releases heat. This unit is designed to capture it: four insulated tunnels, 988 m³ in all.
 
 3
 00:00:20,400 --> 00:00:32,600
-Blowers push air up through a spigot floor. The bed stays aerobic and heats itself to 55–70 °C.
+Air rises through a spigot floor and the bed heats itself to 60 °C. Spray bars keep it 50–60 % moist.
 
 4
 00:00:33,400 --> 00:00:45,600
@@ -16,15 +16,15 @@ The hot, saturated exhaust, 7,030 m³ an hour at 60 °C, is collected from the h
 
 5
 00:00:46,400 --> 00:00:53,800
-On 216 m² of plate-fin coils it cools to 35 °C. 92 % of that heat is water vapour condensing.
+On 249 m² of plate-fin coils it cools to 35 °C. 92 % of that heat is water vapour condensing.
 
 6
 00:00:54,200 --> 00:01:01,600
-Water leaves at 50 °C for the farm's heat users. The condensate goes back to wet the beds.
+Water leaves at 50 °C. A 85 m³ buffer tank evens it out for the farm's heat users.
 
 7
 00:01:02,400 --> 00:01:17,600
-The tunnels start five days apart, so one is always heating, one is hot and one is cooling. Every five days one is emptied and refilled.
+The tunnels start 3.75 days apart, so one is in its mesophilic start, two are thermophilic and one is cooling. Every 3.75 days one is emptied and refilled.
 
 8
 00:01:18,400 --> 00:01:27,600

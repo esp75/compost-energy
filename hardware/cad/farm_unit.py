@@ -1,4 +1,4 @@
-"""Parametric CAD model of the farm-scale unit (drawings CE-06..CE-11).
+"""Parametric CAD model of the farm-scale unit (drawings CE-06..CE-12).
 
     .venv/bin/python hardware/cad/farm_unit.py
 
@@ -15,9 +15,8 @@ operating_modes), the same source as the drawings. The model is in
 millimetres. Axes: x across the tunnels, y along them (doors at the front,
 y = tunnel length), z up.
 
-The beds are shown in the staggered state of CE-11: T-101 on day 12.5
-(cooling), T-102 on day 2.5 (heating up), T-103 on day 7.5 (hot), each
-settled to its depth on that day.
+The beds are shown in the staggered state of CE-11: four batches started
+3.75 days apart, each settled to its depth on the day it has reached.
 """
 
 from __future__ import annotations
@@ -52,22 +51,28 @@ ROOF_Z = G["roof_z_m"]
 BAYS = G["bay_x_m"]
 STAGE = OPS["stage_days"]
 
-# Colours (RGBA 0-1), close to the drawing palette.
+def _rgb(hexcode: str, a: float = 1.0) -> tuple:
+    h = hexcode.lstrip("#")
+    return tuple(int(h[i:i + 2], 16) / 255 for i in (0, 2, 4)) + (a,)
+
+
+# Colours (RGBA 0-1) from the brand tokens (brand/10_color/tokens.json): ember = heat, teal = cold side.
 C = {
-    "concrete": (0.80, 0.80, 0.78, 1.0),
-    "roof": (0.72, 0.73, 0.72, 1.0),
-    "door": (0.55, 0.68, 0.82, 1.0),
-    "compost": (0.42, 0.30, 0.20, 1.0),
-    "plenum": (0.25, 0.45, 0.85, 1.0),
-    "duct_hot": (0.76, 0.25, 0.05, 1.0),
-    "duct_cool": (0.15, 0.39, 0.92, 1.0),
-    "steel": (0.62, 0.64, 0.66, 1.0),
-    "hx": (0.86, 0.45, 0.40, 1.0),
-    "coil": (0.82, 0.55, 0.30, 1.0),
-    "biofilter": (0.55, 0.62, 0.30, 1.0),
-    "tank": (0.70, 0.82, 0.95, 1.0),
-    "pipe_hot": (0.85, 0.30, 0.08, 1.0),
-    "pipe_cool": (0.20, 0.45, 0.90, 1.0),
+    "concrete": _rgb("#c9d1cc"),
+    "roof": _rgb("#aeb8b2"),
+    "door": _rgb("#cfe0df"),
+    "compost": _rgb("#5a4128"),
+    "plenum": _rgb("#2f6f73"),
+    "duct_hot": _rgb("#b23f0a"),
+    "duct_cool": _rgb("#2f6f73"),
+    "steel": _rgb("#8f9a94"),
+    "hx": _rgb("#e0882a"),
+    "coil": _rgb("#c9a06a"),
+    "biofilter": _rgb("#7a8f6a"),
+    "tank": _rgb("#cfe0df"),
+    "buffer": _rgb("#dfe5e1"),
+    "pipe_hot": _rgb("#f26a21"),
+    "pipe_cool": _rgb("#4fb3b0"),
 }
 
 
@@ -92,6 +97,17 @@ def pipe_x(x0, x1, y, z, d) -> cq.Workplane:
 def pipe_y(y0, y1, x, z, d) -> cq.Workplane:
     return (cq.Workplane("XZ").circle(d * MM / 2).extrude(-(y1 - y0) * MM)
             .translate((x * MM, y0 * MM, z * MM)))
+
+
+def pipe_run(pts, z, d) -> cq.Workplane:
+    """Horizontal pipe through axis-aligned (x, y) points at height z, with elbows."""
+    run = None
+    for (x0, y0), (x1, y1) in zip(pts, pts[1:]):
+        seg = pipe_x(min(x0, x1), max(x0, x1), y0, z, d) if y0 == y1 else pipe_y(min(y0, y1), max(y0, y1), x0, z, d)
+        run = seg if run is None else run.union(seg)
+    for x, y in pts[1:-1]:
+        run = run.union(cq.Workplane("XY").sphere(d * MM / 2).translate((x * MM, y * MM, z * MM)))
+    return run
 
 
 def bed_depth(day: float) -> float:
@@ -141,7 +157,7 @@ def build() -> tuple[cq.Assembly, list[dict]]:
             piece = box(xc - 0.04, xc + 0.04, 0.2, L - 0.2, SLAB - 0.12, SLAB + 0.01)
             ch = piece if ch is None else ch.union(piece)
         add(f"{tag}-spigot-floor", ch, "plenum", "HDPE channels with spigots", "process")
-        day = ((i + 2) % N + 0.5) * STAGE      # staggered: T-101 cooling, T-102 heating up, T-103 hot
+        day = ((N - i) % N + 0.5) * STAGE      # staggered: each tunnel one stage behind the next
         add(f"{tag}-bed", box(bx, bx + W, 0, L, SLAB + 0.01, SLAB + 0.01 + bed_depth(day)), "compost",
             f"compost, day {day:g}", "process")
 
@@ -149,22 +165,22 @@ def build() -> tuple[cq.Assembly, list[dict]]:
     for i, bx in enumerate(BAYS):
         tag = f"K-10{i + 1}"
         xc = bx + W / 2
-        add(f"{tag}-blower", cyl(xc, -1.3, 0.0, 0.9, 0.9), "steel", "centrifugal blower 2.7 kW", "air")
+        add(f"{tag}-blower", cyl(xc, -1.3, 0.0, 0.9, 0.9), "steel", f"centrifugal blower {M['blower_kw_each']:.1f} kW", "air")
         add(f"{tag}-duct", pipe_y(-0.85, -T, xc, SLAB / 2 + 0.05, M["duct_tunnel_mm"] / 1000 * 0.9),
             "duct_cool", "galvanised duct", "air")
 
     # ---- exhaust: stubs and manifold -------------------------------------
     zm = ROOF_Z + LAY.manifold_rise_m
-    d_t = 0.315
-    d_m = 0.500
+    d_t = 0.355      # per tunnel, sized for its blower's peak
+    d_m = 0.560
     ey = LAY.exhaust_y_m
     for i, bx in enumerate(BAYS):
         xs = bx + W / 2
-        add(f"X-10{i + 1}-stub", cyl(xs, ey, ROOF_Z, zm, d_t), "duct_hot", "PP duct Ø315", "air")
+        add(f"X-10{i + 1}-stub", cyl(xs, ey, ROOF_Z, zm, d_t), "duct_hot", "PP duct Ø355", "air")
     hx0, hx1, hy0, hy1, hz0, hz1 = LAY.hx
     xd = (hx0 + hx1) / 2
-    add("manifold", pipe_x(BAYS[0] + W / 2, xd, ey, zm, d_m), "duct_hot", "PP duct Ø500", "air")
-    add("manifold-drop", cyl(xd, ey, hz1, zm + d_m / 2, d_m), "duct_hot", "PP duct Ø500", "air")
+    add("manifold", pipe_x(BAYS[0] + W / 2, xd, ey, zm, d_m), "duct_hot", "PP duct Ø560", "air")
+    add("manifold-drop", cyl(xd, ey, hz1, zm + d_m / 2, d_m), "duct_hot", "PP duct Ø560", "air")
 
     # ---- heat-recovery skid ----------------------------------------------
     add("HX-201-casing", box(hx0, hx1, hy0, hy1, hz0, hz1).shell(-60), "hx",
@@ -184,11 +200,59 @@ def build() -> tuple[cq.Assembly, list[dict]]:
     add("TK-401-condensate", cyl((tx0 + tx1) / 2, (ty0 + ty1) / 2, tz0, tz1, tx1 - tx0), "tank",
         "PE tank", "heat")
     add("condensate-line", pipe_x(hx1, tx0, (ty0 + ty1) / 2, 0.25, 0.08), "pipe_cool", "PE pipe", "heat")
-    # water loop to the farm heat users, leaving the skid towards the tunnels
-    add("water-supply", pipe_x(X_ALL + 0.4, hx0, hy1 - 0.6, 1.0, 0.11), "pipe_hot", "steel DN100, insulated", "heat")
-    add("water-return", pipe_x(X_ALL + 0.4, hx0, hy1 - 1.2, 0.6, 0.11), "pipe_cool", "steel DN100, insulated", "heat")
+    # irrigation: TK-401 -> P-401 -> header behind the tunnels -> three roof spray bars per tunnel (CE-09, CE-14)
+    zs = ROOF_Z - T - 0.35
+    zh = ROOF_Z + 0.25
+    for i, bx in enumerate(BAYS):
+        bars = None
+        for f in (0.2, 0.5, 0.8):
+            bar = pipe_y(0.3, L - 0.3, bx + W * f, zs, 0.06)
+            bars = bar if bars is None else bars.union(bar)
+        feed = pipe_run([(bx + W * 0.2, 0.3), (bx + W * 0.2, -0.5), (bx + W * 0.8, -0.5), (bx + W * 0.8, 0.3)], zs, 0.06)
+        add(f"SP-10{i + 1}-spray-bars", bars.union(feed), "pipe_cool", "PE spray bars, flat-fan nozzles", "water")
+        add(f"SP-10{i + 1}-drop", cyl(bx + W / 2, -0.5, zs, zh, 0.06), "pipe_cool", "PE pipe", "water")
+    tcx, tcy = (tx0 + tx1) / 2, (ty0 + ty1) / 2
+    add("irrigation-header", pipe_run([(BAYS[0] + W / 2, -0.5), (tcx, -0.5), (tcx, tcy)], zh, 0.08), "pipe_cool",
+        "PE DN65 irrigation header", "water")
+    add("irrigation-riser", cyl(tcx, tcy, tz1, zh, 0.08), "pipe_cool", "PE DN65, P-401 at the tank", "water")
+    # water: exchanger -> buffer tank TK-201 -> farm heat users
+    bcx, bcy, bdia = LAY.buffer
+    add("TK-201-buffer", cyl(bcx, bcy, 0.0, LAY.buffer_h_m, bdia), "buffer",
+        f"insulated steel tank {M['buffer_m3']:.0f} m³", "heat")
+    # out of the back of the skid, along behind it, into the side of the tank
+    xs, xr = (hx0 + hx1) / 2, (hx0 + hx1) / 2 + 0.6
+    tank_in = bcx - bdia / 2 + 0.1
+    add("water-supply", pipe_run([(xs, hy0 + 0.1), (xs, bcy + 0.5), (tank_in, bcy + 0.5)], 2.6, 0.11), "pipe_hot",
+        "steel DN100, insulated", "heat")
+    add("water-return", pipe_run([(xr, hy0 + 0.1), (xr, bcy - 0.5), (tank_in, bcy - 0.5)], 1.2, 0.11), "pipe_cool",
+        "steel DN100, insulated", "heat")
+    add("users-supply", pipe_x(bcx + bdia / 2 - 0.1, bcx + bdia / 2 + 3.0, bcy, 1.8, 0.11), "pipe_hot",
+        "steel DN100 to heat users", "heat")
+    add("users-return", pipe_x(bcx + bdia / 2 - 0.1, bcx + bdia / 2 + 3.0, bcy + 0.8, 0.9, 0.11), "pipe_cool",
+        "steel DN100 from heat users", "heat")
 
     return assy, parts
+
+
+def _process() -> dict:
+    """Phase boundaries and water of one batch (process.py), for the video (MODEL)."""
+    from compost_energy import process as proc
+    b = proc.run_batch()
+    ph = {p["phase"]: p for p in proc.phases(b)}
+    return {"t45_day": ph["mesophilic"]["end"], "cool_day": ph["cooling"]["start"],
+            "sanitised_day": b["sanitised_day"], "fill_moisture": b["fill_moisture"],
+            "end_moisture": b["totals"]["end_moisture"], "evaporated_t": b["totals"]["evaporated_t"],
+            "spray_m3_h": proc.WaterModel().spray_m3_h}
+
+
+def _study() -> dict:
+    """The configuration study's verdict, for the video's closing numbers (MODEL)."""
+    from compost_energy import configurations as cfg
+    final = next(o for o in cfg.all_options() if o.code == cfg.FINAL)
+    n = cfg.evaluate_option(final).numbers
+    return {"final": cfg.FINAL, "capex_eur": n["capex"], "value_after_capital_eur": n["value_eur"],
+            "low_capex_eur": cfg.evaluate_option(final, cfg.LOW).numbers["capex"],
+            "high_capex_eur": cfg.evaluate_option(final, cfg.HIGH).numbers["capex"]}
 
 
 def main() -> None:
@@ -201,9 +265,9 @@ def main() -> None:
         w = csv.DictWriter(f, fieldnames=list(parts[0]))
         w.writeheader()
         w.writerows(parts)
-    lay = {k: list(getattr(LAY, k)) for k in ("hx", "fan", "tank", "biofilter")}
+    lay = {k: list(getattr(LAY, k)) for k in ("hx", "fan", "tank", "biofilter", "buffer")}
     lay.update({k: getattr(LAY, k) for k in ("wall_m", "slab_m", "door_w_m", "door_h_m", "exhaust_y_m",
-                                             "manifold_rise_m", "spigot_pitch_m")})
+                                             "manifold_rise_m", "spigot_pitch_m", "buffer_h_m")})
     meta = {
         "geometry": {"width_m": W, "height_m": H, "length_m": L, "overall_x_m": X_ALL, "roof_z_m": ROOF_Z,
                      "bay_x_m": BAYS, "n_tunnels": N, **lay},
@@ -214,6 +278,8 @@ def main() -> None:
         "farm": {"net_eur": evaluate(FARM).net_eur, "heat_kwh": evaluate(FARM).heat_kwh,
                  "feedstock_t_per_year": FARM.waste_kg_per_year / 1000},
         "measured": {"kojima2022_recovery_share": 23.3 / 61.8},
+        "study": _study(),
+        "process": _process(),
     }
     (OUT / "farm-unit.json").write_text(json.dumps(meta, indent=1))
     beds = sum(p["volume_m3"] for p in parts if p["part"].endswith("-bed"))

@@ -4,17 +4,19 @@
 <meta charset="utf-8">
 <title>Compost Energy farm-scale unit: product demo</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter+Tight:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=block" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600&family=Geist+Mono:wght@400;500&family=Unbounded:wght@500;600&display=block" rel="stylesheet">
 <style>
-  :root { --night:#050505; --panel:rgba(13,13,15,.86); --ink:#fafafa; --mist:#a1a1aa; --dim:#71717a; --line:#27272a;
-          --yellow:#f7c72f; --orange:#f97316; --teal:#2dd4bf; --blue:#60a5fa; --violet:#8b5cf6; }
+  /* brand tokens (brand/10_color/tokens.json, Night): leaf = matter, ember = heat */
+  :root { --night:#060a07; --panel:rgba(14,22,17,.82); --ink:#eef3ef; --mist:#93a69a; --dim:#6f7f75; --line:rgba(238,243,239,.14);
+          --leaf:#7cc04a; --ember:#f26a21; --glow:#e9f07e; --cool:#4fb3b0; }
   html, body { margin:0; background:var(--night); }
   #stage { position:relative; width:1920px; height:1080px; overflow:hidden; background:var(--night);
-           font-family:"Inter Tight","Helvetica Neue",Arial,sans-serif; color:var(--ink); }
+           font-family:"Instrument Sans","Helvetica Neue",Arial,sans-serif; color:var(--ink); }
   #gl, #ov { position:absolute; inset:0; width:1920px; height:1080px; }
   #cap { position:absolute; left:50%; bottom:54px; transform:translateX(-50%); max-width:1480px; padding:18px 34px 20px; border-radius:18px;
-         background:var(--panel); border:1px solid var(--line); font-size:34px; line-height:1.32; font-weight:500; text-align:center; }
-  #cap b { color:var(--yellow); font-weight:600; }
+         background:var(--panel); border:1px solid var(--line); font-size:34px; line-height:1.32; font-weight:500; text-align:center;
+         backdrop-filter:blur(14px); }
+  #cap b { color:var(--ember); font-weight:600; }
   #cap:empty { display:none; }
 </style>
 <script type="importmap">
@@ -38,6 +40,8 @@ const W = Gm.width_m, L = Gm.length_m, SLAB = Gm.slab_m, ROOF = Gm.roof_z_m, BAY
 const EY = Gm.exhaust_y_m, ZM = ROOF + Gm.manifold_rise_m;
 const [hx0, hx1, hy0, hy1, hz0, hz1] = Gm.hx, [fx0, fx1, fy0, fy1] = Gm.fan, BF = Gm.biofilter;
 const XD = (hx0 + hx1) / 2;
+const N = Gm.n_tunnels, STAGE = Op.stage_days, LAST = N - 1;
+const [BCX, BCY, BDIA] = Gm.buffer, BR = BDIA / 2;
 
 // ---- helpers ----------------------------------------------------------------
 const clamp = (x, a = 0, b = 1) => Math.max(a, Math.min(b, x));
@@ -68,11 +72,11 @@ renderer.shadowMap.enabled = true;
 renderer.shadowMap.type = THREE.PCFSoftShadowMap;
 
 const scene = new THREE.Scene();
-scene.background = new THREE.Color("#060607");
-scene.fog = new THREE.Fog("#060607", 70, 140);
+scene.background = new THREE.Color("#060a07");
+scene.fog = new THREE.Fog("#060a07", 70, 140);
 const camera = new THREE.PerspectiveCamera(34, 1920 / 1080, 0.1, 400);
 
-scene.add(new THREE.HemisphereLight("#dfe6ff", "#1a1410", 0.9));
+scene.add(new THREE.HemisphereLight("#e6f0e8", "#14100b", 0.9));
 const sun = new THREE.DirectionalLight("#fff4e6", 2.2);
 sun.position.copy(V(-20, 40, 38));
 sun.target.position.copy(V(13, 8, 0));
@@ -81,17 +85,17 @@ sun.shadow.mapSize.set(4096, 4096);
 Object.assign(sun.shadow.camera, { left: -32, right: 32, top: 32, bottom: -32, near: 1, far: 140 });
 sun.shadow.bias = -0.0004;
 scene.add(sun, sun.target);
-const rim = new THREE.DirectionalLight("#8fb3ff", 0.6);
+const rim = new THREE.DirectionalLight("#9fd3cf", 0.6);
 rim.position.copy(V(40, -20, 20));
 scene.add(rim);
 
-const ground = new THREE.Mesh(new THREE.PlaneGeometry(400, 400), new THREE.MeshStandardMaterial({ color: "#0c0c0d", roughness: 1 }));
+const ground = new THREE.Mesh(new THREE.PlaneGeometry(400, 400), new THREE.MeshStandardMaterial({ color: "#0a0f0b", roughness: 1 }));
 ground.rotation.x = -Math.PI / 2;
 ground.position.y = -0.01;
 ground.receiveShadow = true;
 scene.add(ground);
-const grid = new THREE.GridHelper(120, 120, "#202024", "#151518");
-grid.position.copy(V(13, 8, 0.002));
+const grid = new THREE.GridHelper(120, 120, "#1d2a22", "#121a15");
+grid.position.copy(V(15, 4, 0.002));
 scene.add(grid);
 
 // ---- the CAD model ----------------------------------------------------------
@@ -101,34 +105,38 @@ model.scale.setScalar(0.001);                                    // CAD is in mm
 scene.add(model);
 
 const STYLE = [
-  [/roof$/, { color: "#b4b6b3", roughness: .85 }],
-  [/door$/, { color: "#5f7fa6", roughness: .5, metalness: .3 }],
-  [/spigot/, { color: "#3b82f6", emissive: "#1d4ed8", emissiveIntensity: .5 }],
-  [/^X-|^manifold/, { color: "#e0601a", roughness: .5, emissive: "#7c2d12", emissiveIntensity: .25 }],
-  [/K-\d+-duct|K-201-inlet|K-201-to/, { color: "#2f6fe0", roughness: .5 }],
-  [/blower|K-201-fan/, { color: "#9aa0a6", metalness: .7, roughness: .35 }],
-  [/HX-201-casing/, { color: "#d4d6d8", metalness: .55, roughness: .35 }],
-  [/coil/, { color: "#c87533", metalness: .75, roughness: .3 }],
-  [/biofilter/, { color: "#55612b", roughness: 1 }],
-  [/TK-401/, { color: "#8ec5f0", roughness: .2, metalness: .1 }],
-  [/water-supply/, { color: "#ea580c", roughness: .4, emissive: "#7c2d12", emissiveIntensity: .35 }],
-  [/water-return|condensate-line/, { color: "#2563eb", roughness: .4 }],
-  [/./, { color: "#c9c9c4", roughness: .9 }],
+  [/roof$/, { color: "#aeb8b2", roughness: .85 }],
+  [/door$/, { color: "#6f9fa0", roughness: .5, metalness: .3 }],
+  [/spigot/, { color: "#2f6f73", emissive: "#1d4f52", emissiveIntensity: .5 }],
+  [/^X-|^manifold/, { color: "#f26a21", roughness: .5, emissive: "#7a2a07", emissiveIntensity: .3 }],
+  [/K-\d+-duct|K-201-inlet|K-201-to/, { color: "#2f6f73", roughness: .5 }],
+  [/blower|K-201-fan/, { color: "#8f9a94", metalness: .7, roughness: .35 }],
+  [/HX-201-casing/, { color: "#d3d9d5", metalness: .55, roughness: .35 }],
+  [/coil/, { color: "#c9a06a", metalness: .75, roughness: .3 }],
+  [/biofilter/, { color: "#55663f", roughness: 1 }],
+  [/TK-401/, { color: "#9fd3cf", roughness: .2, metalness: .1 }],
+  [/TK-201/, { color: "#dfe5e1", roughness: .35, metalness: .45 }],
+  [/water-supply|users-supply/, { color: "#f26a21", roughness: .4, emissive: "#7a2a07", emissiveIntensity: .35 }],
+  [/water-return|users-return|condensate-line|SP-10|irrigation/, { color: "#4fb3b0", roughness: .4 }],
+  [/./, { color: "#c9d1cc", roughness: .9 }],
 ];
 const parts = {};
 model.traverse(o => {
   if (!o.isMesh) return;
   const name = o.parent.name;               // each face loads as its own mesh under the part's node
   const style = STYLE.find(([re]) => re.test(name))[1];
-  o.material = new THREE.MeshStandardMaterial({ ...style, transparent: true, opacity: 1 });
+  o.material = new THREE.MeshStandardMaterial({ ...style, transparent: false, opacity: 1 });
   o.castShadow = o.receiveShadow = true;
   const edges = new THREE.LineSegments(new THREE.EdgesGeometry(o.geometry, 25),
-    new THREE.LineBasicMaterial({ color: "#121214", transparent: true, opacity: .55 }));
+    new THREE.LineBasicMaterial({ color: "#0b120d", transparent: true, opacity: .55 }));
   o.add(edges);
   (parts[name] ||= []).push({ mesh: o, edges, base: o.position.clone() });
 });
 function setOpacity(name, a) {
   for (const p of parts[name] || []) {
+    // only fading parts go in the transparent pass, so opaque roofs can't sort over a translucent duct
+    const tr = a < .999;
+    if (p.mesh.material.transparent !== tr) { p.mesh.material.transparent = tr; p.mesh.material.needsUpdate = true; }
     p.mesh.material.opacity = a; p.mesh.material.depthWrite = a > .98; p.mesh.visible = a > .01;
     p.edges.material.opacity = .55 * a;
   }
@@ -137,8 +145,9 @@ function offset(name, dx, dy, dz) {          // CAD metres
   for (const p of parts[name] || []) p.mesh.position.set(p.base.x + dx * 1000, p.base.y + dy * 1000, p.base.z + dz * 1000);
 }
 // the beds are drawn here so they can settle and refill
-for (let i = 0; i < 3; i++) setOpacity(`T-10${i + 1}-bed`, 0);
-const PHASE = [new THREE.Color("#f7c72f"), new THREE.Color("#f97316"), new THREE.Color("#38bdf8")];
+for (let i = 0; i < N; i++) setOpacity(`T-10${i + 1}-bed`, 0);
+const PHASE_HEX = ["#a7b83f", "#e0882a", "#6f9fa0"];                  // heat-up, hot, cooling (brand phases)
+const PHASE = PHASE_HEX.map(c => new THREE.Color(c));
 const beds = BAYS.map(bx => {
   const g = new THREE.BoxGeometry(W - 0.04, 1, 1); g.translate(0, .5, -.5);     // spans y = 0 .. 1 (scaled to the length)
   const m = new THREE.Mesh(g, new THREE.MeshStandardMaterial({ color: "#4a3322", roughness: 1, emissive: "#000000" }));
@@ -166,7 +175,7 @@ function polyline(pts) {                     // CAD points -> sampler u in [0,1)
   return u => { const s = fract(u) * total; let i = 0; while (i < seg.length - 1 && acc[i + 1] < s) i++;
     const k = (s - acc[i]) / seg[i]; return [0, 1, 2].map(j => lerp(pts[i][j], pts[i + 1][j], k)); };
 }
-const HOT = new THREE.Color("#ff8a3d"), COOL = new THREE.Color("#5aa2ff"), WARM = new THREE.Color("#ffd166");
+const HOT = new THREE.Color("#ff8a3d"), COOL = new THREE.Color("#4fb3b0"), WARM = new THREE.Color("#e9f07e");
 
 const AIR_N = 520, air = BAYS.map(() => cloud(AIR_N, .22));
 const airSeed = BAYS.map((_, i) => { const r = rng(11 + i); return Array.from({ length: AIR_N }, () => [r(), r(), r(), .7 + .6 * r()]); });
@@ -176,8 +185,10 @@ const HXN = 500, hxPts = cloud(HXN, .2), hxSeed = (() => { const r = rng(7); ret
 const outPath = polyline([[hx1, (fy0 + fy1) / 2, .8], [fx0, (fy0 + fy1) / 2, .8], [(fx0 + fx1) / 2, (fy0 + fy1) / 2, .8],
                           [(fx0 + fx1) / 2, BF[2], .8], [(fx0 + fx1) / 2, (BF[2] + BF[3]) / 2, 1.2], [(fx0 + fx1) / 2, (BF[2] + BF[3]) / 2, 4.5]]);
 const OUT_N = 200, outPts = cloud(OUT_N, .28);
-const supply = polyline([[hx0, hy1 - .6, 1.0], [Gm.overall_x_m + .4, hy1 - .6, 1.0], [Gm.overall_x_m + .4, hy1 + 8, 1.0]]);
-const ret = polyline([[Gm.overall_x_m + .4, hy1 + 8, .6], [Gm.overall_x_m + .4, hy1 - 1.2, .6], [hx0, hy1 - 1.2, .6]]);
+// water: exchanger -> buffer TK-201 -> heat users, and back
+// same route as the CAD pipes: out of the back of the skid, along behind it, into the side of the tank
+const supply = polyline([[XD, hy0, 2.6], [XD, BCY + .5, 2.6], [BCX - BR, BCY + .5, 2.6], [BCX, BCY, 2.2], [BCX + BR, BCY, 1.8], [BCX + BR + 3, BCY, 1.8]]);
+const ret = polyline([[BCX + BR + 3, BCY + .8, .9], [BCX + BR, BCY + .8, .9], [BCX, BCY, 1.0], [BCX - BR, BCY - .5, 1.2], [XD + .6, BCY - .5, 1.2], [XD + .6, hy0, 1.2]]);
 const WN = 140, wSup = cloud(WN, .26), wRet = cloud(WN, .26);
 
 function setPt(cl, i, p, col) { const a = cl.geometry.attributes; a.position.setXYZ(i, p[0], p[2], -p[1]); a.color.setXYZ(i, col.r, col.g, col.b); }
@@ -198,31 +209,32 @@ const CH = [
 const net = Math.round(META.farm.net_eur / 1000);
 const CAPTIONS = [
   { start: .8, end: 8.6, html: `A farm co-op handles about <b>${fmt(Mo.feedstock_t_per_day)} tonnes</b> of manure, silage and straw a day.` },
-  { start: 9.2, end: 19.6, html: `Composting it releases heat. This unit is designed to capture it: three insulated tunnels, <b>${fmt(Mo.gross_total_m3)} m³</b> in all.` },
-  { start: 20.4, end: 32.6, html: `Blowers push air up through a spigot floor. The bed stays aerobic and heats itself to <b>55–70 °C</b>.` },
+  { start: 9.2, end: 19.6, html: `Composting it releases heat. This unit is designed to capture it: four insulated tunnels, <b>${fmt(Mo.gross_total_m3)} m³</b> in all.` },
+  { start: 20.4, end: 32.6, html: `Air rises through a spigot floor and the bed heats itself to <b>60 °C</b>. Spray bars keep it <b>50–60 %</b> moist.` },
   { start: 33.4, end: 45.6, html: `The hot, saturated exhaust, <b>${fmt(Mo.air_m3_h)} m³ an hour at ${fmt(Mo.t_exhaust_c)} °C</b>, is collected from the headspace.` },
   { start: 46.4, end: 53.8, html: `On ${fmt(Mo.hx_area_m2)} m² of plate-fin coils it cools to ${fmt(Mo.t_air_out_c)} °C. <b>${fmt(Mo.latent_share * 100)} %</b> of that heat is water vapour condensing.` },
-  { start: 54.2, end: 61.6, html: `Water leaves at <b>${fmt(Mo.t_supply_c)} °C</b> for the farm's heat users. The condensate goes back to wet the beds.` },
-  { start: 62.4, end: 77.6, html: `The tunnels start five days apart, so one is always heating, one is hot and one is cooling. Every five days one is emptied and refilled.` },
+  { start: 54.2, end: 61.6, html: `Water leaves at <b>${fmt(Mo.t_supply_c)} °C</b>. A <b>${fmt(Mo.buffer_m3)} m³</b> buffer tank evens it out for the farm's heat users.` },
+  { start: 62.4, end: 77.6, html: `The tunnels start ${fmt(STAGE, 2)} days apart, so one is in its mesophilic start, two are thermophilic and one is cooling. Every ${fmt(STAGE, 2)} days one is emptied and refilled.` },
   { start: 78.4, end: 87.6, html: `The compost process comes first. Temperature, oxygen and sanitisation set the airflow; heat recovery takes what is left.` },
   { start: 88.4, end: 97.4, html: `Indicative design from an open energy model. <b>Nothing at this scale has been built yet.</b>` },
 ];
 
 // camera keys: [time, position (CAD), target (CAD)]
+const XL = BAYS[LAST] + W / 2;                                   // centre of the last tunnel
 const KEYS = [
-  [0, [-24, 44, 24], [11, 7, 1]],
-  [9, [-7, 42, 15], [10, 8, 1.5]],
-  [19, [0, 40, 14], [10, 8, 1.5]],
-  [24, [13.4, 36, 16], [13.4, 8, .6]],
-  [32, [14.5, 30, 12.5], [13.4, 7, .6]],
-  [37, [-8, -16, 17], [10, 2, 4.2]],
-  [45, [-2, -20, 15], [12, 2, 4.2]],
-  [50, [33, -12, 9], [20.5, 3, 1.7]],
-  [60, [35, -15, 10], [20, 3.5, 1.6]],
-  [66, [6, 40, 33], [8, 11, 0]],
-  [78, [-1, 40, 31], [8, 11, 0]],
-  [88, [-16, 40, 22], [11, 7, 1]],
-  [98, [-21, 37, 20], [11, 7, 1]],
+  [0, [-22, 42, 26], [15, 4, 1]],
+  [9, [-6, 37, 17], [11.5, 5, 1.5]],
+  [19, [2, 35, 15], [11.5, 5, 1.5]],
+  [24, [XL, 30, 15], [XL, 5.5, .6]],
+  [32, [XL + 1, 25, 12], [XL, 4.5, .6]],
+  [37, [-6, -18, 18], [14, 1.5, 4.2]],
+  [45, [0, -22, 16], [16, 1.5, 4.2]],
+  [50, [40, 19, 11], [27, 1, 2]],
+  [60, [43, 16, 12], [27.5, 0, 2]],
+  [66, [11, 33, 36], [11, 6, 0]],
+  [78, [5, 33, 34], [11, 6, 0]],
+  [88, [-14, 38, 24], [15, 4, 1]],
+  [98, [-19, 35, 22], [15, 4, 1]],
 ];
 function cameraAt(t) {
   let i = 0; while (i < KEYS.length - 2 && KEYS[i + 1][0] <= t) i++;
@@ -234,9 +246,11 @@ function cameraAt(t) {
 
 // simulated day for the operation chapter, and each tunnel's batch age
 const dayAt = t => clamp((t - 63) / (77 - 63)) * 20;
-const OFFSET = [2, 0, 1];                                  // at day 0: T-101 cooling, T-102 heating up, T-103 hot
-const ageOf = (i, D) => fract((D + 2.5 + 5 * OFFSET[i]) / 15) * 15;
-const phaseOf = a => a < 5 ? 0 : a < 10 ? 1 : 2;
+// at day 0 each tunnel is one stage behind the next (same moment as the CAD beds)
+const START = i => STAGE * (((N - i) % N) + .5);
+const ageOf = (i, D) => fract((D + START(i)) / 15) * 15;
+const PH = [0, META.process.t45_day, META.process.cool_day, 15];  // phase windows, process.py
+const phaseOf = a => a < PH[1] ? 0 : a < PH[2] ? 1 : 2;
 function depthOf(a) {
   const settled = Op.fill_depth_m * Math.pow(.95, a);
   if (a < .5) return Op.fill_depth_m * ease(a / .5);                  // loader refilling
@@ -246,62 +260,63 @@ function depthOf(a) {
 
 // ---- overlay (SVG) ------------------------------------------------------------
 const ov = document.getElementById("ov"), cap = document.getElementById("cap");
-const SERIF = "'Instrument Serif', Georgia, serif", SANS = "'Inter Tight', Arial, sans-serif", MONO = "'JetBrains Mono', Menlo, monospace";
+const SERIF = "'Instrument Sans', Arial, sans-serif", SANS = "'Instrument Sans', Arial, sans-serif", MONO = "'Geist Mono', Menlo, monospace";
+const FIG = "'Unbounded', 'Instrument Sans', sans-serif";
 const esc = s => String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;");
-const Tx = (x, y, s, o = {}) => `<text x="${x}" y="${y}" font-family="${o.font || SANS}" font-size="${o.size || 24}" fill="${o.fill || "#fafafa"}" font-weight="${o.weight || 400}" text-anchor="${o.anchor || "start"}" letter-spacing="${o.ls || 0}" opacity="${o.op ?? 1}">${s}</text>`;
+const Tx = (x, y, s, o = {}) => `<text x="${x}" y="${y}" font-family="${o.font || SANS}" font-size="${o.size || 24}" fill="${o.fill || "#eef3ef"}" font-weight="${o.weight || 400}" text-anchor="${o.anchor || "start"}" letter-spacing="${o.ls || 0}" opacity="${o.op ?? 1}">${s}</text>`;
 const Rc = (x, y, w, h, o = {}) => `<rect x="${x}" y="${y}" width="${w}" height="${h}" rx="${o.rx || 0}" fill="${o.fill || "none"}" stroke="${o.stroke || "none"}" stroke-width="${o.sw || 1}" opacity="${o.op ?? 1}"/>`;
 const Gp = (op, s) => op <= .001 ? "" : `<g opacity="${op.toFixed(3)}">${s}</g>`;
-const TAGC = { MODEL: "#a1a1aa", MEASURED: "#2dd4bf", SIMULATED: "#f7c72f" };
-const tag = (x, y, s) => { const w = s.length * 9.4 + 22; return Rc(x, y - 18, w, 26, { rx: 13, stroke: TAGC[s] || "#a1a1aa", sw: 1.3 }) + Tx(x + 11, y, s, { size: 13, fill: TAGC[s], weight: 600, ls: 1.3, font: MONO }); };
+const TAGC = { MODEL: "#93a69a", MEASURED: "#7cc04a", SIMULATED: "#e9f07e" };
+const tag = (x, y, s) => { const w = s.length * 9.4 + 22; return Rc(x, y - 18, w, 26, { rx: 13, stroke: TAGC[s] || "#93a69a", sw: 1.3 }) + Tx(x + 11, y, s, { size: 13, fill: TAGC[s], weight: 500, ls: 1.3, font: MONO }); };
+const PANEL = "rgba(14,22,17,.86)", EDGE = "rgba(238,243,239,.16)", MUTED = "#93a69a";
 
 function project(p) { const v = V(...p).project(camera); return [(v.x + 1) / 2 * 1920, (1 - v.y) / 2 * 1080, v.z < 1]; }
-function callout(p, dx, dy, title, sub, op, col = "#fafafa") {
+function callout(p, dx, dy, title, sub, op, col = "#eef3ef") {
   if (op <= .001) return "";
   const [x, y, vis] = project(p); if (!vis) return "";
   const tx = x + dx, ty = y + dy, right = dx >= 0, w = Math.max(title.length * 13.2, (sub || "").length * 10.4) + 30;
   const bx = dx === 0 ? tx - w / 2 : right ? tx : tx - w;
   return Gp(op, `<line x1="${x}" y1="${y}" x2="${tx}" y2="${ty}" stroke="${col}" stroke-width="1.4" opacity=".75"/>
-    <circle cx="${x}" cy="${y}" r="4.5" fill="${col}"/>` + Rc(bx, ty - 30, w, sub ? 62 : 40, { rx: 8, fill: "rgba(13,13,15,.88)", stroke: "#3f3f46" }) +
-    Tx(bx + 15, ty - 4, esc(title), { size: 21, weight: 600, fill: col }) + (sub ? Tx(bx + 15, ty + 22, esc(sub), { size: 16, fill: "#a1a1aa" }) : ""));
+    <circle cx="${x}" cy="${y}" r="4.5" fill="${col}"/>` + Rc(bx, ty - 30, w, sub ? 62 : 40, { rx: 14, fill: PANEL, stroke: EDGE }) +
+    Tx(bx + 15, ty - 4, esc(title), { size: 21, weight: 600, fill: col }) + (sub ? Tx(bx + 15, ty + 22, esc(sub), { size: 16, fill: MUTED }) : ""));
 }
 function card(x, y, rows, op) {          // rows: [value, label, tag]
   if (op <= .001) return "";
-  let s = Rc(x, y, 430, 34 + rows.length * 86, { rx: 14, fill: "rgba(13,13,15,.86)", stroke: "#27272a" });
+  let s = Rc(x, y, 430, 34 + rows.length * 86, { rx: 28, fill: PANEL, stroke: EDGE });
   rows.forEach(([v, l, tg], i) => { const yy = y + 66 + i * 86;
-    s += Tx(x + 26, yy, v, { size: 46, font: SERIF }) + Tx(x + 26, yy + 28, esc(l), { size: 17, fill: "#a1a1aa" }) + (tg ? tag(x + 404 - (tg.length * 9.4 + 22), yy - 30, tg) : ""); });
+    s += Tx(x + 26, yy, v, { size: 38, font: FIG, weight: 600, fill: "#f26a21" }) + Tx(x + 26, yy + 28, esc(l), { size: 17, fill: MUTED }) + (tg ? tag(x + 404 - (tg.length * 9.4 + 22), yy - 30, tg) : ""); });
   return Gp(op, s);
 }
 function enthalpyPanel(x, y, op) {
   if (op <= .001) return "";
   const w = 470, h = 300, t0 = 20, t1 = 65, X = t => x + 50 + (t - t0) / (t1 - t0) * (w - 80), Y = v => y + h - 46 - v / 600 * (h - 96);
-  let s = Rc(x, y, w, h, { rx: 14, fill: "rgba(13,13,15,.88)", stroke: "#27272a" }) + Tx(x + 24, y + 36, "WHY LATENT HEAT DOMINATES", { size: 14, fill: "#a1a1aa", ls: 1.6, font: MONO });
-  for (const tt of [20, 35, 50, 65]) s += Tx(X(tt), y + h - 18, `${tt} °C`, { size: 14, fill: "#71717a", anchor: "middle" });
+  let s = Rc(x, y, w, h, { rx: 28, fill: PANEL, stroke: EDGE }) + Tx(x + 24, y + 36, "WHY LATENT HEAT DOMINATES", { size: 14, fill: MUTED, ls: 1.6, font: MONO });
+  for (const tt of [20, 35, 50, 65]) s += Tx(X(tt), y + h - 18, `${tt} °C`, { size: 14, fill: "#6f7f75", anchor: "middle" });
   let d = ""; for (let tt = t0; tt <= t1; tt += .5) d += `${tt === t0 ? "M" : "L"}${X(tt).toFixed(1)},${Y(hsat(tt)).toFixed(1)}`;
-  s += `<path d="${d}" stroke="#f97316" stroke-width="3" fill="none"/>`;
+  s += `<path d="${d}" stroke="#f26a21" stroke-width="3" fill="none"/>`;
   const ta = Mo.t_air_out_c, tb = Mo.t_exhaust_c;
-  s += `<line x1="${X(ta)}" y1="${Y(hsat(ta))}" x2="${X(tb)}" y2="${Y(hsat(ta) + 1.006 * (tb - ta))}" stroke="#a1a1aa" stroke-width="2" stroke-dasharray="6 5"/>`;
-  s += `<circle cx="${X(tb)}" cy="${Y(hsat(tb))}" r="6" fill="#f97316"/><circle cx="${X(ta)}" cy="${Y(hsat(ta))}" r="6" fill="#60a5fa"/>`;
-  s += `<line x1="${X(tb) + 16}" y1="${Y(hsat(tb))}" x2="${X(tb) + 16}" y2="${Y(hsat(ta))}" stroke="#fafafa" stroke-width="1.6"/>`;
+  s += `<line x1="${X(ta)}" y1="${Y(hsat(ta))}" x2="${X(tb)}" y2="${Y(hsat(ta) + 1.006 * (tb - ta))}" stroke="#93a69a" stroke-width="2" stroke-dasharray="6 5"/>`;
+  s += `<circle cx="${X(tb)}" cy="${Y(hsat(tb))}" r="6" fill="#f26a21"/><circle cx="${X(ta)}" cy="${Y(hsat(ta))}" r="6" fill="#4fb3b0"/>`;
+  s += `<line x1="${X(tb) + 16}" y1="${Y(hsat(tb))}" x2="${X(tb) + 16}" y2="${Y(hsat(ta))}" stroke="#eef3ef" stroke-width="1.6"/>`;
   s += Tx(X(tb) - 6, Y((hsat(ta) + hsat(tb)) / 2) - 10, `${fmt(Mo.enthalpy_drop_kj_kg)} kJ/kg`, { size: 20, weight: 600, anchor: "end" });
-  s += Tx(X(tb) - 6, Y((hsat(ta) + hsat(tb)) / 2) + 16, `${fmt(Mo.latent_share * 100)} % latent`, { size: 18, fill: "#ffd166", anchor: "end" });
-  s += Tx(X(36), Y(70), "dry air: sensible only", { size: 15, fill: "#a1a1aa" });
+  s += Tx(X(tb) - 6, Y((hsat(ta) + hsat(tb)) / 2) + 16, `${fmt(Mo.latent_share * 100)} % latent`, { size: 18, fill: "#e9f07e", anchor: "end" });
+  s += Tx(X(36), Y(70), "dry air: sensible only", { size: 15, fill: MUTED });
   return Gp(op, s + tag(x + w - 106, y + 34, "MODEL"));
 }
 function timeline(D, op) {
   if (op <= .001) return "";
-  const x = 1240, y = 690, w = 620, rh = 24, days = 30, X = d => x + 70 + d / days * (w - 100);
-  let s = Rc(x, y - 52, w, 4 * (rh + 8) + 64, { rx: 14, fill: "rgba(13,13,15,.88)", stroke: "#27272a" });
-  s += Tx(x + 24, y - 20, "STAGGERED BATCHES, ONE TUNNEL REFILLED EVERY 5 DAYS", { size: 14, fill: "#a1a1aa", ls: 1.6, font: MONO });
-  const cols = ["#f7c72f", "#f97316", "#38bdf8"];
-  for (let i = 0; i < 3; i++) {
+  const x = 1240, y = 660, w = 620, rh = 24, days = 30, X = d => x + 70 + d / days * (w - 100);
+  let s = Rc(x, y - 52, w, (N + 1) * (rh + 8) + 64, { rx: 28, fill: PANEL, stroke: EDGE });
+  s += Tx(x + 24, y - 20, `STAGGERED BATCHES, ONE TUNNEL REFILLED EVERY ${fmt(STAGE, 2)} DAYS`, { size: 14, fill: MUTED, ls: 1.4, font: MONO });
+  for (let i = 0; i < N; i++) {
     const yy = y + i * (rh + 8);
     s += Tx(x + 24, yy + 19, `T-10${i + 1}`, { size: 15, weight: 600 });
-    for (let k = -3; k < 4; k++) { const st = k * 15 - 2.5 - 5 * OFFSET[i];
-      for (let ph = 0; ph < 3; ph++) { const a = Math.max(st + ph * 5, 0), b = Math.min(st + ph * 5 + 5, days); if (b > a) s += Rc(X(a), yy, X(b) - X(a) - 1, rh, { fill: cols[ph], op: .85 }); } }
+    for (let k = -3; k < 4; k++) { const st = k * 15 - START(i);
+      for (let ph = 0; ph < 3; ph++) { const a = Math.max(st + PH[ph], 0), b = Math.min(st + PH[ph + 1], days); if (b > a) s += Rc(X(a), yy, X(b) - X(a) - 1, rh, { fill: PHASE_HEX[ph], op: .85 }); } }
   }
   const px = X(D);
-  s += `<line x1="${px}" y1="${y - 8}" x2="${px}" y2="${y + 3 * (rh + 8)}" stroke="#fafafa" stroke-width="2.4"/>`;
-  s += Tx(px, y + 3 * (rh + 8) + 22, `day ${fmt(D)}`, { size: 16, anchor: "middle", weight: 600 });
+  s += `<line x1="${px}" y1="${y - 8}" x2="${px}" y2="${y + N * (rh + 8)}" stroke="#eef3ef" stroke-width="2.4"/>`;
+  s += Tx(px, y + N * (rh + 8) + 22, `day ${fmt(D)}`, { size: 16, anchor: "middle", weight: 600 });
   return Gp(op, s);
 }
 
@@ -310,15 +325,15 @@ function renderFrame(t) {
   cameraAt(t);
 
   // roofs and doors
-  const lift103 = ramp(t, 20.5, 2.2) * (1 - ramp(t, 88.5, 2.2));
+  const liftLast = ramp(t, 20.5, 2.2) * (1 - ramp(t, 88.5, 2.2));
   const liftAll = ramp(t, 62.5, 2) * (1 - ramp(t, 88.5, 2.2));
-  [liftAll, liftAll, Math.max(lift103, liftAll)].forEach((k, i) => {
+  BAYS.forEach((_, i) => { const k = i === LAST ? Math.max(liftLast, liftAll) : liftAll;
     offset(`T-10${i + 1}-roof`, 0, 0, 7 * k); setOpacity(`T-10${i + 1}-roof`, 1 - ease(clamp((k - .55) / .45)));
   });
-  setOpacity("T-103-door", 1 - lift103);
+  setOpacity(`T-10${N}-door`, 1 - liftLast);
   // ducts turn translucent to show the flow
   const ductGlass = win(t, 33, 62, 1.6);
-  for (const n of ["X-101-stub", "X-102-stub", "X-103-stub", "manifold", "manifold-drop"]) setOpacity(n, 1 - .7 * ductGlass);
+  for (const n of [...BAYS.map((_, i) => `X-10${i + 1}-stub`), "manifold", "manifold-drop"]) setOpacity(n, 1 - .7 * ductGlass);
   // exchanger: casing ghosts, coils separate
   const ghost = win(t, 46, 62, 2);
   setOpacity("HX-201-casing", 1 - .86 * ghost);
@@ -327,12 +342,12 @@ function renderFrame(t) {
 
   // beds: settle and refill in the operation chapter, phase tint throughout
   const D = dayAt(t), tint = .03 + .1 * win(t, 62, 88, 1.5);
-  const cut = 1 - .38 * win(t, 21, 33, 1.5);            // T-103 bed cut back to show the spigot floor
-  beds.forEach((b, i) => { const a = ageOf(i, D); b.scale.y = Math.max(depthOf(a), .001); b.scale.z = (L - .04) * (i === 2 ? cut : 1);
+  const cut = 1 - .38 * win(t, 21, 33, 1.5);            // last tunnel's bed cut back to show the spigot floor
+  beds.forEach((b, i) => { const a = ageOf(i, D); b.scale.y = Math.max(depthOf(a), .001); b.scale.z = (L - .04) * (i === LAST ? cut : 1);
     b.material.emissive.copy(PHASE[phaseOf(a)]).multiplyScalar(tint); });
 
   // air through the beds
-  const airOn = [win(t, 62, 88), win(t, 62, 88), Math.max(win(t, 22.5, 62), win(t, 62, 88))];
+  const airOn = BAYS.map((_, i) => i === LAST ? Math.max(win(t, 22.5, 62), win(t, 62, 88)) : win(t, 62, 88));
   BAYS.forEach((bx, i) => {
     const top = SLAB + depthOf(ageOf(i, D)), xs = bx + W / 2;
     airSeed[i].forEach(([rx, ry, o, sp], j) => {
@@ -364,67 +379,72 @@ function renderFrame(t) {
   // ---- overlay ----
   let s = "";
   const brand = ramp(t, 8.5, 1) * (1 - ramp(t, 88, 1));
-  s += Gp(brand, Tx(72, 80, "COMPOST ENERGY · FARM-SCALE UNIT", { size: 15, fill: "#a1a1aa", ls: 2.2, font: MONO }));
+  s += Gp(brand, `<image href="/brand/06_logo_variants/wordmark_dark.png" x="66" y="48" width="230" height="37"/>` +
+                 Tx(312, 74, "FARM-SCALE UNIT", { size: 14, fill: MUTED, ls: 2.2, font: MONO }));
   const ch = CH.find(c => t >= c.start && t < c.end) || CH[CH.length - 1];
-  if (ch.label) s += Gp(win(t, ch.start + .2, ch.end, .6), Tx(72, 128, ch.label, { size: 40, font: SERIF }));
+  if (ch.label) s += Gp(win(t, ch.start + .2, ch.end, .6), Tx(72, 134, ch.label, { size: 40, weight: 500, ls: -.6 }));
 
   // c0: title
   const ti = win(t, .4, 8.6, 1.1);
   s += Gp(ti, `<rect x="0" y="0" width="1920" height="1080" fill="url(#vig)"/>` +
-    Tx(120, 380, "COMPOST ENERGY · OPEN HARDWARE", { size: 18, fill: "#f7c72f", ls: 3, font: MONO }) +
-    Tx(116, 480, "Heat from compost,", { size: 104, font: SERIF }) +
-    Tx(116, 584, "at farm scale.", { size: 104, font: SERIF, fill: "#ffd166" }) +
-    Tx(120, 650, "A three-tunnel unit that turns farm feedstock into hot water and fertiliser.", { size: 26, fill: "#a1a1aa" }));
+    `<image href="/brand/05_logo_primary/mark_v2_dark.png" x="1080" y="150" width="760" height="630" opacity="${(.4 + .6 * ramp(t, .4, 2.5)).toFixed(3)}"/>` +
+    Tx(120, 360, "COMPOST ENERGY · OPEN HARDWARE", { size: 17, fill: "#7cc04a", ls: 3, font: MONO }) +
+    Tx(114, 470, "Heat from what", { size: 104, weight: 500, ls: -3.5 }) +
+    Tx(114, 578, "farms already make.", { size: 104, weight: 500, ls: -3.5 }) +
+    Tx(120, 650, "A four-tunnel unit that turns farm feedstock into hot water and fertiliser.", { size: 26, fill: MUTED }));
   // c1: tunnels
   const c1 = win(t, 10, 20);
-  for (let i = 0; i < 3; i++) s += callout([BAYS[i] + W / 2, L + .3, ROOF], 0, -80, `T-10${i + 1}`, `${fmt(W, 1)} × ${fmt(Gm.height_m, 1)} × ${fmt(L, 1)} m`, c1 * ramp(t, 10.5 + i * .5));
-  s += card(1440, 220, [[`${fmt(Mo.gross_total_m3)} m³`, "in three insulated tunnels", "MODEL"],
+  for (let i = 0; i < N; i++) s += callout([BAYS[i] + W / 2, L + .3, ROOF], 0, -80 - 30 * (i % 2), `T-10${i + 1}`, `${fmt(W, 1)} × ${fmt(Gm.height_m, 1)} × ${fmt(L, 1)} m`, c1 * ramp(t, 10.5 + i * .5));
+  s += card(1440, 220, [[`${fmt(Mo.gross_total_m3)} m³`, "in four insulated tunnels", "MODEL"],
                         [`${fmt(Mo.feedstock_t_per_day, 1)} t/day`, "manure, silage and straw", "MODEL"]], win(t, 11.5, 20));
   // c2: aeration
   const c2 = win(t, 23.5, 33);
-  s += callout([BAYS[2] + 1.2, 13.5, SLAB], -320, 40, "Spigot floor", `air channels every ${fmt(Gm.spigot_pitch_m, 1)} m`, c2);
-  s += callout([BAYS[2] + 2.5, 5.5, SLAB + depthOf(ageOf(2, 0))], -220, -150, "Compost bed, 55–70 °C", "aerobic: no methane", c2 * ramp(t, 25));
-  s += card(1440, 220, [[`${fmt(Mo.air_per_tunnel_m3_h)} m³/h`, "per tunnel, from its own blower", "MODEL"],
-                        [`${fmt(Mo.fan_kw_per_tunnel, 1)} kW`, `per blower at ${fmt(Mo.fan_pressure_pa)} Pa`, "MODEL"]], win(t, 25, 33));
+  s += callout([BAYS[LAST] + 1.2, L * .85, SLAB], -320, 40, "Spigot floor", `air channels every ${fmt(Gm.spigot_pitch_m, 1)} m`, c2);
+  s += callout([BAYS[LAST] + 2.5, L * .3, SLAB + depthOf(ageOf(LAST, 0))], -220, -150, "Compost bed, held at 60 °C", "aerobic: no methane", c2 * ramp(t, 25));
+  s += callout([BAYS[LAST] + W * .8, L * .55, ROOF - Gm.wall_m - .35], 150, -60, "Spray bars SP-10x", `condensate, ${fmt(META.process.spray_m3_h)} m³/h per tunnel`, c2 * ramp(t, 27), "#9fd3cf");
+  s += card(1440, 220, [[`${fmt(Mo.blower_m3_h_each)} m³/h`, "per tunnel at its batch's peak", "MODEL"],
+                        [`${fmt(Mo.blower_kw_each, 1)} kW`, `per blower at ${fmt(Mo.fan_pressure_pa)} Pa`, "MODEL"]], win(t, 25, 33));
   // c3: exhaust
   const c3 = win(t, 35, 46);
-  s += callout([(BAYS[0] + XD) / 2 + 3, EY, ZM + .3], -120, -120, `Exhaust manifold Ø${500}`, `${fmt(Mo.air_m3_h)} m³/h at ${fmt(Mo.t_exhaust_c)} °C, saturated`, c3, "#ffb27a");
+  s += callout([(BAYS[0] + XD) / 2 + 3, EY, ZM + .3], -120, -120, `Exhaust manifold Ø${560}`, `${fmt(Mo.air_m3_h)} m³/h at ${fmt(Mo.t_exhaust_c)} °C, saturated`, c3, "#ff9a55");
   s += card(1440, 220, [[`${fmt(Mo.wall_loss_share * 100)} %`, "of the heat lost through the walls", "MODEL"],
                         [`${fmt(Mo.enthalpy_drop_kj_kg)} kJ`, "recoverable per kg of exhaust air", "MODEL"]], win(t, 37, 46));
   // c4: heat recovery
-  s += callout([hx1, (hy0 + hy1) / 2, 2.6], 120, -170, "HX-201 plate-fin exchanger", `${fmt(Mo.hx_area_m2)} m², ${fmt(Mo.pinch_k)} K pinch`, win(t, 48, 62));
-  s += callout([(Gm.tank[0] + Gm.tank[1]) / 2, (Gm.tank[2] + Gm.tank[3]) / 2, .9], 140, 90, "Condensate", `${fmt(Mo.condensate_m3_h, 2)} m³/h back to the beds`, win(t, 50, 62), "#8ec5f0");
-  s += callout([Gm.overall_x_m + .4, hy1 + 3, 1.0], -180, 120, `Water ${fmt(Mo.t_return_c)} → ${fmt(Mo.t_supply_c)} °C`, `${fmt(Mo.water_m3_h, 1)} m³/h to the farm's heat users`, win(t, 54, 62), "#ffb27a");
-  s += enthalpyPanel(1380, 200, win(t, 47.5, 61.5));
+  s += callout([hx0, (hy0 + hy1) / 2, 2.6], 90, -240, "HX-201 plate-fin exchanger", `${fmt(Mo.hx_area_m2)} m², sized for ${fmt(Mo.peak_duty_kw)} kW peak`, win(t, 48, 62));
+  s += callout([(Gm.tank[0] + Gm.tank[1]) / 2, (Gm.tank[2] + Gm.tank[3]) / 2, .9], -160, 110, "Condensate", `${fmt(Mo.condensate_m3_h, 2)} m³/h back to the beds`, win(t, 50, 62), "#9fd3cf");
+  s += callout([BCX, BCY, Gm.buffer_h_m * .8], -150, -150, `Buffer TK-201, ${fmt(Mo.buffer_m3)} m³`, `water ${fmt(Mo.t_return_c)} → ${fmt(Mo.t_supply_c)} °C, ${fmt(Mo.water_m3_h, 1)} m³/h to heat users`, win(t, 54, 62), "#ff9a55");
+  s += enthalpyPanel(1400, 545, win(t, 47.5, 61.5));
   // c5: operation
   const c5 = win(t, 64, 78);
-  beds.forEach((b, i) => { const a = ageOf(i, D), names = ["heating up", "hot: sanitise", "cooling"];
-    s += callout([BAYS[i] + W / 2, L * .6, SLAB + depthOf(a)], 0, -110 - 26 * i, `T-10${i + 1} · day ${fmt(Math.floor(a))}`, names[phaseOf(a)], c5, ["#f7c72f", "#f97316", "#38bdf8"][phaseOf(a)]); });
+  beds.forEach((b, i) => { const a = ageOf(i, D), names = ["mesophilic", "thermophilic, 60 °C", "cooling to 45 °C"];
+    s += callout([BAYS[i] + W / 2, L * .6, SLAB + depthOf(a)], 0, -110 - 34 * (i % 2), `T-10${i + 1} · day ${fmt(Math.floor(a))}`, names[phaseOf(a)], c5, PHASE_HEX[phaseOf(a)]); });
   s += timeline(D, c5);
   // c6: control
   const c6 = win(t, 79, 88);
   const loops = [["1  Temperature", "core median sets blower speed"], ["2  Oxygen floor", "below 5 % O₂, fresh air overrides"],
                  ["3  Sanitisation", "≥ 55 °C for 3 days (US EPA PFRP)"], ["4  Heat recovery", "takes what the process gives"]];
-  if (c6 > .001) { let g = Rc(72, 190, 490, 380, { rx: 14, fill: "rgba(13,13,15,.88)", stroke: "#27272a" }) +
-      Tx(98, 232, "CONTROL LOOPS, PER TUNNEL", { size: 14, fill: "#a1a1aa", ls: 1.6, font: MONO });
-    loops.forEach(([a, b], i) => { const k = ramp(t, 79.5 + i * 1.2, .6); g += Gp(k, Tx(98, 292 + i * 76, a, { size: 26, weight: 600, fill: i === 3 ? "#ffd166" : "#fafafa" }) + Tx(98, 320 + i * 76, esc(b), { size: 18, fill: "#a1a1aa" })); });
+  if (c6 > .001) { let g = Rc(72, 190, 490, 380, { rx: 28, fill: PANEL, stroke: EDGE }) +
+      Tx(98, 232, "CONTROL LOOPS, PER TUNNEL", { size: 14, fill: MUTED, ls: 1.6, font: MONO });
+    loops.forEach(([a, b], i) => { const k = ramp(t, 79.5 + i * 1.2, .6); g += Gp(k, Tx(98, 292 + i * 76, a, { size: 26, weight: 600, fill: i === 3 ? "#f26a21" : "#eef3ef" }) + Tx(98, 320 + i * 76, esc(b), { size: 18, fill: MUTED })); });
     s += Gp(c6, g); }
   // c7: numbers
   const c7 = win(t, 88.6, 98.2, 1);
   if (c7 > .001) {
-    let g = `<rect x="0" y="0" width="1920" height="1080" fill="#050505" opacity=".95"/>` +
-      Tx(120, 230, "COMPOST ENERGY · FARM-SCALE UNIT", { size: 18, fill: "#f7c72f", ls: 3, font: MONO });
+    const St = META.study, capex = (St.capex_eur / 1e6).toFixed(2);
+    let g = `<rect x="0" y="0" width="1920" height="1080" fill="#060a07" opacity=".96"/>` +
+      `<image href="/brand/05_logo_primary/mark_v2_dark.png" x="1440" y="96" width="380" height="315"/>` +
+      `<image href="/brand/06_logo_variants/wordmark_dark.png" x="120" y="150" width="420" height="68"/>`;
     const cells = [[`${fmt(Mo.duty_kw)} kW`, "heat recovered over the heating season", "MODEL"],
                    [`${fmt(Mo.heat_gwh_per_year, 1)} GWh`, "of heat a year", "MODEL"],
-                   [`€${net}k`, "net a year, after electricity and operations", "MODEL"],
+                   [`€${net}k`, `net a year before capital; about €${capex}M to build`, "MODEL"],
                    [`${fmt(META.measured.kojima2022_recovery_share * 100)} %`, "of microbial heat reached the water on a 150-cow dairy farm (Kojima et al. 2022)", "MEASURED"]];
-    cells.forEach(([v, l, tg], i) => { const x = 120 + (i % 2) * 840, y = 340 + Math.floor(i / 2) * 210, k = ramp(t, 89 + i * .45, .7);
-      g += Gp(k, Tx(x, y, v, { size: 96, font: SERIF }) + tag(x + 4, y + 50, tg) + Tx(x + 4, y + 94, esc(l), { size: 22, fill: "#a1a1aa" })); });
-    g += Tx(120, 790, "Drawings, CAD and model are open source: CERN-OHL-P · CC BY 4.0 · MIT.  Maxime Kadri", { size: 20, fill: "#71717a" });
+    cells.forEach(([v, l, tg], i) => { const x = 120 + (i % 2) * 840, y = 400 + Math.floor(i / 2) * 210, k = ramp(t, 89 + i * .45, .7);
+      g += Gp(k, Tx(x, y, v, { size: 80, font: FIG, weight: 600, fill: i === 3 ? "#7cc04a" : "#f26a21", ls: -2 }) + tag(x + 4, y + 50, tg) + Tx(x + 4, y + 94, esc(l), { size: 22, fill: MUTED })); });
+    g += Tx(120, 860, "Drawings, CAD and model are open source: CERN-OHL-P · CC BY 4.0 · MIT.  Maxime Kadri", { size: 20, fill: "#6f7f75" });
     s += Gp(c7, g);
   }
   s = `<rect x="0" y="0" width="900" height="190" fill="url(#scrim)"/>` + s;
-  ov.innerHTML = `<defs><radialGradient id="vig" cx="30%" cy="50%" r="80%"><stop offset="0" stop-color="#050505" stop-opacity=".82"/><stop offset="1" stop-color="#050505" stop-opacity=".2"/></radialGradient><linearGradient id="scrim" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#050505" stop-opacity=".75"/><stop offset="1" stop-color="#050505" stop-opacity="0"/></linearGradient></defs>` + s;
+  ov.innerHTML = `<defs><radialGradient id="vig" cx="30%" cy="50%" r="80%"><stop offset="0" stop-color="#060a07" stop-opacity=".86"/><stop offset="1" stop-color="#060a07" stop-opacity=".25"/></radialGradient><linearGradient id="scrim" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#060a07" stop-opacity=".75"/><stop offset="1" stop-color="#060a07" stop-opacity="0"/></linearGradient></defs>` + s;
 
   const c = CAPTIONS.find(c => t >= c.start && t < c.end);
   cap.innerHTML = c ? c.html : "";

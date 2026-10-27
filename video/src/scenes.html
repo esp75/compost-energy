@@ -2,37 +2,45 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<title>How Compostito works</title>
+<title>How compost makes heat</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter+Tight:wght@400;500;600;700&display=block" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600&family=Geist+Mono:wght@400;500&family=Unbounded:wght@500;600&display=block" rel="stylesheet">
 <style>
-  :root { --night:#050505; --ink:#fafafa; --mist:#a1a1aa; --dim:#71717a; --line:#27272a; --yellow:#f7c72f; --teal:#2dd4bf; --violet:#8b5cf6; }
+  /* brand tokens (brand/10_color/tokens.json, Night): leaf = matter, ember = heat */
+  :root { --night:#060a07; --panel:rgba(14,22,17,.86); --ink:#eef3ef; --line:rgba(238,243,239,.14); --ember:#f26a21; }
   html, body { margin:0; background:var(--night); }
-  #stage { position:relative; width:1920px; height:1080px; overflow:hidden; background:var(--night); font-family:"Inter Tight", "Helvetica Neue", Arial, sans-serif; }
+  #stage { position:relative; width:1920px; height:1080px; overflow:hidden; background:var(--night); font-family:"Instrument Sans", "Helvetica Neue", Arial, sans-serif; }
   #scene { position:absolute; inset:0; }
   #cap { position:absolute; left:50%; bottom:54px; transform:translateX(-50%); max-width:1480px; padding:18px 34px 20px; border-radius:18px;
-         background:rgba(13,13,15,.86); border:1px solid #27272a; color:var(--ink); font-size:36px; line-height:1.32; font-weight:500; text-align:center; letter-spacing:-.005em; }
-  #cap b { color:var(--yellow); font-weight:600; }
+         background:var(--panel); border:1px solid var(--line); color:var(--ink); font-size:34px; line-height:1.32; font-weight:500; text-align:center; }
+  #cap b { color:var(--ember); font-weight:600; }
   #cap:empty { display:none; }
 </style>
 </head>
 <body>
 <script src="sim-data.js"></script>
+<script src="tunnel-data.js"></script>
 <div id="stage"><svg id="scene" viewBox="0 0 1920 1080" width="1920" height="1080"></svg><div id="cap"></div></div>
 <script>
 // Pure function of time: renderFrame(t) draws the frame at t seconds.
 // No CSS animations or timers, so every frame is reproducible.
+// SIM_DATA: the SIMULATED 200 kg pile (data/simulated/truth_run_01.csv).
+// TUNNEL_DATA: one MODEL farm-tunnel batch (model/scripts/run_process.py).
 const DATA = window.SIM_DATA || {day:[0,45],T:[15,15],amb:[13,13],phases:[0,3.3,13.2,23,45],turns:[9.5,23]};
-const C = { bg:"#050505", panel:"#0d0d0f", line:"#27272a", line2:"#3f3f46", ink:"#fafafa", mist:"#a1a1aa", dim:"#71717a",
-  yellow:"#f7c72f", teal:"#2dd4bf", violet:"#8b5cf6", hot:"#f97316", red:"#ef4444", green:"#84cc16", brown:"#8b5a2b", soil:"#3b2a1c",
-  A:"#f7c72f", B:"#f97316", Cc:"#38bdf8", D:"#84cc16" };
-const SERIF = "'Instrument Serif', Georgia, serif", SANS = "'Inter Tight', 'Helvetica Neue', Arial, sans-serif";
+const TUN = window.TUNNEL_DATA || {day:[0,15],T:[15,45],moisture:[.65,.49],t45:4.1,hot_from:4.6,sanitised:7.6,cool_from:10,batch_t:147,fill_moisture:.65,cn:27,evaporated_t:63,condensate_t:44,end_moisture:.49};
+// farm numbers from hardware/cad/out/farm-unit.json (MODEL)
+const FARM = { latent: .92, kj_per_kg: 330, gwh: 2.0, feed_t: 14279, t_exhaust: 60, t_supply: 50, t_air_out: 35 };
+const C = { bg:"#060a07", panel:"#0e1611", line:"#25302a", line2:"#3a463f", ink:"#eef3ef", mist:"#93a69a", dim:"#6f7f75",
+  leaf:"#7cc04a", ember:"#f26a21", glow:"#e9f07e", cool:"#4fb3b0", red:"#e5533d", anaer:"#8d86b8", brown:"#8b5a2b", soil:"#2e2116",
+  meso:"#a7b83f", thermo:"#e0882a", cooling:"#6f9fa0", mat:"#7cc04a" };
+const SANS = "'Instrument Sans', 'Helvetica Neue', Arial, sans-serif", DISP = SANS,
+  FIG = "'Unbounded', 'Instrument Sans', sans-serif", MONO = "'Geist Mono', ui-monospace, monospace";
+const BRAND = "../../brand";
 
 // ---- helpers --------------------------------------------------------------
 const clamp = (x, a = 0, b = 1) => Math.max(a, Math.min(b, x));
 const lerp = (a, b, k) => a + (b - a) * k;
 const ease = k => { k = clamp(k); return k < .5 ? 4 * k * k * k : 1 - Math.pow(-2 * k + 2, 3) / 2; };
-const easeOut = k => 1 - Math.pow(1 - clamp(k), 3);
 const ramp = (t, a, d = .6) => ease((t - a) / d);               // 0 -> 1 starting at a
 const win = (t, a, b, d = .5) => Math.min(ramp(t, a, d), 1 - ramp(t, b - d, d));  // in at a, out by b
 function rng(seed) { return function () { seed |= 0; seed = seed + 0x6D2B79F5 | 0; let t = Math.imul(seed ^ seed >>> 15, 1 | seed); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; }; }
@@ -41,46 +49,53 @@ function T(x, y, s, o = {}) {
   const a = Object.assign({ size: 28, fill: C.ink, anchor: "start", weight: 400, font: SANS, op: 1, ls: 0 }, o);
   return `<text x="${f1(x)}" y="${f1(y)}" font-family="${a.font}" font-size="${a.size}" fill="${a.fill}" text-anchor="${a.anchor}" font-weight="${a.weight}" opacity="${a.op}" letter-spacing="${a.ls}"${a.extra || ""}>${s}</text>`;
 }
+// display type: medium weight, tight tracking (brand typography)
+const D = (x, y, s, o = {}) => T(x, y, s, Object.assign({ weight: 500, ls: -(o.size || 28) * .03 }, o));
+const M = (x, y, s, o = {}) => T(x, y, s, Object.assign({ size: 15, fill: C.mist, font: MONO, ls: 1.8 }, o));
 const G = (op, inner, tr = "") => op <= 0.001 ? "" : `<g opacity="${op.toFixed(3)}"${tr ? ` transform="${tr}"` : ""}>${inner}</g>`;
 const R = (x, y, w, h, o = {}) => `<rect x="${f1(x)}" y="${f1(y)}" width="${f1(Math.max(w, 0))}" height="${f1(Math.max(h, 0))}" rx="${o.rx || 0}" fill="${o.fill || "none"}" stroke="${o.stroke || "none"}" stroke-width="${o.sw || 1}" opacity="${o.op ?? 1}"${o.extra || ""}/>`;
 const Cir = (x, y, r, o = {}) => `<circle cx="${f1(x)}" cy="${f1(y)}" r="${f1(Math.max(r, 0))}" fill="${o.fill || "none"}" stroke="${o.stroke || "none"}" stroke-width="${o.sw || 1}" opacity="${o.op ?? 1}"/>`;
 const L = (x1, y1, x2, y2, o = {}) => `<line x1="${f1(x1)}" y1="${f1(y1)}" x2="${f1(x2)}" y2="${f1(y2)}" stroke="${o.stroke || C.ink}" stroke-width="${o.sw || 2}" stroke-linecap="round" opacity="${o.op ?? 1}"${o.dash ? ` stroke-dasharray="${o.dash}"` : ""}${o.extra || ""}/>`;
 const P = (d, o = {}) => `<path d="${d}" fill="${o.fill || "none"}" stroke="${o.stroke || "none"}" stroke-width="${o.sw || 2}" stroke-linecap="round" stroke-linejoin="round" opacity="${o.op ?? 1}"${o.dash ? ` stroke-dasharray="${o.dash}"` : ""}${o.extra || ""}/>`;
+const Img = (href, x, y, w, h, op = 1) => `<image href="${href}" x="${x}" y="${y}" width="${w}" height="${h}" opacity="${op}"/>`;
+const panel = (x, y, w, h) => R(x, y, w, h, { rx: 26, fill: C.panel, stroke: C.line2, sw: 1.2 });
 function arrow(x1, y1, x2, y2, col, sw = 3, op = 1) {
   const a = Math.atan2(y2 - y1, x2 - x1), h = 7 + sw * 2;
   return L(x1, y1, x2 - Math.cos(a) * h * .6, y2 - Math.sin(a) * h * .6, { stroke: col, sw, op }) +
     `<polygon points="${f1(x2)},${f1(y2)} ${f1(x2 - h * Math.cos(a - .45))},${f1(y2 - h * Math.sin(a - .45))} ${f1(x2 - h * Math.cos(a + .45))},${f1(y2 - h * Math.sin(a + .45))}" fill="${col}" opacity="${op}"/>`;
 }
+// pill tag, as on the drawings and the demo: SIMULATED / MODEL / MEASURED
 function tag(x, y, s, col = C.mist) {
-  const w = s.length * 9.6 + 26;
-  return R(x, y - 22, w, 32, { rx: 16, stroke: col, sw: 1.4 }) + T(x + 13, y - 1, s, { size: 15, fill: col, weight: 600, ls: 1.4 });
+  const w = s.length * 9.4 + 28;
+  return R(x, y - 22, w, 32, { rx: 16, stroke: col, sw: 1.3 }) + M(x + 14, y - 1, s, { fill: col, size: 14, ls: 1.4 });
 }
 // microbe: capsule (bacterium) at x,y with angle
-const bact = (x, y, ang, col = C.violet, s = 1, op = 1) =>
+const bact = (x, y, ang, col = C.glow, s = 1, op = 1) =>
   `<g transform="translate(${f1(x)} ${f1(y)}) rotate(${f1(ang)}) scale(${s})" opacity="${op}"><rect x="-13" y="-5.5" width="26" height="11" rx="5.5" fill="${col}" opacity=".9"/><circle cx="6" cy="0" r="2" fill="#fff" opacity=".45"/></g>`;
-// thermometer
 function thermo(x, y, h, val, col, label = true) {
   const k = clamp((val - 0) / 80), bulb = 22;
   let s = R(x - 12, y, 24, h, { rx: 12, fill: C.panel, stroke: C.line2, sw: 2 }) + Cir(x, y + h + 14, bulb, { fill: col, stroke: C.line2, sw: 2 });
   s += R(x - 6, y + h - h * k, 12, h * k + 10, { rx: 6, fill: col });
   for (const v of [20, 40, 60]) { const yy = y + h - h * v / 80; s += L(x + 14, yy, x + 24, yy, { stroke: C.dim, sw: 1.5 }) + T(x + 30, yy + 6, `${v}°`, { size: 17, fill: C.dim }); }
-  if (label) s += T(x, y - 18, `${Math.round(val)} °C`, { size: 40, anchor: "middle", font: SERIF, fill: C.ink });
+  if (label) s += D(x, y - 18, `${Math.round(val)} °C`, { size: 40, anchor: "middle" });
   return s;
 }
 function mound(cx, base, w, h) { return `M${cx - w / 2},${base} C${cx - w / 2.6},${base - h * .9} ${cx - w / 6},${base - h} ${cx},${base - h} C${cx + w / 6},${base - h} ${cx + w / 2.6},${base - h * .9} ${cx + w / 2},${base} Z`; }
 function wasteItem(kind, x, y, rot, s = 1) {
   const tr = `translate(${f1(x)} ${f1(y)}) rotate(${f1(rot)}) scale(${s})`;
-  if (kind === 0) return `<g transform="${tr}"><path d="M-22,0 C-10,-14 10,-14 22,0 C10,14 -10,14 -22,0Z" fill="${C.green}"/><line x1="-20" y1="0" x2="20" y2="0" stroke="#3f6212" stroke-width="2"/></g>`;
+  if (kind === 0) return `<g transform="${tr}"><path d="M-22,0 C-10,-14 10,-14 22,0 C10,14 -10,14 -22,0Z" fill="${C.leaf}"/><line x1="-20" y1="0" x2="20" y2="0" stroke="#3d5f1f" stroke-width="2"/></g>`;
   if (kind === 1) return `<g transform="${tr}"><circle r="13" fill="${C.red}"/><rect x="-1.5" y="-21" width="3" height="9" fill="${C.brown}"/></g>`;
-  if (kind === 2) return `<g transform="${tr}"><rect x="-20" y="-9" width="40" height="18" rx="7" fill="#d6a35c"/></g>`;
-  if (kind === 3) return `<g transform="${tr}"><path d="M-14,-12 L14,-12 L10,12 L-10,12Z" fill="#c8a27a"/></g>`;
+  if (kind === 2) return `<g transform="${tr}"><rect x="-22" y="-4" width="44" height="8" rx="4" fill="#d6b35c"/><rect x="-18" y="5" width="36" height="6" rx="3" fill="#c9a24c"/></g>`;
+  if (kind === 3) return `<g transform="${tr}"><path d="M-16,-10 C-6,-16 8,-14 16,-6 C12,8 -4,14 -16,6Z" fill="#5a3d26"/></g>`;
   return `<g transform="${tr}"><line x1="-24" y1="0" x2="24" y2="0" stroke="${C.brown}" stroke-width="5" stroke-linecap="round"/><line x1="4" y1="0" x2="14" y2="-9" stroke="${C.brown}" stroke-width="3"/></g>`;
 }
-function tempAt(day) {
-  const d = DATA.day, i = Math.max(1, Math.min(d.length - 1, d.findIndex(v => v >= day)));
-  const k = clamp((day - d[i - 1]) / (d[i] - d[i - 1] || 1));
-  return lerp(DATA.T[i - 1], DATA.T[i], k);
+function interp(xs, ys, x) {
+  if (x >= xs[xs.length - 1]) return ys[ys.length - 1];
+  const i = Math.max(1, Math.min(xs.length - 1, xs.findIndex(v => v >= x)));
+  const k = clamp((x - xs[i - 1]) / (xs[i] - xs[i - 1] || 1));
+  return lerp(ys[i - 1], ys[i], k);
 }
+const tempAt = day => interp(DATA.day, DATA.T, day);
 // sample points along a polyline (array of [x,y]) at fraction u
 function along(pts, u) {
   let tot = 0; const seg = [];
@@ -89,7 +104,9 @@ function along(pts, u) {
   for (let i = 0; i < seg.length; i++) { if (d <= seg[i]) { const k = d / seg[i]; return [lerp(pts[i][0], pts[i + 1][0], k), lerp(pts[i][1], pts[i + 1][1], k)]; } d -= seg[i]; }
   return pts[pts.length - 1];
 }
+const poly = pts => "M" + pts.map(p => p.map(f1).join(",")).join(" L");
 const mix = (c1, c2, k) => { const a = parseInt(c1.slice(1), 16), b = parseInt(c2.slice(1), 16); const ch = s => Math.round(lerp((a >> s) & 255, (b >> s) & 255, clamp(k))); return `rgb(${ch(16)},${ch(8)},${ch(0)})`; };
+const pct = v => `${Math.round(v * 100)} %`;
 
 // ---- chapters ---------------------------------------------------------------
 // caps: caption lines for the chapter; they are spread over the chapter after
@@ -97,19 +114,20 @@ const mix = (c1, c2, k) => { const a = parseInt(c1.slice(1), 16), b = parseInt(c
 const CH = [];
 function chapter(o) { CH.push(o); }
 
-chapter({ id: "intro", dur: 5.5, caps: [], draw(t) {
+chapter({ id: "intro", dur: 6, caps: [], draw(t) {
   const r = rng(3); let s = "";
-  for (let i = 0; i < 26; i++) { const x = 960 + (r() - .5) * 900, ph = r() * 6, sp = 40 + r() * 50; const y = 760 - ((t * sp + ph * 100) % 520);
-    s += Cir(x, y, 3 + r() * 5, { fill: i % 3 ? C.yellow : C.hot, op: .18 * clamp((760 - y) / 160) * clamp(y / 300) }); }
-  s += G(ramp(t, .2, 1), T(960, 470, "How Compostito works", { size: 132, anchor: "middle", font: SERIF }));
-  s += G(ramp(t, 1.1, 1), T(960, 560, "Food waste in. Heat and fertiliser out.", { size: 40, anchor: "middle", fill: C.mist }));
-  s += G(ramp(t, 2, 1), T(960, 660, "COMPOST ENERGY · OPEN HARDWARE", { size: 18, anchor: "middle", fill: C.yellow, weight: 600, ls: 5 }));
+  s += Img(`${BRAND}/05_logo_primary/mark_v2_dark.png`, 1080, 150, 760, 630, (.35 + .65 * ramp(t, .2, 2.5)).toFixed(3));
+  for (let i = 0; i < 26; i++) { const x = 560 + (r() - .5) * 900, ph = r() * 6, sp = 40 + r() * 50; const y = 860 - ((t * sp + ph * 100) % 560);
+    s += Cir(x, y, 3 + r() * 5, { fill: i % 3 ? C.leaf : C.ember, op: .16 * clamp((860 - y) / 160) * clamp(y / 300) }); }
+  s += G(ramp(t, .3, 1), M(120, 360, "COMPOST ENERGY · EXPLAINER", { size: 17, fill: C.leaf, ls: 3 }));
+  s += G(ramp(t, .5, 1), D(114, 470, "How compost", { size: 104 }) + D(114, 578, "makes heat.", { size: 104 }));
+  s += G(ramp(t, 1.4, 1), T(120, 650, "Farm waste in. Heat and fertiliser out.", { size: 30, fill: C.mist }));
   return s;
 }});
 
-chapter({ id: "c1", num: "01", title: "What compost is", dur: 21, caps: [
-  "Compost is what happens when microbes eat our food and garden waste.",
-  "Bacteria and fungi break down carbon-rich <b>browns</b> and nitrogen-rich <b>greens</b>, ideally mixed about <b>25–30 : 1</b>.",
+chapter({ id: "c1", num: "01", title: "What compost is", dur: 20, caps: [
+  "Compost is what happens when microbes eat manure, straw, food and garden waste.",
+  "Bacteria and fungi break down carbon-rich <b>browns</b> and nitrogen-rich <b>greens</b>, ideally mixed about <b>25–35 : 1</b>.",
   "With oxygen, they turn it into CO₂, water, <b>heat</b> and <b>humus</b>, the dark, stable part of good soil."],
   draw(t) {
     let s = ""; const r = rng(11); const cx = 420, base = 760, N = 22;
@@ -118,14 +136,14 @@ chapter({ id: "c1", num: "01", title: "What compost is", dur: 21, caps: [
       const t0 = 2.4 + i * .22, k = clamp((t - t0) / .75);
       const rx = cx + (r() - .5) * 330, ry = base - 30 - r() * 120 * (1 - Math.abs(rx - cx) / 220), kind = Math.floor(r() * 5), rot = r() * 360;
       if (k <= 0) continue; if (k >= 1) landed++;
-      items.push(wasteItem(kind, rx, lerp(120, ry, k * k), rot + k * 90, 1.25));
+      items.push(wasteItem(kind, rx, lerp(180, ry, k * k), rot + k * 90, 1.25));
     }
     const h = 40 + 150 * clamp(landed / N);
     s += P(mound(cx, base, 520, h), { fill: C.soil, op: ramp(t, 2.4, 1) });
     s += L(110, base, 740, base, { stroke: C.line2, sw: 2 });
     s += items.join("");
     // magnifier
-    const mo = ramp(t, 7.5, .9), mx = 1010, my = 450, mr = 235;
+    const mo = ramp(t, 7.5, .9), mx = 1010, my = 470, mr = 235;
     if (mo > 0) {
       let m = `<clipPath id="mag"><circle cx="${mx}" cy="${my}" r="${mr}"/></clipPath>`;
       m += L(cx + 90, base - 120, mx - mr * .8, my + mr * .55, { stroke: C.line2, sw: 2 });
@@ -133,287 +151,389 @@ chapter({ id: "c1", num: "01", title: "What compost is", dur: 21, caps: [
       let inner = "";
       const rr = rng(5), eat = clamp((t - 9) / 11);
       for (let i = 0; i < 16; i++) { const x = mx + (rr() - .5) * 380, y = my + (rr() - .5) * 380, rad = (14 + rr() * 26) * (1 - .65 * eat * rr());
-        inner += `<path d="M${f1(x - rad)},${f1(y)} Q${f1(x - rad * .4)},${f1(y - rad * 1.1)} ${f1(x + rad)},${f1(y - rad * .2)} Q${f1(x + rad * .5)},${f1(y + rad)} ${f1(x - rad)},${f1(y)}Z" fill="${i % 2 ? "#6b4a2a" : "#4d7c0f"}" opacity=".85"/>`; }
-      // fungal hyphae growing
+        inner += `<path d="M${f1(x - rad)},${f1(y)} Q${f1(x - rad * .4)},${f1(y - rad * 1.1)} ${f1(x + rad)},${f1(y - rad * .2)} Q${f1(x + rad * .5)},${f1(y + rad)} ${f1(x - rad)},${f1(y)}Z" fill="${i % 2 ? "#6b4a2a" : "#4f7a2a"}" opacity=".85"/>`; }
       const grow = clamp((t - 9) / 9);
       for (let j = 0; j < 4; j++) { const a0 = j * 1.6 + .3; let x = mx + Math.cos(a0) * 150, y = my + Math.sin(a0) * 150; let d = `M${f1(x)},${f1(y)}`;
         for (let k = 0; k < 14 * grow; k++) { x += Math.cos(a0 + Math.PI + Math.sin(k * 1.3 + j) * .9) * 16; y += Math.sin(a0 + Math.PI + Math.sin(k * 1.3 + j) * .9) * 16; d += ` L${f1(x)},${f1(y)}`; }
-        inner += P(d, { stroke: C.teal, sw: 2.5, op: .85 }); }
+        inner += P(d, { stroke: C.cool, sw: 2.5, op: .85 }); }
       const nb = Math.round(8 + 40 * clamp((t - 8.5) / 10));
       for (let i = 0; i < nb; i++) { const ph = rr() * 6.28, rad = 40 + rr() * 170, sp = .25 + rr() * .4;
-        inner += bact(mx + Math.cos(ph + t * sp) * rad, my + Math.sin(ph * 1.3 + t * sp) * rad * .9, (ph + t * sp) * 57 + 90, C.violet, 1.1); }
+        inner += bact(mx + Math.cos(ph + t * sp) * rad, my + Math.sin(ph * 1.3 + t * sp) * rad * .9, (ph + t * sp) * 57 + 90, C.glow, 1.1); }
       m += `<g clip-path="url(#mag)">${inner}</g>` + Cir(mx, my, mr, { stroke: C.ink, sw: 3 });
-      m += G(ramp(t, 10, .6), T(mx + mr + 24, my - 60, "bacteria", { size: 26, fill: C.violet, weight: 600 }) + T(mx + mr + 24, my - 24, "fungi", { size: 26, fill: C.teal, weight: 600 }));
+      m += G(ramp(t, 10, .6), T(mx + mr + 24, my - 60, "bacteria", { size: 26, fill: C.glow, weight: 600 }) + T(mx + mr + 24, my - 24, "fungi", { size: 26, fill: C.cool, weight: 600 }));
       s += G(mo, m);
     }
     // C:N card
     const co = ramp(t, 10.5, .8);
     if (co > 0) {
-      let c = R(1390, 210, 420, 230, { rx: 18, fill: C.panel, stroke: C.line, sw: 1.5 });
-      c += T(1418, 256, "THE MIX", { size: 16, fill: C.mist, weight: 600, ls: 3 });
-      c += R(1418, 280, 300, 34, { rx: 6, fill: "#c8a27a" }) + T(1730, 306, "C", { size: 26, weight: 700 });
-      c += R(1418, 326, 300 / 27 * 1.6, 34, { rx: 6, fill: C.green }) + T(1440, 352, "N", { size: 26, weight: 700 });
-      c += T(1418, 410, "C : N ≈ 25–30 : 1", { size: 40, font: SERIF });
+      let c = panel(1390, 220, 420, 250);
+      c += M(1420, 264, "THE MIX");
+      c += R(1420, 288, 300, 34, { rx: 6, fill: "#c9a24c" }) + T(1732, 314, "C", { size: 26, weight: 600 }) + T(1430, 312, "browns: straw, wood chip", { size: 18, fill: "#1a120c", weight: 600 });
+      c += R(1420, 334, 300 / 30 * 2.4, 34, { rx: 6, fill: C.leaf }) + T(1432, 360, "N", { size: 26, weight: 600 }) + T(1470, 360, "greens: manure, grass", { size: 18, fill: C.mist });
+      c += D(1420, 432, "C : N ≈ 25–35 : 1", { size: 40 });
       s += G(co, c);
     }
     // equation
-    const toks = [["organic matter", C.ink], ["+", C.dim], ["O₂", C.teal], ["→", C.dim], ["CO₂", C.mist], ["+", C.dim], ["H₂O", C.mist], ["+", C.dim], ["heat", C.yellow], ["+", C.dim], ["humus", "#c08a55"]];
-    let x = 1060 - 0, eq = ""; const widths = toks.map(([w]) => w.length * 21 + 26); let total = widths.reduce((a, b) => a + b, 0); x = 1150 - total / 2;
-    toks.forEach(([w, col], i) => { const o = ramp(t, 15.2 + i * .28, .4); eq += T(x, 830, w, { size: 44, fill: col, font: SERIF, op: o }); x += widths[i]; });
+    const toks = [["organic matter", C.ink], ["+", C.dim], ["O₂", C.cool], ["→", C.dim], ["CO₂", C.mist], ["+", C.dim], ["H₂O", C.mist], ["+", C.dim], ["heat", C.ember], ["+", C.dim], ["humus", "#c08a55"]];
+    const widths = toks.map(([w]) => w.length * 21 + 26); const total = widths.reduce((a, b) => a + b, 0); let x = 1150 - total / 2, eq = "";
+    toks.forEach(([w, col], i) => { const o = ramp(t, 14.4 + i * .28, .4); eq += D(x, 840, w, { size: 44, fill: col, op: o }); x += widths[i]; });
     s += eq;
     return s;
   }});
 
-chapter({ id: "c2", num: "02", title: "Aerobic vs anaerobic", dur: 21, caps: [
+chapter({ id: "c2", num: "02", title: "Aerobic vs anaerobic", dur: 19, caps: [
   "Microbes can work <b>with</b> oxygen (aerobic) or <b>without</b> it (anaerobic). The difference matters.",
   "Aerobic: fast, hot (55–70 °C) and almost odourless. Carbon leaves as CO₂ and most nitrogen stays in the compost.",
   "Anaerobic: slow and cool. A wet, airless pile gives off methane, about <b>28×</b> as warming as CO₂, and loses nitrogen as ammonia."],
   draw(t) {
     let s = "";
-    const panel = (x0, good) => {
+    const side = (x0, good) => {
       const o = ramp(t, good ? 2.4 : 3.2, .8); if (o <= 0) return "";
-      const r = rng(good ? 21 : 22); let p = R(x0, 180, 800, 620, { rx: 22, fill: C.panel, stroke: C.line, sw: 1.5 });
-      p += T(x0 + 36, 240, good ? "Aerobic" : "Anaerobic", { size: 56, font: SERIF });
-      p += T(x0 + 36, 278, good ? "with oxygen" : "without oxygen", { size: 24, fill: good ? C.teal : C.violet, weight: 600 });
+      const r = rng(good ? 21 : 22); let p = panel(x0, 190, 800, 620);
+      p += D(x0 + 36, 254, good ? "Aerobic" : "Anaerobic", { size: 54 });
+      p += M(x0 + 38, 290, good ? "WITH OXYGEN" : "WITHOUT OXYGEN", { fill: good ? C.cool : C.anaer, size: 16 });
       const cx = x0 + 300, base = 640;
       if (good) {
         p += P(mound(cx, base, 400, 230), { fill: C.soil });
-        for (let i = 0; i < 18; i++) p += Cir(cx + (r() - .5) * 280, base - 20 - r() * 170 * .8, 6 + r() * 6, { fill: "#0d0d0f", op: .9 });
+        for (let i = 0; i < 18; i++) p += Cir(cx + (r() - .5) * 280, base - 20 - r() * 170 * .8, 6 + r() * 6, { fill: "#060a07", op: .9 });
         const k = (t * .55) % 1;
-        for (let i = 0; i < 3; i++) { const kk = (k + i / 3) % 1; p += arrow(cx - 300 + 90 * kk, base - 40 - i * 40, cx - 220 + 90 * kk, base - 60 - i * 40, C.teal, 3, win(kk, 0, 1, .2)); }
-        p += T(cx - 290, base - 170, "O₂", { size: 30, fill: C.teal, weight: 700 });
+        for (let i = 0; i < 3; i++) { const kk = (k + i / 3) % 1; p += arrow(cx - 300 + 90 * kk, base - 40 - i * 40, cx - 220 + 90 * kk, base - 60 - i * 40, C.cool, 3, win(kk, 0, 1, .2)); }
+        p += T(cx - 290, base - 170, "O₂", { size: 30, fill: C.cool, weight: 600 });
         for (let i = 0; i < 7; i++) { const ph = r(), y = base - 240 - ((t * 60 + ph * 200) % 200), xx = cx - 120 + i * 40;
-          p += P(`M${xx},${y + 40} q10,-12 0,-24 q-10,-12 0,-24`, { stroke: i % 2 ? C.yellow : C.mist, sw: 3, op: .7 * clamp((y - (base - 460)) / 80) }); }
+          p += P(`M${xx},${y + 40} q10,-12 0,-24 q-10,-12 0,-24`, { stroke: i % 2 ? C.ember : C.mist, sw: 3, op: .7 * clamp((y - (base - 460)) / 80) }); }
         p += T(cx + 120, base - 320, "CO₂ + water vapour", { size: 22, fill: C.mist });
-        p += thermo(x0 + 690, 330, 260, lerp(15, 65, ramp(t, 9, 3)), C.hot);
+        p += thermo(x0 + 690, 340, 250, lerp(15, 65, ramp(t, 9, 3)), C.ember);
       } else {
-        p += R(cx - 220, base - 90, 440, 90, { rx: 8, fill: "#241a12" }) + R(cx - 220, base - 26, 440, 26, { rx: 4, fill: "#1e3a5f", op: .9 });
+        p += R(cx - 220, base - 90, 440, 90, { rx: 8, fill: "#241a12" }) + R(cx - 220, base - 26, 440, 26, { rx: 4, fill: "#1e3a4f", op: .9 });
         for (let i = 0; i < 9; i++) { const ph = r(), y = base - 100 - ((t * 45 + ph * 220) % 260), xx = cx - 180 + r() * 360;
-          p += Cir(xx, y, 9, { stroke: C.violet, sw: 2.5, op: .8 * clamp((y - (base - 380)) / 60) }); }
-        p += T(cx - 60, base - 300, "CH₄", { size: 32, fill: C.violet, weight: 700 }) + T(cx + 60, base - 260, "NH₃ · H₂S", { size: 24, fill: C.dim, weight: 600 });
-        p += thermo(x0 + 690, 330, 260, lerp(15, 30, ramp(t, 12, 3)), C.violet);
+          p += Cir(xx, y, 9, { stroke: C.anaer, sw: 2.5, op: .8 * clamp((y - (base - 380)) / 60) }); }
+        p += T(cx - 60, base - 300, "CH₄", { size: 32, fill: C.anaer, weight: 600 }) + T(cx + 60, base - 260, "NH₃ · H₂S", { size: 24, fill: C.dim, weight: 600 });
+        p += thermo(x0 + 690, 340, 250, lerp(15, 30, ramp(t, 12, 3)), C.anaer);
       }
       const lines = good ? [["✓", "Hot enough to kill pathogens"], ["✓", "Almost no smell"], ["✓", "Keeps most nitrogen"]] :
         [["✕", "Methane, ~28× CO₂ (IPCC AR5)"], ["✕", "Rotten-egg smell"], ["✕", "Nitrogen lost as ammonia"]];
-      lines.forEach(([m, w], i) => { const oo = ramp(t, (good ? 9.5 : 14) + i * .5, .5);
-        p += G(oo, T(x0 + 40, 700 + i * 34, m, { size: 24, fill: good ? C.teal : C.red, weight: 700 }) + T(x0 + 74, 700 + i * 34, w, { size: 24, fill: C.ink })); });
+      lines.forEach(([m, w], i) => { const oo = ramp(t, (good ? 8.5 : 12.5) + i * .5, .5);
+        p += G(oo, T(x0 + 40, 712 + i * 34, m, { size: 24, fill: good ? C.leaf : C.red, weight: 600 }) + T(x0 + 74, 712 + i * 34, w, { size: 24, fill: C.ink })); });
       return G(o, p);
     };
-    s += panel(120, true) + panel(1000, false);
+    s += side(120, true) + side(1000, false);
     return s;
   }});
 
-// Compostito section geometry (shared by chapters 3, 4 and 6)
-const BOX = { x: 560, w: 440, top: 230 }; BOX.A = [250, 400]; BOX.B = [410, 560]; BOX.Cc = [570, 650]; BOX.D = [660, 740]; BOX.bottom = 756;
-function compostito(t, o = {}) {
-  const x0 = BOX.x, w = BOX.w, ins = 16, show = o.show || (() => 1);
-  let s = "";
-  // stilts and ground
-  s += G(show("frame"), R(x0 + 10, BOX.bottom, 22, 120, { fill: "#6b4a2a" }) + R(x0 + w - 32, BOX.bottom, 22, 120, { fill: "#6b4a2a" }) + L(x0 - 120, 876, x0 + w + 120, 876, { stroke: C.line2, sw: 2 }));
-  s += G(show("frame"), R(x0, BOX.top, w, BOX.bottom - BOX.top, { rx: 6, fill: "#140f0b", stroke: "#a0703f", sw: 4 }));
-  // roof tank + hatch
-  s += G(show("tank"), R(x0 + 30, BOX.top - 90, 170, 90, { rx: 10, fill: C.panel, stroke: C.line2, sw: 2 }) + T(x0 + 115, BOX.top - 38, "rainwater", { size: 18, fill: C.mist, anchor: "middle" }));
-  s += G(show("frame"), R(x0 + 250, BOX.top - 10, 150, 14, { rx: 4, fill: "#a0703f" }));
-  const ch = [["A", BOX.A, C.A], ["B", BOX.B, C.B], ["C", BOX.Cc, C.Cc], ["D", BOX.D, C.D]];
-  ch.forEach(([n, [y0, y1], col]) => {
-    const op = show("ch" + n); if (op <= 0) return;
-    const ww = n === "C" || n === "D" ? (w - 2 * ins) : (w - 2 * ins);
-    let c = R(x0 + ins, y0, ww, y1 - y0, { rx: 4, fill: col, op: .22 }) + R(x0 + ins, y0, ww, y1 - y0, { rx: 4, stroke: col, sw: 2, op: .9, extra: ` stroke-dasharray="6 5"` });
-    c += T(x0 + 40, y0 + 46, n, { size: 44, font: SERIF, fill: col });
-    s += G(op, c);
-  });
-  return s;
-}
-const chLabel = (n, y, title, sub, col, op) => G(op, Cir(1080, y - 9, 9, { fill: col }) + T(1104, y, `<tspan font-weight="600">${n}  ${title}</tspan>`, { size: 30 }) + T(1104, y + 34, sub, { size: 22, fill: C.mist }));
-
-chapter({ id: "c3", num: "03", title: "Meet Compostito", dur: 23, caps: [
-  "Meet <b>Compostito</b>: a home composter that runs each phase in its own chamber, stacked on stilts.",
-  "Waste goes in at the top. Mesh walls and two vents let air rise through the pile: cool air in low, warm air out high.",
-  "Every week or so, material moves down a chamber: A → B → C → D. C and D are half size, because the pile shrinks by 20–50 %."],
+chapter({ id: "c3", num: "03", title: "What the microbes need", dur: 25, caps: [
+  "Microbes need four things: the right <b>food mix</b>, <b>water</b>, <b>air</b>, and a pile big enough to stay warm.",
+  "Water: <b>50–60 %</b>, as damp as a wrung-out sponge. Too dry and they stall. Too wet and water fills the air gaps, so the pile goes anaerobic.",
+  "Air: at least <b>5 % oxygen</b> in the gaps, so turn the pile or blow air through it. And at least about <b>1 m³</b>, or it loses heat faster than it makes it."],
   draw(t) {
-    const show = k => ({ frame: ramp(t, 2.2, .8), tank: ramp(t, 8.6, .6), chA: ramp(t, 3.2, .5), chB: ramp(t, 3.7, .5), chC: ramp(t, 4.2, .5), chD: ramp(t, 4.7, .5) })[k] ?? 1;
-    let s = compostito(t, { show });
-    s += chLabel("A", 300, "Mesophilic", "40–45 °C · about 1 week", C.A, ramp(t, 3.4, .5));
-    s += chLabel("B", 470, "Thermophilic", "55–70 °C · 3–4 weeks · heat taken here", C.B, ramp(t, 3.9, .5));
-    s += chLabel("C", 600, "Cooling", "back to 40–45 °C · half size", C.Cc, ramp(t, 4.4, .5));
-    s += chLabel("D", 712, "Maturation", "ambient · half size · finished compost", C.D, ramp(t, 4.9, .5));
-    // waste dropping through the hatch
-    const r = rng(31);
-    for (let i = 0; i < 6; i++) { const t0 = 8.2 + i * .35, k = clamp((t - t0) / .8); if (k <= 0) continue;
-      const x = BOX.x + 290 + r() * 70; const y = lerp(90, 300 + r() * 60, k * k);
-      s += G(1 - ramp(t, 15, .6), wasteItem(i % 5, x, y, r() * 360 + k * 120, 1)); }
-    s += G(win(t, 8, 12.5), arrow(BOX.x + 325, 110, BOX.x + 325, 200, C.ink, 3) + T(BOX.x + 360, 150, "food & garden waste", { size: 22, fill: C.mist }));
-    // drip line
-    s += G(ramp(t, 9, .6), P(`M${BOX.x + 115},${BOX.top} L${BOX.x + 115},${BOX.B[0] + 30} L${BOX.x + 200},${BOX.B[0] + 30}`, { stroke: C.teal, sw: 3, dash: "7 6", extra: ` stroke-dashoffset="${f1(-t * 30)}"` }));
-    // airflow
-    const ao = ramp(t, 9.6, .8);
-    if (ao > 0) {
-      let a = arrow(BOX.x - 170, BOX.D[1] - 20, BOX.x - 6, BOX.D[1] - 20, C.teal, 4) + T(BOX.x - 170, BOX.D[1] - 40, "VB: cool air in", { size: 22, fill: C.teal, weight: 600 });
-      a += arrow(BOX.x + BOX.w + 6, BOX.A[0] + 20, BOX.x + BOX.w + 150, BOX.A[0] - 30, C.hot, 4) + "";
-      a += T(BOX.x + BOX.w + 160, BOX.A[0] - 34, "VH: warm, moist air out", { size: 22, fill: C.hot, weight: 600 });
-      const rr = rng(7);
-      for (let i = 0; i < 26; i++) { const ph = rr(), u = (t * .12 + ph) % 1; const x = BOX.x + 60 + rr() * (BOX.w - 120) + Math.sin(u * 12 + i) * 12; const y = lerp(BOX.D[1] - 10, BOX.A[0] + 10, u);
-        a += Cir(x, y, 4, { fill: mix(C.teal, C.hot, u), op: .8 * win(u, 0, 1, .15) }); }
-      s += G(ao * (1 - ramp(t, 15.4, .5) * .6), a);
-    }
-    // batch moving down through the chambers
-    const mo = ramp(t, 15.5, .6);
-    if (mo > 0) {
-      const stops = [BOX.A, BOX.B, BOX.Cc, BOX.D], weeks = ["week 0", "week 1", "week 5", "week 8+"];
-      const u = clamp((t - 16) / 6) * 3, i = Math.min(2, Math.floor(u)), k = ease(u - i);
-      const y0 = lerp(stops[i][0], stops[i + 1][0], k), y1 = lerp(stops[i][1], stops[i + 1][1], k);
-      s += G(mo, R(BOX.x + 20, y0 + 4, BOX.w - 40, y1 - y0 - 8, { rx: 6, stroke: C.ink, sw: 4 }));
-      const wi = Math.min(3, Math.round(u));
-      s += G(mo, T(BOX.x + BOX.w - 30, (y0 + y1) / 2 + 12, weeks[wi], { size: 30, anchor: "end", weight: 600 }));
-    }
+    let s = "";
+    const cards = [["FOOD", "25–35 : 1", "carbon to nitrogen", ["browns (straw, wood chip)", "plus greens (manure, grass)"]],
+                   ["WATER", "50–60 %", "moisture by weight", ["squeeze a handful:", "a few drops, no stream"]],
+                   ["AIR", "≥ 5 %", "oxygen in the air between particles", ["30–40 % of the pile is air;", "turn it or blow air through"]],
+                   ["SIZE", "≥ 1 m³", "about 1 m each way or more", ["a small pile loses heat", "faster than it makes it"]]];
+    const hi = t < 9.5 ? -1 : t < 17 ? 1 : 2.5;     // which card the caption is about
+    cards.forEach(([lab, val, sub, desc], i) => {
+      const o = ramp(t, 2.6 + i * .45, .6); if (o <= 0) return;
+      const x = 110 + i * 432, y = 196, w = 400, h = 640, cx = x + w / 2;
+      const focus = hi < 0 || Math.abs(hi - i) < .6 || (hi === 2.5 && i >= 2) ? 1 : .45;
+      let c = panel(x, y, w, h) + M(x + 30, y + 44, lab, { fill: C.leaf, size: 16 });
+      // illustration area y+70 .. y+330
+      const iy = y + 70;
+      if (i === 0) {
+        c += R(x + 40, iy + 70, 300, 46, { rx: 8, fill: "#c9a24c" }) + T(x + 352, iy + 103, "C", { size: 30, weight: 600 });
+        c += R(x + 40, iy + 130, 300 / 30 * 2.4 * ramp(t, 4, 1.5), 46, { rx: 8, fill: C.leaf }) + T(x + 76, iy + 163, "N", { size: 30, weight: 600 });
+        c += T(x + 40, iy + 230, "too little C: ammonia smell", { size: 19, fill: C.dim }) + T(x + 40, iy + 258, "too much C: slow and cool", { size: 19, fill: C.dim });
+      } else if (i === 1) {
+        const gx = x + 40, gw = 320, gy = iy + 190, X = v => gx + gw * (v - .3) / .5;
+        c += R(gx, gy, gw, 24, { rx: 12, fill: "#18211c" });
+        c += R(X(.5), gy, X(.6) - X(.5), 24, { fill: C.cool, op: .55 });
+        c += R(X(.65), gy, X(.8) - X(.65), 24, { rx: 0, fill: C.anaer, op: .35 });
+        for (const v of [.4, .5, .6, .7]) c += T(X(v), gy + 56, pct(v), { size: 17, fill: C.dim, anchor: "middle" });
+        // the marker sweeps dry -> wet -> right
+        const k = t < 10 ? .55 : t < 17 ? .55 + .2 * Math.sin((t - 10) / 7 * Math.PI * 1.5) : .55;
+        const mv = clamp(t < 10 ? lerp(.35, .55, ramp(t, 4, 2)) : k, .32, .78);
+        const state = mv < .45 ? ["too dry: microbes stall", C.thermo] : mv > .65 ? ["too wet: no air, goes anaerobic", C.anaer] : ["just right", C.cool];
+        c += L(X(mv), gy - 16, X(mv), gy + 40, { stroke: C.ink, sw: 3 }) + Cir(X(mv), gy - 20, 7, { fill: C.ink });
+        c += T(cx, gy - 40, state[0], { size: 21, fill: state[1], anchor: "middle", weight: 600 });
+        // drop from a squeezed handful
+        const u = (t * .7) % 1;
+        c += P(`M${cx - 30},${iy + 14} q30,-26 60,0 q8,24 -30,36 q-38,-12 -30,-36Z`, { fill: "#5a3d26" });
+        c += Cir(cx, iy + 56 + u * 50, 5, { fill: C.cool, op: win(u, 0, 1, .2) });
+      } else if (i === 2) {
+        const r = rng(83);
+        for (let gx = 0; gx < 6; gx++) for (let gy = 0; gy < 4; gy++) c += Cir(x + 70 + gx * 52 + (gy % 2) * 26, iy + 50 + gy * 52, 20 + r() * 4, { fill: "#4a3422" });
+        for (let j = 0; j < 14; j++) { const ph = r(), u = (t * .25 + ph) % 1, xx = x + 96 + Math.floor(r() * 5) * 52 + (Math.floor(u * 4) % 2) * 26 + Math.sin(u * 20) * 4;
+          c += Cir(xx, iy + 230 - u * 220, 4.5, { fill: C.cool, op: .9 * win(u, 0, 1, .15) }); }
+        c += T(x + 40, iy + 270, "O₂ moves up through the gaps", { size: 19, fill: C.cool });
+      } else {
+        const heatSmall = 1 - ramp(t, 18, 3), heatBig = ramp(t, 18, 3);
+        c += R(x + 60, iy + 160, 70, 70, { rx: 6, fill: mix("#3a2a1c", C.ember, .3 + .4 * heatSmall), stroke: C.line2 });
+        for (const [dx, dy] of [[-1, 0], [1, 0], [0, -1]]) c += arrow(x + 95 + dx * 40, iy + 195 + dy * 40, x + 95 + dx * 70, iy + 195 + dy * 70, C.cool, 2.5, .8);
+        c += R(x + 190, iy + 40, 180, 190, { rx: 8, fill: mix("#3a2a1c", C.ember, .4 + .5 * heatBig), stroke: C.line2 });
+        c += T(x + 95, iy + 270, "cools", { size: 19, fill: C.cool, anchor: "middle" }) + T(x + 280, iy + 270, "stays hot", { size: 19, fill: C.ember, anchor: "middle" });
+      }
+      c += T(x + 30, y + 420, val, { size: 50, font: FIG, weight: 600, fill: C.ember, ls: -1.5 });
+      c += T(x + 32, y + 458, sub, { size: 20, fill: C.mist });
+      c += L(x + 30, y + 492, x + w - 30, y + 492, { stroke: C.line2, sw: 1 });
+      desc.forEach((d, j) => { c += T(x + 32, y + 540 + j * 32, d, { size: 21 }); });
+      s += G(o * focus, c);
+    });
     return s;
   }});
 
-chapter({ id: "c4", num: "04", title: "Microbes make heat", dur: 20, caps: [
+chapter({ id: "c4", num: "04", title: "Microbes make heat", dur: 19, caps: [
   "As the microbes feed, they multiply, and their metabolism releases heat.",
   "Every kilogram of organic matter they break down releases about <b>18 MJ</b>, roughly <b>5 kWh</b>.",
   "The pile insulates itself, so heat builds up faster than it escapes: from 15 °C to over 60 °C in a few days."],
   draw(t) {
-    let s = ""; const day = 5 * clamp((t - 2.6) / 15), temp = tempAt(day), heat = clamp((temp - 15) / 50);
+    let s = ""; const day = 5 * clamp((t - 2.6) / 14), temp = tempAt(day), heat = clamp((temp - 15) / 50);
     const cx = 520, cy = 520, cr = 270;
-    s += `<defs><radialGradient id="glow"><stop offset="0" stop-color="${C.hot}" stop-opacity="${(.55 * heat).toFixed(3)}"/><stop offset="1" stop-color="${C.hot}" stop-opacity="0"/></radialGradient><clipPath id="pile"><circle cx="${cx}" cy="${cy}" r="${cr}"/></clipPath></defs>`;
+    s += `<defs><radialGradient id="glow"><stop offset="0" stop-color="${C.ember}" stop-opacity="${(.55 * heat).toFixed(3)}"/><stop offset="1" stop-color="${C.ember}" stop-opacity="0"/></radialGradient><clipPath id="pile"><circle cx="${cx}" cy="${cy}" r="${cr}"/></clipPath></defs>`;
     let inner = R(cx - cr, cy - cr, cr * 2, cr * 2, { fill: "#120c08" }) + Cir(cx, cy, cr * 1.2, { fill: "url(#glow)" });
     const r = rng(41), n = Math.round(10 + 190 * clamp(heat * 1.15));
     for (let i = 0; i < n; i++) { const ph = r() * 6.28, rad = Math.sqrt(r()) * (cr - 12), sp = (.3 + r() * .6) * (r() < .5 ? -1 : 1);
-      const col = temp > 45 && i % 3 ? C.yellow : C.violet;
+      const col = temp > 45 && i % 3 ? C.ember : C.glow;
       inner += bact(cx + Math.cos(ph + t * sp * .4) * rad, cy + Math.sin(ph + t * sp * .4) * rad, (ph + t * sp) * 57, col, .9, .9); }
     for (let i = 0; i < 14; i++) { const ph = r(), u = (t * .35 + ph) % 1; const x = cx + (r() - .5) * cr * 1.4, y = cy + cr * .6 - u * cr * 1.4;
-      inner += P(`M${f1(x)},${f1(y)} q8,-10 0,-20 q-8,-10 0,-20`, { stroke: C.yellow, sw: 3, op: heat * .8 * win(u, 0, 1, .2) }); }
+      inner += P(`M${f1(x)},${f1(y)} q8,-10 0,-20 q-8,-10 0,-20`, { stroke: C.ember, sw: 3, op: heat * .8 * win(u, 0, 1, .2) }); }
     s += G(ramp(t, 2.2, .8), `<g clip-path="url(#pile)">${inner}</g>` + Cir(cx, cy, cr, { stroke: C.line2, sw: 3 }) +
       T(cx, cy + cr + 50, `${n} × microbes shown · real piles hold billions per gram`, { size: 20, fill: C.dim, anchor: "middle" }));
-    // chart days 0-5
     const gx = 980, gy = 230, gw = 760, gh = 380, X = d => gx + gw * d / 5, Y = v => gy + gh - gh * (v - 10) / 60;
-    let g = R(gx, gy, gw, gh, { fill: C.panel, stroke: C.line, sw: 1.5, rx: 10 });
+    let g = panel(gx, gy, gw, gh);
     for (const v of [20, 40, 60]) g += L(gx, Y(v), gx + gw, Y(v), { stroke: C.line, sw: 1 }) + T(gx - 14, Y(v) + 7, `${v} °C`, { size: 18, fill: C.dim, anchor: "end" });
     for (let d = 0; d <= 5; d++) g += T(X(d), gy + gh + 30, `day ${d}`, { size: 18, fill: C.dim, anchor: "middle" });
     let d = ""; for (let i = 0; i < DATA.day.length && DATA.day[i] <= day; i++) d += `${d ? "L" : "M"}${f1(X(DATA.day[i]))},${f1(Y(DATA.T[i]))}`;
     d += `L${f1(X(day))},${f1(Y(temp))}`;
-    g += P(d, { stroke: mix(C.violet, C.hot, heat), sw: 5 }) + Cir(X(day), Y(temp), 9, { fill: mix(C.violet, C.hot, heat) });
-    g += T(gx + gw - 20, gy + 70, `${Math.round(temp)} °C`, { size: 76, anchor: "end", font: SERIF });
+    g += P(d, { stroke: mix(C.glow, C.ember, heat), sw: 5 }) + Cir(X(day), Y(temp), 9, { fill: mix(C.glow, C.ember, heat) });
+    g += T(gx + gw - 24, gy + 84, `${Math.round(temp)} °C`, { size: 64, font: FIG, weight: 600, anchor: "end", ls: -2 });
     g += tag(gx + 20, gy + 48, "SIMULATED · 200 KG PILE", C.mist);
     s += G(ramp(t, 2.6, .8), g);
-    // energy card
-    s += G(ramp(t, 9, .8), R(980, 690, 760, 120, { rx: 16, fill: C.panel, stroke: C.line, sw: 1.5 }) +
-      T(1010, 742, "1 kg of organic matter broken down", { size: 26, fill: C.mist }) + T(1010, 790, "≈ 18 MJ ≈ 5 kWh of heat", { size: 42, font: SERIF, fill: C.yellow }));
+    s += G(ramp(t, 8.5, .8), panel(980, 690, 760, 130) +
+      T(1012, 742, "1 kg of organic matter broken down", { size: 24, fill: C.mist }) + D(1012, 794, "≈ 18 MJ ≈ 5 kWh of heat", { size: 42, fill: C.ember }));
     return s;
   }});
 
-chapter({ id: "c5", num: "05", title: "The four phases", dur: 21, caps: [
+chapter({ id: "c5", num: "05", title: "The four phases", dur: 23, caps: [
   "That rise and fall gives the four phases of composting.",
-  "<b>Mesophilic</b> (A), then <b>thermophilic</b> (B, 55–70 °C): heat-loving microbes take over, and the heat kills pathogens and weed seeds.",
-  "<b>Cooling</b> (C) and <b>maturation</b> (D): fungi and slower microbes finish the job. Each turning brings fresh oxygen back in."],
+  "<b>Mesophilic</b>, 20–45 °C, for the first days. Then <b>thermophilic</b>, 45–70 °C: heat-loving microbes take over, and 3 days above 55 °C kill pathogens and weed seeds.",
+  "<b>Cooling</b> and <b>maturation</b>: fungi and slower microbes finish the job over weeks to months. In an open pile, each turning brings oxygen back in."],
   draw(t) {
-    let s = ""; const gx = 200, gy = 220, gw = 1520, gh = 520, X = d => gx + gw * d / 45, Y = v => gy + gh - gh * (v - 5) / 70;
-    const ph = DATA.phases, names = [["Mesophilic", "A", C.A], ["Thermophilic", "B", C.B], ["Cooling", "C", C.Cc], ["Maturation", "D", C.D]];
-    names.forEach(([n, l, col], i) => { const o = ramp(t, 8 + i * .9, .6);
+    let s = ""; const gx = 200, gy = 230, gw = 1520, gh = 500, X = d => gx + gw * d / 45, Y = v => gy + gh - gh * (v - 5) / 70;
+    const ph = DATA.phases, names = [["Mesophilic", "20–45 °C", C.meso], ["Thermophilic", "45–70 °C", C.thermo], ["Cooling", "back to 45 °C", C.cooling], ["Maturation", "to ambient", C.mat]];
+    names.forEach(([n, sub, col], i) => { const o = ramp(t, 7.5 + i * .9, .6), xm = (X(ph[i]) + X(ph[i + 1])) / 2, narrow = i === 0;
+      const days = `days ${Math.round(ph[i])}–${Math.round(ph[i + 1])}${i === 3 ? "+" : ""}`;
       s += G(o, R(X(ph[i]), gy, X(ph[i + 1]) - X(ph[i]), gh, { fill: col, op: .12 }) +
-        T((X(ph[i]) + X(ph[i + 1])) / 2, gy + 44, l, { size: 44, font: SERIF, fill: col, anchor: "middle" }) +
-        T((X(ph[i]) + X(ph[i + 1])) / 2, gy + 76, i === 0 ? "" : n, { size: 21, fill: col, anchor: "middle", weight: 600 })); });
-    s += G(ramp(t, 8, .6), T(X(ph[0]) + 6, gy + gh + 64, "Mesophilic", { size: 21, fill: C.A, weight: 600 }));
-    s += G(ramp(t, 2.2, .6), R(gx, gy, gw, gh, { stroke: C.line, sw: 1.5 }) +
+        (narrow ? "" : D(xm, gy + 46, n, { size: 30, fill: col, anchor: "middle" }) + T(xm, gy + 76, `${sub} · ${days}`, { size: 19, fill: col, anchor: "middle" }))); });
+    s += G(ramp(t, 7.5, .6), D(X(ph[0]), gy + gh + 70, "Mesophilic", { size: 24, fill: C.meso }) + T(X(ph[0]) + 140, gy + gh + 70, `20–45 °C · days 0–${Math.round(ph[1])}`, { size: 19, fill: C.meso }));
+    s += G(ramp(t, 2.2, .6), R(gx, gy, gw, gh, { stroke: C.line2, sw: 1.2 }) +
       [20, 40, 60].map(v => L(gx, Y(v), gx + gw, Y(v), { stroke: C.line, sw: 1 }) + T(gx - 14, Y(v) + 7, `${v} °C`, { size: 18, fill: C.dim, anchor: "end" })).join("") +
       [0, 10, 20, 30, 40].map(d => T(X(d), gy + gh + 30, `day ${d}`, { size: 18, fill: C.dim, anchor: "middle" })).join(""));
     const dd = 45 * ease((t - 2.4) / 5.5); let d = "";
     for (let i = 0; i < DATA.day.length && DATA.day[i] <= dd; i++) d += `${d ? "L" : "M"}${f1(X(DATA.day[i]))},${f1(Y(DATA.T[i]))}`;
     s += P(d, { stroke: C.ink, sw: 4 });
-    s += G(ramp(t, 2.2, .6), tag(gx + gw - 268, gy - 18, "SIMULATED · 200 KG PILE", C.mist));
-    // 55 °C line
-    s += G(ramp(t, 10.5, .6), L(gx, Y(55), gx + gw, Y(55), { stroke: C.B, sw: 2, dash: "10 8" }) + T(X(14), Y(55) - 14, "above 55 °C: pathogens and weed seeds are killed", { size: 22, fill: C.B, weight: 600 }));
-    // turning
+    s += G(ramp(t, 2.2, .6), tag(gx + gw - 268, gy - 20, "SIMULATED · 200 KG PILE", C.mist));
+    s += G(ramp(t, 10, .6), L(gx, Y(55), gx + gw, Y(55), { stroke: C.ember, sw: 2, dash: "10 8" }) + T(X(14.5), Y(55) - 14, "≥ 55 °C for 3 days: pathogens and weed seeds killed", { size: 22, fill: C.ember, weight: 600 }));
     DATA.turns.forEach((td, i) => { const o = ramp(t, 15 + i * .6, .5);
-      s += G(o, L(X(td), gy + 90, X(td), gy + gh, { stroke: C.teal, sw: 2, dash: "4 6" }) + T(X(td) + 10, gy + gh - 60 - i * 0, "turned:", { size: 20, fill: C.teal, weight: 600 }) + T(X(td) + 10, gy + gh - 34, "O₂ back in", { size: 20, fill: C.teal })); });
+      s += G(o, L(X(td), gy + 96, X(td), gy + gh, { stroke: C.cool, sw: 2, dash: "4 6" }) + T(X(td) + 10, gy + gh - 60, "turned:", { size: 20, fill: C.cool, weight: 600 }) + T(X(td) + 10, gy + gh - 34, "O₂ back in", { size: 20, fill: C.cool })); });
     return s;
   }});
 
-chapter({ id: "c6", num: "06", title: "From heat to the farm", dur: 25, caps: [
-  "In chamber B, water flows through an aluminium coil and picks up the heat.",
-  "But compost passes heat on poorly: <b>99.5 %</b> of the resistance is on the compost side, so a buried pipe gets only about <b>50 W</b>.",
-  "Scale fixes it. On a farm, fans push air through the pile, and an <b>air-to-water exchanger</b> sends the heat to dairy hot water, barns and greenhouses."],
+// Compostito, the 2024 home design (chapter 6)
+const BOX = { x: 220, w: 400, top: 250 }; BOX.A = [270, 410]; BOX.B = [420, 560]; BOX.Cc = [570, 650]; BOX.D = [660, 740]; BOX.bottom = 756;
+function compostito(show) {
+  const x0 = BOX.x, w = BOX.w, ins = 16;
+  let s = "";
+  s += G(show("frame"), R(x0 + 10, BOX.bottom, 22, 90, { fill: "#6b4a2a" }) + R(x0 + w - 32, BOX.bottom, 22, 90, { fill: "#6b4a2a" }) + L(x0 - 100, 846, x0 + w + 100, 846, { stroke: C.line2, sw: 2 }));
+  s += G(show("frame"), R(x0, BOX.top, w, BOX.bottom - BOX.top, { rx: 6, fill: "#140f0b", stroke: "#a0703f", sw: 4 }));
+  s += G(show("frame"), R(x0 + 230, BOX.top - 10, 130, 14, { rx: 4, fill: "#a0703f" }));
+  const ch = [["A", BOX.A, C.meso], ["B", BOX.B, C.thermo], ["C", BOX.Cc, C.cooling], ["D", BOX.D, C.mat]];
+  ch.forEach(([n, [y0, y1], col]) => {
+    const op = show("ch" + n); if (op <= 0) return;
+    let c = R(x0 + ins, y0, w - 2 * ins, y1 - y0, { rx: 4, fill: col, op: .2 }) + R(x0 + ins, y0, w - 2 * ins, y1 - y0, { rx: 4, stroke: col, sw: 2, op: .9, extra: ` stroke-dasharray="6 5"` });
+    c += D(x0 + 36, y0 + 44, n, { size: 40, fill: col });
+    s += G(op, c);
+  });
+  return s;
+}
+const chLabel = (n, y, title, sub, col, op) => G(op, Cir(680, y - 9, 8, { fill: col }) + T(702, y, `<tspan font-weight="600">${n}  ${title}</tspan>`, { size: 26 }) + T(702, y + 30, sub, { size: 19, fill: C.mist }));
+
+chapter({ id: "c6", num: "06", title: "Where it started", dur: 23, caps: [
+  "The project started with <b>Compostito</b>, a home composter with one chamber per phase and a water coil in the hot one.",
+  "But compost passes heat on poorly: <b>99.5 %</b> of the resistance is on the compost side, so a buried pipe collects only about <b>50 W</b>.",
+  "And a box that small loses its heat through the walls. At home the maths didn't add up, so the design moved to farm scale."],
   draw(t) {
-    let s = ""; const o1 = 1 - ramp(t, 15.2, .8), o2 = ramp(t, 15.6, .8);
-    if (o1 > 0) {
-      let a = R(140, 220, 900, 560, { rx: 18, fill: "#1c0f08", stroke: C.B, sw: 2 }) + T(170, 270, "B", { size: 52, font: SERIF, fill: C.B }) + T(214, 268, "thermophilic chamber, 60 °C", { size: 24, fill: C.mist });
-      const r = rng(61); for (let i = 0; i < 120; i++) a += Cir(160 + r() * 860, 290 + r() * 470, 2 + r() * 4, { fill: i % 2 ? "#6b4a2a" : "#4d3420", op: .8 });
-      a += R(230, 380, 720, 300, { rx: 12, fill: "#2a2a2e", stroke: "#52525b", sw: 2 });
-      const sp = [[1100, 420], [900, 420], [280, 420], [280, 475], [900, 475], [900, 530], [280, 530], [280, 585], [900, 585], [900, 640], [1100, 640]];
-      a += P("M" + sp.map(p => p.join(",")).join(" L"), { stroke: "#9ca3af", sw: 20 }) + P("M" + sp.map(p => p.join(",")).join(" L"), { stroke: "#18181b", sw: 12 });
-      for (let i = 0; i < 40; i++) { const u = (i / 40 + t * .05) % 1, [x, y] = along(sp, u); a += Cir(x, y, 5, { fill: mix(C.teal, C.yellow, u) }); }
-      for (let i = 0; i < 18; i++) { const ph = r(), u = (t * .6 + ph) % 1, x = 300 + r() * 600, yb = r() < .5 ? 330 : 730; const y = lerp(yb, yb < 500 ? 380 : 680, u);
-        a += arrow(x, y - (yb < 500 ? 0 : -0), x, y + (yb < 500 ? 22 : -22), C.yellow, 2.5, .8 * win(u, 0, 1, .2)); }
-      a += T(1110, 426, "in, cool", { size: 22, fill: C.teal, weight: 600 }) + T(1110, 646, "out, warm", { size: 22, fill: C.yellow, weight: 600 });
-      // resistance bar
-      const bo = ramp(t, 7, .7);
-      a += G(bo, T(1260, 300, "Where the heat gets stuck", { size: 34, font: SERIF }) + T(1260, 336, "share of thermal resistance", { size: 21, fill: C.mist }) +
-        R(1260, 360, 520 * .995, 56, { rx: 6, fill: C.B }) + R(1260 + 520 * .995, 360, 520 * .005 + 2, 56, { fill: C.teal }) +
-        T(1280, 397, "compost side 99.5 %", { size: 24, weight: 700, fill: "#111" }) + T(1260, 446, "aluminium wall 0.02 % · water 0.5 %", { size: 20, fill: C.mist }));
-      a += G(ramp(t, 9.5, .7), T(1260, 560, "≈ 50 W", { size: 110, font: SERIF, fill: C.yellow }) + T(1260, 606, "from a 3 m buried pipe (model, h ≈ 15 W/m²K)", { size: 21, fill: C.mist }) +
-        T(1260, 652, "Copper wouldn't help. Moving air would.", { size: 24, fill: C.ink }));
-      s += G(o1, a);
+    const show = k => ({ frame: ramp(t, 2.2, .8), chA: ramp(t, 3, .5), chB: ramp(t, 3.4, .5), chC: ramp(t, 3.8, .5), chD: ramp(t, 4.2, .5) })[k] ?? 1;
+    let s = compostito(show);
+    s += chLabel("A", 330, "Mesophilic", "fresh waste in at the top", C.meso, ramp(t, 3.2, .5));
+    s += chLabel("B", 480, "Thermophilic", "coil takes the heat here", C.thermo, ramp(t, 3.6, .5));
+    s += chLabel("C", 610, "Cooling", "half size: the pile shrinks", C.cooling, ramp(t, 4, .5));
+    s += chLabel("D", 712, "Maturation", "finished compost out", C.mat, ramp(t, 4.4, .5));
+    // coil in chamber B
+    const co = ramp(t, 5, .8);
+    if (co > 0) {
+      const sp = [[BOX.x + BOX.w + 30, 450], [BOX.x + BOX.w - 40, 450], [BOX.x + 70, 450], [BOX.x + 70, 490], [BOX.x + BOX.w - 40, 490], [BOX.x + BOX.w - 40, 530], [BOX.x + 70, 530], [BOX.x + 70, 548], [BOX.x + BOX.w + 30, 548]];
+      let c = P(poly(sp), { stroke: "#9aa59f", sw: 12 }) + P(poly(sp), { stroke: "#18211c", sw: 6 });
+      for (let i = 0; i < 26; i++) { const u = (i / 26 + t * .05) % 1, [x, y] = along(sp, u); c += Cir(x, y, 3.5, { fill: mix(C.cool, C.ember, u) }); }
+      s += G(co * (1 - .5 * ramp(t, 17, .8)), c);
     }
-    if (o2 > 0) {
-      let b = "";
-      const rx = [160, 380, 600], cols = [C.A, C.B, C.Cc];
-      rx.forEach((x, i) => { b += R(x, 420, 190, 230, { rx: 14, fill: cols[i], op: .16 }) + R(x, 420, 190, 230, { rx: 14, stroke: cols[i], sw: 2.5 }) + T(x + 95, 560, "ABC"[i], { size: 64, font: SERIF, fill: cols[i], anchor: "middle" }); });
-      b += T(160, 400, "Enclosed reactors", { size: 26, weight: 600 }) + T(160, 690, "fan pushes air through the pile", { size: 21, fill: C.mist });
-      b += arrow(475, 760, 475, 660, C.teal, 4);
-      const duct = [[475, 420], [475, 300], [900, 300]];
-      b += P("M" + duct.map(p => p.join(",")).join(" L"), { stroke: "#3f3f46", sw: 26 });
-      for (let i = 0; i < 12; i++) { const u = (i / 12 + t * .12) % 1, [x, y] = along(duct, u); b += Cir(x, y, 6, { fill: C.hot, op: .9 }); }
-      b += T(560, 270, "hot, moist exhaust air", { size: 22, fill: C.hot, weight: 600 });
-      b += R(900, 230, 220, 160, { rx: 14, fill: C.panel, stroke: C.ink, sw: 2 }) + T(1010, 300, "air-to-water", { size: 24, anchor: "middle", weight: 600 }) + T(1010, 332, "exchanger", { size: 24, anchor: "middle", weight: 600 });
-      for (let k = 0; k < 6; k++) b += L(930 + k * 32, 350, 930 + k * 32, 375, { stroke: C.mist, sw: 2 });
-      const users = [["Dairy hot water", 250], ["Barns", 420], ["Greenhouse", 590]];
-      users.forEach(([n, y], i) => {
-        const pipe = [[1120, 310], [1250, 310], [1250, y], [1440, y]];
-        b += P("M" + pipe.map(p => p.join(",")).join(" L"), { stroke: "#3f3f46", sw: 10 });
-        for (let j = 0; j < 8; j++) { const u = (j / 8 + t * .15 + i * .1) % 1, [x, yy] = along(pipe, u); b += Cir(x, yy, 4.5, { fill: C.yellow }); }
-        b += R(1450, y - 50, 300, 100, { rx: 14, fill: C.panel, stroke: C.line2, sw: 1.5 }) + T(1600, y + 9, n, { size: 26, anchor: "middle", weight: 600 });
-      });
-      const so = ramp(t, 19.5, .8);
-      b += G(so, R(140, 740, 1620, 0, {}) + T(1250, 760, "38 %", { size: 96, font: SERIF, fill: C.yellow }) +
-        T(1450, 728, "of the microbial heat reached the water", { size: 25 }) + T(1450, 760, "Measured on a 150-cow dairy farm", { size: 21, fill: C.mist }) + T(1450, 788, "Kojima et al., 2022 · simulated home box: ~9 %", { size: 21, fill: C.mist }));
-      s += G(o2, b);
-    }
+    // the heat-transfer problem
+    const bo = ramp(t, 9, .7);
+    let a = panel(1080, 230, 720, 300) + D(1112, 290, "Where the heat gets stuck", { size: 32 }) + T(1112, 324, "share of thermal resistance, buried coil", { size: 20, fill: C.mist }) +
+      R(1112, 350, 640 * .995, 56, { rx: 6, fill: C.thermo }) + R(1112 + 640 * .995, 350, 640 * .005 + 3, 56, { fill: C.cool }) +
+      T(1132, 387, "compost side 99.5 %", { size: 24, weight: 600, fill: "#140d07" }) + T(1112, 440, "aluminium wall 0.02 % · water 0.5 %", { size: 19, fill: C.mist }) +
+      T(1112, 500, "≈ 50 W", { size: 46, font: FIG, weight: 600, fill: C.ember, ls: -1.5 }) + T(1330, 498, "from a 3 m buried pipe (model, h ≈ 15 W/m²K)", { size: 19, fill: C.mist });
+    s += G(bo, a);
+    const ko = ramp(t, 16.5, .8);
+    s += G(ko, panel(1080, 570, 720, 210) + M(1112, 614, "THE LESSON", { fill: C.leaf }) +
+      D(1112, 672, "Don't pull heat out of the pile.", { size: 34 }) + D(1112, 716, "Let air carry it out, at farm scale.", { size: 34, fill: C.ember }) +
+      T(1112, 756, "Fans move the heat; the pile only has to make it.", { size: 20, fill: C.mist }));
     return s;
   }});
 
-chapter({ id: "c7", num: "07", title: "A better fertiliser", dur: 17, caps: [
-  "After a few weeks of maturation, what comes out of chamber D is dark, crumbly compost.",
+// one farm tunnel in long section (chapters 7 and 8)
+function tunnel(t, x0, y0, w, h, o) {
+  const floor = y0 + h, bedTop = floor - h * .58, heat = clamp((o.temp - 15) / 45);
+  let s = R(x0 - 16, y0 - 16, w + 32, h + 32, { rx: 4, fill: "#1a221d", stroke: C.line2, sw: 1.5 }) + R(x0, y0, w, h, { fill: C.bg });
+  s += `<defs><linearGradient id="bed${o.id}" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="${mix("#3a2a1c", "#8a3d12", heat)}"/><stop offset="1" stop-color="${mix("#2e2116", "#5a2a10", heat)}"/></linearGradient></defs>`;
+  s += R(x0, bedTop, w, floor - bedTop, { fill: `url(#bed${o.id})` });
+  const r = rng(91);
+  for (let i = 0; i < 60; i++) s += Cir(x0 + r() * w, bedTop + 8 + r() * (floor - bedTop - 16), 2 + r() * 3, { fill: i % 3 ? "#4a3422" : "#6b4a2a", op: .8 });
+  for (let x = x0 + 24; x < x0 + w - 10; x += 38) s += R(x, floor - 5, 16, 6, { fill: C.cool });
+  // air rising through the bed, warming as it goes
+  for (let i = 0; i < 46 * o.air; i++) { const ph = r(), u = (t * .3 + ph) % 1, x = x0 + 20 + r() * (w - 40) + Math.sin(u * 14 + i) * 6, y = lerp(floor - 4, y0 + 30, u);
+    s += Cir(x, y, 3.6, { fill: mix(C.cool, C.ember, clamp(u * 1.6) * (.3 + .7 * heat)), op: .9 * win(u, 0, 1, .12) }); }
+  if (o.spray) {
+    for (const f of [.2, .5, .8]) s += L(x0 + 20, y0 + 26 + f * 0, x0 + w - 20, y0 + 26, { stroke: C.cool, sw: 3, op: o.spray });
+    for (let i = 0; i < 30; i++) { const ph = r(), u = (t * .9 + ph) % 1, x = x0 + 30 + r() * (w - 60);
+      s += Cir(x, lerp(y0 + 32, bedTop, u), 2.6, { fill: C.cool, op: o.spray * o.wet * win(u, 0, 1, .15) }); }
+  }
+  return s;
+}
+
+chapter({ id: "c7", num: "07", title: "The farm tunnel", dur: 26, caps: [
+  `On a farm, the same process runs in four insulated tunnels. Each takes a <b>${TUN.batch_t} t</b> batch of manure, silage and straw for <b>15 days</b>.`,
+  `Fans blow air up through a slotted floor, and a controller holds the bed at <b>60 °C</b>: about ${Math.round(TUN.t45)} days mesophilic, then ${Math.round(15 - TUN.t45)} thermophilic.`,
+  "<b>72 hours above 55 °C</b> sanitise every batch. It cools to 45 °C, then matures for <b>8 weeks</b> in windrows, where no heat is collected."],
+  draw(t) {
+    let s = "";
+    const day = 15 * clamp((t - 4) / 17), temp = interp(TUN.day, TUN.T, day);
+    const x0 = 220, y0 = 330, w = 700, h = 380, o = ramp(t, 2.2, .8);
+    let g = tunnel(t, x0, y0, w, h, { id: 7, temp, air: ramp(t, 9, 1.2) });
+    g += M(x0 - 14, y0 - 46, "ONE OF FOUR TUNNELS · 5 × 4 × 12.5 M", { fill: C.mist });
+    // blower and plenum
+    g += Cir(x0 - 60, y0 + h + 54, 26, { fill: "#2a332d", stroke: C.line2, sw: 1.5 }) + L(x0 - 34, y0 + h + 54, x0 + w, y0 + h + 54, { stroke: C.cool, sw: 6, op: .5 });
+    g += G(ramp(t, 9, .8), arrow(x0 - 140, y0 + h + 54, x0 - 90, y0 + h + 54, C.cool, 3) + T(x0 - 150, y0 + h + 100, "fresh air in", { size: 19, fill: C.cool }) + T(x0 + 220, y0 + h + 100, "slotted (spigot) floor", { size: 19, fill: C.mist }));
+    // exhaust stub
+    g += R(x0 + w - 120, y0 - 90, 40, 74, { fill: C.ember, op: .75 }) + G(ramp(t, 10, .8), T(x0 + w - 60, y0 - 54, "exhaust, saturated", { size: 19, fill: C.ember }));
+    // readout in the headspace
+    g += T(x0 + 28, y0 + 74, `${Math.round(temp)} °C`, { size: 50, font: FIG, weight: 600, ls: -1.5, fill: mix(C.glow, C.ember, clamp((temp - 15) / 45)) }) +
+      T(x0 + 30, y0 + 108, `day ${day.toFixed(1)}`, { size: 20, fill: C.mist });
+    s += G(o, g);
+    // the batch curve
+    const gx = 1060, gy = 270, gw = 740, gh = 400, X = d => gx + gw * d / 15, Y = v => gy + gh - gh * (v - 10) / 60;
+    let c = panel(gx - 20, gy - 70, gw + 40, gh + 210);
+    const bands = [[0, TUN.t45, C.meso, "mesophilic"], [TUN.t45, 15, C.thermo, "thermophilic"]];
+    bands.forEach(([a, b, col, n]) => { c += R(X(a), gy, X(b) - X(a), gh, { fill: col, op: .13 }) + M((X(a) + X(b)) / 2, gy + 30, n.toUpperCase(), { fill: col, anchor: "middle", size: 14 }); });
+    c += R(X(TUN.cool_from), gy + 46, X(15) - X(TUN.cool_from), gh - 46, { fill: C.cooling, op: .16 }) + T((X(TUN.cool_from) + X(15)) / 2, gy + gh - 18, "cooling to 45 °C", { size: 17, fill: C.cooling, anchor: "middle" });
+    for (const v of [20, 40, 60]) c += L(gx, Y(v), gx + gw, Y(v), { stroke: C.line, sw: 1 }) + T(gx - 10, Y(v) + 6, `${v}°`, { size: 17, fill: C.dim, anchor: "end" });
+    for (const d of [0, 5, 10, 15]) c += T(X(d), gy + gh + 28, `day ${d}`, { size: 17, fill: C.dim, anchor: "middle" });
+    let d = ""; for (let i = 0; i < TUN.day.length && TUN.day[i] <= day; i++) d += `${d ? "L" : "M"}${f1(X(TUN.day[i]))},${f1(Y(TUN.T[i]))}`;
+    d += `L${f1(X(day))},${f1(Y(temp))}`;
+    c += P(d, { stroke: C.ink, sw: 4 }) + Cir(X(day), Y(temp), 8, { fill: C.ember });
+    const so = ramp(t, 16, .7);
+    c += G(so, L(X(TUN.hot_from), Y(50), X(TUN.sanitised), Y(50), { stroke: C.ember, sw: 2.5 }) + L(X(TUN.hot_from), Y(50) - 8, X(TUN.hot_from), Y(50) + 8, { stroke: C.ember, sw: 2.5 }) +
+      L(X(TUN.sanitised), Y(50) - 8, X(TUN.sanitised), Y(50) + 8, { stroke: C.ember, sw: 2.5 }) + T(X(TUN.hot_from), Y(50) + 32, "sanitised: 72 h ≥ 55 °C", { size: 18, fill: C.ember, weight: 600 }));
+    c += tag(gx, gy - 24, `MODEL · ONE ${TUN.batch_t} T BATCH`, C.mist);
+    c += G(ramp(t, 19, .8), arrow(gx, gy + gh + 74, gx + 70, gy + gh + 74, C.leaf, 3) + D(gx + 86, gy + gh + 82, "then 8 weeks of maturation in windrows", { size: 24, fill: C.leaf }));
+    s += G(ramp(t, 3.4, .8), c);
+    return s;
+  }});
+
+chapter({ id: "c8", num: "08", title: "Heat and water", dur: 27, caps: [
+  `The exhaust leaves the bed saturated at <b>${FARM.t_exhaust} °C</b>. <b>${pct(FARM.latent)}</b> of its heat is in the water vapour, so the exchanger condenses it.`,
+  `That heats water to <b>${FARM.t_supply} °C</b> for dairy hot water, barns and greenhouses: about <b>${FARM.gwh.toFixed(0)} GWh</b> a year from ${FARM.feed_t.toLocaleString("en-GB")} t of feedstock.`,
+  `Taking that heat dries the bed: about <b>${TUN.evaporated_t} t</b> of water leave each batch, and ${TUN.condensate_t} t condense back. Spray bars rewet the bed if it falls below <b>52 %</b>.`],
+  draw(t) {
+    let s = "";
+    const air = ramp(t, 2.6, .8), hot = ramp(t, 9.5, .8), wet = ramp(t, 17.5, .8);
+    // tunnel, small
+    s += G(ramp(t, 2.2, .8), tunnel(t, 120, 520, 300, 200, { id: 8, temp: 60, air: .5, spray: wet, wet: win(t, 18.5, 24, .6) }) +
+      M(104, 494, "TUNNEL, 60 °C", { fill: C.mist }));
+    // exhaust duct to the exchanger
+    const duct = [[350, 504], [350, 330], [600, 330]];
+    let a = P(poly(duct), { stroke: "#2a332d", sw: 28 }) + P(poly(duct), { stroke: C.ember, sw: 2, op: .5 });
+    for (let i = 0; i < 16; i++) { const u = (i / 16 + t * .14) % 1, [x, y] = along(duct, u); a += Cir(x, y, 5.5, { fill: C.ember, op: .9 }); }
+    for (let i = 0; i < 8; i++) { const u = (i / 8 + t * .14 + .05) % 1, [x, y] = along(duct, u); a += P(`M${f1(x - 6)},${f1(y + 4)} q6,-8 0,-14`, { stroke: C.mist, sw: 2, op: .7 }); }
+    a += T(372, 306, `${FARM.t_exhaust} °C, saturated`, { size: 19, fill: C.ember });
+    // exchanger
+    a += R(600, 260, 200, 240, { rx: 12, fill: C.panel, stroke: C.ink, sw: 2 }) + D(700, 248, "exchanger", { size: 22, anchor: "middle" });
+    for (let k = 0; k < 9; k++) a += L(624 + k * 19, 290, 624 + k * 19, 470, { stroke: C.mist, sw: 1.5, op: .6 });
+    // air out
+    a += arrow(800, 470, 880, 470, C.mist, 2.5) + T(890, 476, `air out at ${FARM.t_air_out} °C, to the biofilter`, { size: 18, fill: C.mist });
+    s += G(air, a);
+    // hot water to the farm
+    let b = "";
+    [["Dairy hot water", 250], ["Barns", 330], ["Greenhouses", 410]].forEach(([n, y], i) => {
+      const pipe = [[800, 300], [900, 300], [900, y], [960, y]];
+      b += P(poly(pipe), { stroke: "#2a332d", sw: 8 });
+      for (let j = 0; j < 6; j++) { const u = (j / 6 + t * .15 + i * .1) % 1, [x, yy] = along(pipe, u); b += Cir(x, yy, 4, { fill: C.ember }); }
+      b += R(960, y - 28, 210, 56, { rx: 12, fill: C.panel, stroke: C.line2, sw: 1.2 }) + T(1065, y + 7, n, { size: 20, anchor: "middle", weight: 500 });
+    });
+    b += T(810, 222, `water ${FARM.t_supply} °C`, { size: 18, fill: C.ember, weight: 600 });
+    s += G(hot, b);
+    // condensate: drips into the tank, pumped back to the spray bars
+    let c = "";
+    for (let i = 0; i < 4; i++) { const u = (t * .8 + i / 4) % 1; c += Cir(680 + i * 14, lerp(500, 600, u), 4, { fill: C.cool, op: win(u, 0, 1, .15) }); }
+    c += R(640, 600, 120, 90, { rx: 10, fill: "#16302f", stroke: C.cool, sw: 1.5 }) + T(700, 716, "condensate", { size: 18, fill: C.cool, anchor: "middle" });
+    const back = [[640, 650], [470, 650], [470, 546], [420, 546]];
+    c += P(poly(back), { stroke: C.cool, sw: 3, op: .4 + .6 * wet, dash: "8 6" });
+    for (let i = 0; i < 8 * wet; i++) { const u = (i / 8 + t * .2) % 1, [x, y] = along(back, u); c += Cir(x, y, 4, { fill: C.cool }); }
+    s += G(air, c);
+    // right: where the heat is, and the water per batch
+    let k = panel(1260, 200, 560, 270) + M(1290, 244, "WHERE THE HEAT IS");
+    k += T(1290, 314, `${FARM.kj_per_kg} kJ`, { size: 56, font: FIG, weight: 600, fill: C.ember, ls: -1.5 }) + T(1290, 348, `per kg of exhaust air, ${FARM.t_exhaust} → ${FARM.t_air_out} °C`, { size: 19, fill: C.mist });
+    k += R(1290, 372, 500 * FARM.latent, 40, { rx: 6, fill: C.ember }) + R(1290 + 500 * FARM.latent + 3, 372, 500 * (1 - FARM.latent) - 3, 40, { rx: 6, fill: C.glow });
+    k += T(1304, 400, `${pct(FARM.latent)} water vapour (latent)`, { size: 18, weight: 600, fill: "#1a0d05" }) + T(1290, 446, "the rest is warm air (sensible)", { size: 17, fill: C.mist });
+    k += tag(1660, 244, "MODEL", C.mist);
+    s += G(ramp(t, 4, .8), k);
+    let wv = panel(1260, 500, 560, 320) + M(1290, 544, `WATER PER ${TUN.batch_t} T BATCH`) + tag(1660, 544, "MODEL", C.mist);
+    const rows = [[`${TUN.evaporated_t} t`, "evaporated from the bed", C.cool], [`${TUN.condensate_t} t`, "condensed back in the exchanger", C.cool],
+                  [`${pct(TUN.fill_moisture)} → ${pct(TUN.end_moisture)}`, "bed moisture, filled → emptied", C.ink]];
+    rows.forEach(([v, l, col], i) => { wv += G(ramp(t, 18 + i * .6, .6), T(1290, 612 + i * 74, v, { size: 38, font: FIG, weight: 600, fill: col, ls: -1 }) + T(1290, 640 + i * 74, l, { size: 18, fill: C.mist })); });
+    s += G(ramp(t, 17.5, .8), wv);
+    return s;
+  }});
+
+chapter({ id: "c9", num: "09", title: "A better fertiliser", dur: 16, caps: [
+  "After 8 weeks of maturation, what comes out of the windrow is dark, crumbly compost.",
   "Because it was made with oxygen, it is stable and sanitised, holds its nutrients, and adds organic matter that keeps water and feeds soil life."],
   draw(t) {
     let s = ""; const r = rng(71);
-    // chamber D (small) top-left, pouring
-    s += G(ramp(t, 2.2, .6), R(170, 210, 320, 120, { rx: 8, fill: C.D, op: .2 }) + R(170, 210, 320, 120, { rx: 8, stroke: C.D, sw: 2.5, extra: ` stroke-dasharray="6 5"` }) + T(196, 262, "D", { size: 48, font: SERIF, fill: C.D }) + T(250, 262, "matured", { size: 22, fill: C.mist }));
-    for (let i = 0; i < 60; i++) { const ph = r(), u = (t * .5 + ph) % 1; if (t < 3) continue; const x = 420 + (r() - .5) * 40 + u * 30, y = lerp(330, 560, u * u);
+    s += G(ramp(t, 2.2, .6), P(mound(320, 360, 380, 140), { fill: "#3b2a1c" }) + L(100, 360, 560, 360, { stroke: C.line2, sw: 2 }) + M(140, 210, "WINDROW · 8 WEEKS", { fill: C.mat }));
+    for (let i = 0; i < 60; i++) { const ph = r(), u = (t * .5 + ph) % 1; if (t < 3) continue; const x = 470 + (r() - .5) * 40 + u * 30, y = lerp(340, 560, u * u);
       s += Cir(x, y, 4 + r() * 4, { fill: i % 3 ? "#3b2a1c" : "#5a3d26", op: win(u, 0, 1, .1) * ramp(t, 3, .6) }); }
-    // soil profile
     const so = ramp(t, 2.6, .8);
     let soil = R(120, 560, 900, 70, { fill: "#2b1d13" }) + R(120, 630, 900, 170, { fill: "#1a120c" });
-    for (let i = 0; i < 70; i++) soil += Cir(130 + r() * 880, 570 + r() * 220, 2 + r() * 4, { fill: i % 4 ? "#3b2a1c" : "#52525b", op: .8 });
+    for (let i = 0; i < 70; i++) soil += Cir(130 + r() * 880, 570 + r() * 220, 2 + r() * 4, { fill: i % 4 ? "#3b2a1c" : "#4a524c", op: .8 });
     const g = ramp(t, 5, 7);
-    const sx = 640, gl = 560; soil += P(`M${sx},${gl} C${sx - 5},${gl - 80 * g} ${sx + 8},${gl - 150 * g} ${sx},${gl - 200 * g}`, { stroke: C.green, sw: 7 });
-    if (g > .3) { const k = clamp((g - .3) / .7); soil += `<g transform="translate(${sx} ${gl - 120 * g}) scale(${k})"><path d="M0,0 C30,-30 70,-20 90,-40 C60,0 30,10 0,0Z" fill="${C.green}"/><path d="M0,-40 C-30,-70 -70,-60 -90,-80 C-60,-40 -30,-30 0,-40Z" fill="${C.green}"/></g>`; }
+    const sx = 700, gl = 560; soil += P(`M${sx},${gl} C${sx - 5},${gl - 80 * g} ${sx + 8},${gl - 150 * g} ${sx},${gl - 200 * g}`, { stroke: C.leaf, sw: 7 });
+    if (g > .3) { const k = clamp((g - .3) / .7); soil += `<g transform="translate(${sx} ${gl - 120 * g}) scale(${k})"><path d="M0,0 C30,-30 70,-20 90,-40 C60,0 30,10 0,0Z" fill="${C.leaf}"/><path d="M0,-40 C-30,-70 -70,-60 -90,-80 C-60,-40 -30,-30 0,-40Z" fill="${C.leaf}"/></g>`; }
     for (let j = 0; j < 6; j++) { let x = sx, y = gl, d = `M${x},${y}`; for (let k = 0; k < 10 * g; k++) { x += Math.sin(j * 2 + k * .7) * 14 + (j - 2.5) * 5; y += 15; d += ` L${f1(x)},${f1(y)}`; } soil += P(d, { stroke: "#d6c3a5", sw: 2.5, op: .8 }); }
-    for (let i = 0; i < 10; i++) soil += P(`M${f1(200 + r() * 760)},${f1(660 + r() * 120)} q-6,10 0,14 q6,-4 0,-14Z`, { fill: C.teal, op: .7 * ramp(t, 9, 1) });
+    for (let i = 0; i < 10; i++) soil += P(`M${f1(200 + r() * 760)},${f1(660 + r() * 120)} q-6,10 0,14 q6,-4 0,-14Z`, { fill: C.cool, op: .7 * ramp(t, 9, 1) });
     s += G(so, soil);
-    // benefit cards
-    const cards = [["Stable and sanitised", "heated above 55 °C in chamber B"], ["Holds its nutrients", "nitrogen, phosphorus and potassium, released slowly"], ["Builds the soil", "organic matter holds water and feeds soil life"]];
-    cards.forEach(([h, sub], i) => { const o = ramp(t, 6 + i * 1.6, .6);
-      s += G(o, R(1110, 220 + i * 170, 690, 140, { rx: 16, fill: C.panel, stroke: C.line, sw: 1.5 }) + T(1144, 280 + i * 170, h, { size: 40, font: SERIF }) + T(1144, 322 + i * 170, sub, { size: 23, fill: C.mist })); });
+    const cards = [["Stable and sanitised", "72 h above 55 °C in the tunnel"], ["Holds its nutrients", "nitrogen, phosphorus and potassium, released slowly"], ["Builds the soil", "organic matter holds water and feeds soil life"]];
+    cards.forEach(([h, sub], i) => { const o = ramp(t, 5.5 + i * 1.4, .6);
+      s += G(o, panel(1110, 220 + i * 180, 690, 150) + D(1144, 282 + i * 180, h, { size: 38 }) + T(1144, 324 + i * 180, sub, { size: 22, fill: C.mist })); });
     return s;
   }});
 
-chapter({ id: "end", dur: 6, caps: [], draw(t) {
-  let s = G(ramp(t, .2, .8), T(960, 430, "Compost Energy", { size: 110, font: SERIF, anchor: "middle" }));
-  s += G(ramp(t, .8, .8), T(960, 500, "Compostito · 2024 design · open hardware (CERN-OHL-P)", { size: 30, anchor: "middle", fill: C.mist }));
-  s += G(ramp(t, 1.4, .8), T(960, 640, "Drawings, model, simulation and data are open source.", { size: 26, anchor: "middle" }) +
-    T(960, 690, "Simulated data is labelled as such. Farm measurements: Kojima et al., 2022, CC BY 4.0.", { size: 22, anchor: "middle", fill: C.dim }) +
-    T(960, 780, "maximekadri.org", { size: 26, anchor: "middle", fill: C.yellow, weight: 600, ls: 2 }));
+chapter({ id: "end", dur: 7, caps: [], draw(t) {
+  let s = Img(`${BRAND}/05_logo_primary/mark_v2_dark.png`, 1440, 96, 380, 315, ramp(t, .2, .8).toFixed(3));
+  s += G(ramp(t, .2, .8), Img(`${BRAND}/06_logo_variants/wordmark_dark.png`, 120, 150, 420, 68));
+  s += G(ramp(t, .8, .8), D(120, 420, "Heat from what", { size: 84 }) + D(120, 512, "farms already make.", { size: 84 }));
+  s += G(ramp(t, 1.4, .8), T(124, 610, "Drawings, CAD, model, simulation and data are open source: CERN-OHL-P · CC BY 4.0 · MIT.", { size: 24 }) +
+    T(124, 656, "Pile temperatures are SIMULATED. Farm numbers are MODEL: nothing at this scale has been built yet.", { size: 22, fill: C.mist }) +
+    T(124, 694, "Measured elsewhere: 38 % of the microbial heat reached the water on a 150-cow dairy farm (Kojima et al., 2022, CC BY 4.0).", { size: 22, fill: C.mist }) +
+    M(124, 790, "MAXIMEKADRI.ORG", { size: 20, fill: C.leaf, ls: 3 }));
   return s;
 }});
 
@@ -431,8 +551,9 @@ for (const c of CH) {
 function header(c, lt) {
   if (!c.num) return "";
   const big = 1 - ramp(lt, 1.6, .6), small = ramp(lt, 1.7, .6);
-  let s = G(ramp(lt, 0, .5) * big, T(960, 520, c.num, { size: 30, anchor: "middle", fill: C.yellow, weight: 600, ls: 6 }) + T(960, 610, c.title, { size: 104, anchor: "middle", font: SERIF }));
-  s += G(small, T(96, 108, c.num, { size: 20, fill: C.yellow, weight: 600, ls: 4 }) + T(140, 110, c.title, { size: 42, font: SERIF }));
+  let s = G(ramp(lt, 0, .5) * big, M(960, 500, c.num, { size: 24, anchor: "middle", fill: C.leaf, ls: 6 }) + D(960, 600, c.title, { size: 96, anchor: "middle" }));
+  s += G(small, Img(`${BRAND}/06_logo_variants/wordmark_dark.png`, 66, 48, 230, 37) + M(312, 74, "EXPLAINER", { size: 14, ls: 2.2 }) +
+    M(72, 134, c.num, { size: 18, fill: C.leaf, ls: 3 }) + D(110, 136, c.title, { size: 40 }));
   return s;
 }
 
@@ -443,7 +564,7 @@ function renderFrame(t) {
   let s = "";
   s += G(fadeIn * fadeOut, c.draw(lt));
   s += G(fadeOut, header(c, lt));
-  s += R(0, 0, 1920 * clamp(t / DURATION), 4, { fill: C.yellow, op: .85 });
+  s += R(0, 0, 1920 * clamp(t / DURATION), 4, { fill: C.ember, op: .85 });
   document.getElementById("scene").innerHTML = s;
   const cap = CAPTIONS.find(k => t >= k.start && t < k.end);
   const el = document.getElementById("cap");

@@ -58,8 +58,8 @@ for (let i = 0; i < n; i++) {
 }
 ff.stdin.end();
 await new Promise(r => ff.on("close", r));
-// poster: a frame from the Compostito chapter
-await page.evaluate(() => window.renderFrame(window.CHAPTERS.find(c => c.id === "c3").start + 14));
+// poster: the title card
+await page.evaluate(() => window.renderFrame(4.5));
 await stage.screenshot({ path: join(out, "poster.png") });
 await browser.close();
 console.log(`done: ${n} frames, ${duration.toFixed(1)} s`);

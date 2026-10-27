@@ -1,4 +1,4 @@
-"""Drawings CE-06..CE-10: the farm-scale unit.
+"""Drawings CE-06..CE-14: the farm-scale unit.
 
 Imported by make_drawings.py. Every number comes from
 model/compost_energy/industrial.py, so the drawings move with the model.
@@ -14,23 +14,29 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[3] / "model"))
 
+from compost_energy import configurations as CFG  # noqa: E402
+from compost_energy import process as PROC  # noqa: E402
 from compost_energy.industrial import enthalpy_kj_per_kg, layout, operating_modes, size  # noqa: E402
-from make_drawings import Svg, header  # noqa: E402
+from make_drawings import MONO, Svg, header  # noqa: E402
 
 M = size()
 OPS = operating_modes()
+BATCH = PROC.run_batch()
+PH = {ph["phase"]: ph for ph in PROC.phases(BATCH)}
+T45 = PH["mesophilic"]["end"]                   # day the bed passes 45 °C
+COOL = PH["cooling"]["start"]                   # day the cooling setpoint starts
 
 # ---- buildable geometry (m), shared with hardware/cad ----------------------
 G = layout()
 LAY = G["layout"]
 W = G["width_m"]                                # 5.0 inner
 H = G["height_m"]                               # 4.0 inner
-L = G["length_m"]                               # 16.5 inner, rounded up from the model
+L = G["length_m"]                               # 12.5 inner, rounded up from the model
 FILL = M["fill_depth_m"]                        # 2.0 average bed
 T = LAY.wall_m                                  # 200 concrete + 100 PIR
 SLAB = LAY.slab_m                               # plenum slab under the spigot floor
 N = M["n_tunnels"]
-X_ALL = G["overall_x_m"]                        # 16.2 overall
+X_ALL = G["overall_x_m"]                        # 21.5 overall
 DOOR_W, DOOR_H = LAY.door_w_m, LAY.door_h_m
 SPIGOT_PITCH = LAY.spigot_pitch_m
 
@@ -44,8 +50,13 @@ def fmt(v: float, nd: int = 0) -> str:
     return f"{v:,.{nd}f}"
 
 
-DUCT_T = 315    # next standard size up from the model
-DUCT_M = 500
+def eur(v: float) -> str:
+    """k€ per year with a real minus sign."""
+    return ("−" if v < 0 else "") + f"€{abs(v) / 1e3:,.0f}k/yr"
+
+
+DUCT_T = 355    # per tunnel, at its blower's peak (3,570 m³/h, 10 m/s)
+DUCT_M = 560    # manifold, at the plant's peak exhaust
 
 
 # ---------------------------------------------------------------------------
@@ -54,10 +65,10 @@ DUCT_M = 500
 def unit_cutaway(p: dict) -> str:
     s = Svg(1600, 1000, p, "Farm-scale unit - isometric cutaway")
     header(s, "Farm-scale unit: isometric cutaway",
-           f"Three aerated tunnels, {fmt(M['gross_total_m3'])} m³ in all, with heat recovered from the exhaust air. "
-           "Tunnel 3 roof and side wall cut away.")
+           f"{N} aerated tunnels, {fmt(M['gross_total_m3'])} m³ in all, with heat recovered from the exhaust air. "
+           f"T-10{N} roof and side wall cut away.")
     ink, mu = p["ink"], p["muted"]
-    k, ox, oy = 32.0, 560.0, 270.0
+    k, ox, oy = 25.0, 400.0, 290.0
     c30 = math.cos(math.radians(30))
 
     def P(x, y, z):
@@ -70,6 +81,20 @@ def unit_cutaway(p: dict) -> str:
         s.poly([P(x1, y0, z0), P(x1, y1, z0), P(x1, y1, z1), P(x1, y0, z1)], right, stroke, sw, e)
         s.poly([P(x0, y0, z1), P(x1, y0, z1), P(x1, y1, z1), P(x0, y1, z1)], top, stroke, sw, e)
 
+    def cylinder(cx, cy, r, z0, z1, fill, stroke=None):
+        stroke = stroke or ink
+        ring = [(cx + r * math.cos(t / 36 * 2 * math.pi), cy + r * math.sin(t / 36 * 2 * math.pi)) for t in range(36)]
+        # silhouette: the two tangents seen in the iso view are at +45 and -135 degrees in plan
+        ta, tb = math.radians(45), math.radians(225)
+        a0, a1 = P(cx + r * math.cos(ta), cy - r * math.sin(ta), z0), P(cx + r * math.cos(ta), cy - r * math.sin(ta), z1)
+        b0, b1 = P(cx + r * math.cos(tb), cy - r * math.sin(tb), z0), P(cx + r * math.cos(tb), cy - r * math.sin(tb), z1)
+        bottom = [P(x, y, z0) for x, y in ring]
+        s.poly(bottom, fill, stroke, 1.1)
+        s.poly([a0, a1, b1, b0], fill, "none", 0)
+        s.line(a0[0], a0[1], a1[0], a1[1], stroke, 1.1)
+        s.line(b0[0], b0[1], b1[0], b1[1], stroke, 1.1)
+        s.poly([P(x, y, z1) for x, y in ring], fill, stroke, 1.1)
+
     def seg(a, b, col=None, w=1.0, extra=""):
         (x1, y1), (x2, y2) = P(*a), P(*b)
         s.line(x1, y1, x2, y2, col or ink, w, extra)
@@ -77,21 +102,22 @@ def unit_cutaway(p: dict) -> str:
     wall_top = SLAB + H
     roof = wall_top + T
     concrete, side = p["concrete"], p["panel"]
+    hx, fan, tank, bio = LAY.hx, LAY.fan, LAY.tank, LAY.biofilter
+    bcx, bcy, bdia = LAY.buffer
 
     # ground
-    s.poly([P(-1, -1.5, 0), P(27, -1.5, 0), P(27, 18.5, 0), P(-1, 18.5, 0)],
+    s.poly([P(-1, -1.5, 0), P(bio[1] + 1.5, -1.5, 0), P(bio[1] + 1.5, bio[3] + 1.0, 0), P(-1, bio[3] + 1.0, 0)],
            p["panel"], p["faint"], 1, 'stroke-dasharray="5 5"')
 
     # back wall of the whole block and slab
     box(0, X_ALL, -T, 0, 0, roof, concrete, side, concrete)
     box(0, X_ALL, 0, L, 0, SLAB, concrete, side, concrete)
 
-    # tunnels 1 and 2: closed
+    # tunnels 1..N-1: closed
     for i in range(N - 1):
         x0 = bay_x(i)
         box(x0 - T, x0, 0, L, SLAB, roof, concrete, side, concrete)       # left wall
         box(x0, x0 + W, 0, L, wall_top, roof, concrete, side, concrete)   # roof
-        # door frame + sectional door on the front face (y = L)
         dx0 = x0 + (W - DOOR_W) / 2
         s.poly([P(x0 - T, L, SLAB), P(x0 + W + T, L, SLAB), P(x0 + W + T, L, roof), P(x0 - T, L, roof)],
                concrete, ink, 1.1)
@@ -101,98 +127,98 @@ def unit_cutaway(p: dict) -> str:
             z = SLAB + DOOR_H * j / 8
             seg((dx0, L, z), (dx0 + DOOR_W, L, z), mu, 0.6)
         tx, ty = P(x0 + W / 2, L, roof + 0.25)
-        s.text(tx, ty, f"T-10{i + 1}", 12, weight="bold", anchor="middle")
+        s.text(tx, ty, f"T-10{i + 1}", 12, weight="600", anchor="middle")
 
-    # tunnel 3: cut away
+    # last tunnel: cut away
     x0 = bay_x(N - 1)
     x1 = x0 + W
     box(x0 - T, x0, 0, L, SLAB, roof, concrete, side, concrete)           # its left wall (shared)
-    # inside faces seen through the cut: back wall face and left wall face
     s.poly([P(x0, 0, SLAB), P(x1, 0, SLAB), P(x1, 0, wall_top), P(x0, 0, wall_top)], p["panel"], ink, 0.9)
     s.poly([P(x0, 0, SLAB), P(x0, L, SLAB), P(x0, L, wall_top), P(x0, 0, wall_top)], side, ink, 0.9)
-    # spigot floor: air channels running along the tunnel
     nch = int(W / SPIGOT_PITCH)
     for c in range(1, nch):
         xc = x0 + c * SPIGOT_PITCH
         seg((xc, 0.2, SLAB), (xc, L - 0.2, SLAB), p["cool"], 0.8, 'stroke-dasharray="2 3"')
-    # compost bed: rear part only, front part removed to show the floor
     bed_front = L * 0.62
     box(x0, x1, 0, bed_front, SLAB, SLAB + FILL, p["timber_fill"], p["timber_side"], p["timber_fill"], 1.1)
-    for j in range(14):
-        yy = 0.6 + j * (bed_front - 1.0) / 13
+    for j in range(11):
+        yy = 0.6 + j * (bed_front - 1.0) / 10
         for xx in (x0 + 0.8, x0 + 2.1, x0 + 3.4, x0 + 4.4):
             cx, cy = P(xx + (j % 3) * 0.15, yy, SLAB + FILL)
-            s.add(f'<circle cx="{cx:.1f}" cy="{cy:.1f}" r="1.6" fill="{p["timber"]}" opacity="0.6"/>')
-    # air rising through the bed
+            s.add(f'<circle cx="{cx:.1f}" cy="{cy:.1f}" r="1.5" fill="{p["timber"]}" opacity="0.6"/>')
     for xx in (x0 + 1.2, x0 + 2.5, x0 + 3.8):
         a, b = P(xx, bed_front - 0.05, SLAB + 0.1), P(xx, bed_front - 0.05, SLAB + FILL + 1.0)
         s.line(a[0], a[1], b[0], b[1], p["cool"], 1.6, 'marker-end="url(#arrCool)"')
-    # right wall cut down to a stepped section
     cut_z = SLAB + 0.9
     box(x1, x1 + T, 0, L * 0.45, SLAB, roof, concrete, side, concrete)
     box(x1, x1 + T, L * 0.45, L, SLAB, cut_z, concrete, side, concrete)
-    # section hatch on the cut face of the wall
     s.poly([P(x1, L * 0.45, cut_z), P(x1 + T, L * 0.45, cut_z), P(x1 + T, L * 0.45, roof), P(x1, L * 0.45, roof)],
            "url(#hatch)", ink, 0.8)
-    # tunnel 3: door open, front frame cut with the wall
     tx, ty = P(x0 + W / 2 + 1.0, L + 1.6, 0)
-    s.text(tx, ty, "T-103 (door open)", 12, weight="bold", anchor="middle")
+    s.text(tx, ty, f"T-10{N} (door open)", 12, weight="600", anchor="middle")
 
-    # exhaust stubs and manifold on the roof
+    # exhaust stubs and manifold on the roof, down to the exchanger
     zm = roof + 0.9
-    hot = p["hot"]
+    hot, cool = p["hot"], p["cool"]
+    ey = LAY.exhaust_y_m
+    xin = hx[0] + 1.0
     for i in range(N):
         xs = bay_x(i) + W / 2
-        seg((xs, 1.2, roof), (xs, 1.2, zm), hot, 5)
-    seg((bay_x(0) + W / 2, 1.2, zm), (19.6, 1.2, zm), hot, 7)
-    seg((19.6, 1.2, zm), (19.6, 1.2, 3.4), hot, 7)
+        seg((xs, ey, roof), (xs, ey, zm), hot, 5)
+    seg((bay_x(0) + W / 2, ey, zm), (xin, ey, zm), hot, 7)
+    seg((xin, ey, zm), (xin, ey, hx[5]), hot, 7)
 
-    # heat-recovery skid: exchanger, fan, biofilter
-    box(*LAY.hx, p["panel"], p["b"], p["panel"], 1.3, op=0.95)
-    for j in range(9):   # fin pack lines on the visible side
-        yy = 0.6 + j * 0.42
-        seg((21.4, yy, 0.5), (21.4, yy, 2.9), p["hot"], 0.6)
-    box(*LAY.fan, p["panel"], p["panel"], p["panel"], 1.2)          # fan housing
-    cx, cy = P(23.1, 2.1, 0.8)
-    s.add(f'<ellipse cx="{cx:.1f}" cy="{cy:.1f}" rx="10" ry="13" fill="{p["bg"]}" stroke="{ink}" stroke-width="1.2"/>')
-    seg((21.4, 2.1, 0.8), (21.9, 2.1, 0.8), mu, 3)
-    box(*LAY.tank, p["c"], p["c"], p["c"], 1.1)                        # condensate tank
-    seg((21.4, 3.9, 0.3), (24.0, 3.9, 0.3), p["cool"], 2, 'stroke-dasharray="4 3"')
-    box(*LAY.biofilter, p["d"], p["d"], p["d"], 1.2, op=0.9)               # biofilter
-    seg((22.5, 2.8, 0.8), (22.5, 8.0, 0.8), mu, 3)
-    # water loop leaving the exchanger
-    seg((18.6, 3.6, 1.0), (17.2, 3.6, 1.0), hot, 3)
-    seg((18.6, 3.0, 0.6), (17.2, 3.0, 0.6), p["cool"], 3)
+    # buffer tank stands behind the skid; water: exchanger -> buffer -> heat users
+    cylinder(bcx, bcy, bdia / 2, 0, LAY.buffer_h_m, p["panel"])
+    tx, ty = P(bcx, bcy, LAY.buffer_h_m + 0.5)
+    s.text(tx, ty, f"TK-201 · {fmt(M['buffer_m3'])} m³", 11, weight="600", anchor="middle")
+    seg(((hx[0] + hx[1]) / 2, hx[2], 2.6), ((hx[0] + hx[1]) / 2, bcy + 0.4, 2.6), hot, 3)
+    seg(((hx[0] + hx[1]) / 2 + 0.6, hx[2], 1.2), ((hx[0] + hx[1]) / 2 + 0.6, bcy + 0.4, 1.2), cool, 3)
+    seg((bcx + bdia / 2, bcy, 1.8), (bcx + bdia / 2 + 3.0, bcy, 1.8), hot, 3, 'marker-end="url(#arrHot)"')
+    seg((bcx + bdia / 2 + 3.0, bcy + 0.8, 0.9), (bcx + bdia / 2, bcy + 0.8, 0.9), cool, 3, 'marker-end="url(#arrCool)"')
 
-    # callouts
+    # heat-recovery skid: exchanger, fan, condensate tank, biofilter
+    box(*hx, p["panel"], p["b"], p["panel"], 1.3, op=0.95)
+    for j in range(9):
+        yy = hx[2] + 0.4 + j * (hx[3] - hx[2] - 0.8) / 8
+        seg((hx[1], yy, 0.5), (hx[1], yy, hx[5] - 0.5), hot, 0.6)
+    box(*fan, p["panel"], p["panel"], p["panel"], 1.2)
+    cx, cy = P(fan[1], (fan[2] + fan[3]) / 2, 0.8)
+    s.add(f'<ellipse cx="{cx:.1f}" cy="{cy:.1f}" rx="9" ry="12" fill="{p["bg"]}" stroke="{ink}" stroke-width="1.2"/>')
+    seg((hx[1], (fan[2] + fan[3]) / 2, 0.8), (fan[0], (fan[2] + fan[3]) / 2, 0.8), mu, 3)
+    box(*tank, p["c"], p["c"], p["c"], 1.1)
+    seg((hx[1], (tank[2] + tank[3]) / 2, 0.3), (tank[0], (tank[2] + tank[3]) / 2, 0.3), cool, 2, 'stroke-dasharray="4 3"')
+    box(*bio, p["d"], p["d"], p["d"], 1.2, op=0.9)
+    fy = (fan[2] + fan[3]) / 2
+    seg(((fan[0] + fan[1]) / 2, fan[3], 0.8), ((fan[0] + fan[1]) / 2, bio[2], 0.8), mu, 3)
+    # callouts: (point, label, balloon offset in px)
     items = [
-        (P(x0 - T / 2, 9.0, roof), "Insulated precast tunnel"),
-        (P(bay_x(1) + 2.2, L, SLAB + 2.0), "Sectional door"),
-        (P(x0 + 2.5, 13.0, SLAB), "Aerated spigot floor"),
-        (P(x0 + 2.4, 5.0, SLAB + FILL), "Compost bed"),
-        (P(x0 + 1.5, 2.0, SLAB + FILL + 1.0), "Headspace"),
-        (P(9.0, 1.2, zm), "Exhaust manifold"),
-        (P(21.4, 2.0, 2.0), "Plate-fin exchanger HX-201"),
-        (P(24.5, 3.9, 0.9), "Condensate tank TK-401"),
-        (P(22.5, 2.8, 1.2), "Exhaust fan"),
-        (P(22.5, 12.0, 1.6), f"Biofilter, {fmt(M['biofilter_m2'])} m²"),
-        (P(17.6, 3.6, 1.0), "Water loop to heat users"),
-        (P(x1 + T, 13.5, cut_z), "Side wall, cut"),
+        (P(bay_x(0) - T / 2, L * 0.55, roof), "Insulated precast tunnel", (-120, -150)),
+        (P(bay_x(1) + 2.2, L, SLAB + 2.0), "Sectional door", (-150, 130)),
+        (P(x0 + 2.5, L * 0.85, SLAB), "Aerated spigot floor", (-90, 150)),
+        (P(x0 + 2.4, bed_front * 0.4, SLAB + FILL), "Compost bed", (140, -120)),
+        (P(x0 + 1.5, 1.2, SLAB + FILL + 1.0), "Headspace", (110, -150)),
+        (P(bay_x(1) + W / 2, ey, zm), "Exhaust manifold", (-60, -110)),
+        (P(hx[1], (hx[2] + hx[3]) / 2, 2.0), "Plate-fin exchanger HX-201", (230, -60)),
+        (P(tank[1], (tank[2] + tank[3]) / 2, 0.9), "Condensate tank TK-401", (60, 150)),
+        (P((fan[0] + fan[1]) / 2, fan[2], 1.2), "Exhaust fan K-201", (210, 40)),
+        (P((bio[0] + bio[1]) / 2, (bio[2] + bio[3]) / 2, 1.6), f"Biofilter, {fmt(M['biofilter_m2'])} m²", (60, 110)),
+        (P(bcx, bcy, 4.0), f"Buffer tank TK-201, {fmt(M['buffer_m3'])} m³", (-60, -170)),
+        (P(bcx + bdia / 2 + 2.4, bcy, 1.8), "Water loop to heat users", (130, -90)),
+        (P(x1 + T, L * 0.8, cut_z), "Side wall, cut", (-20, 200)),
     ]
-    balloons = [(200, 220), (360, 760), (600, 800), (1030, 260), (1110, 330), (700, 140),
-                (1250, 540), (1300, 720), (1300, 640), (1000, 870), (1060, 400), (720, 830)]
-    for n, ((x, y), _), (bx, by) in zip(range(1, 13), items, balloons):
-        s.callout(n, x, y, bx, by)
+    for n, ((x, y), _, (dx, dy)) in enumerate(items, 1):
+        s.callout(n, x, y, x + dx, y + dy)
 
     # key
-    kx, ky = 1300, 108
-    s.rect(kx - 14, ky - 8, 290 + 14, 26 + 20 * 12 + 120, p["bg"], p["faint"], 1, 'rx="6"')
-    s.text(kx, ky + 12, "KEY", 10, mu, extra='letter-spacing="1.5"')
-    for n, (_, label) in enumerate(items, 1):
-        s.text(kx, ky + 22 + n * 20, f"{n}", 12, weight="bold")
+    kx, ky = 1290, 108
+    s.rect(kx - 14, ky - 8, 300, 26 + 20 * len(items) + 130, p["bg"], p["faint"], 1, 'rx="6"')
+    s.text(kx, ky + 12, "KEY", 10, mu, extra=f'letter-spacing="1.5" font-family="{MONO}"')
+    for n, (_, label, _) in enumerate(items, 1):
+        s.text(kx, ky + 22 + n * 20, f"{n}", 12, weight="600")
         s.text(kx + 22, ky + 22 + n * 20, label, 12)
-    yy = ky + 22 + 13 * 20 + 6
-    for line in [f"Duty {fmt(M['duty_kw'])} kW, heating season",
+    yy = ky + 22 + (len(items) + 1) * 20 + 6
+    for line in [f"Duty {fmt(M['duty_kw'])} kW mean, {fmt(M['peak_duty_kw'])} kW peak",
                  f"Air {fmt(M['air_m3_h'], 0)} m³/h at {fmt(M['t_exhaust_c'])} °C, saturated",
                  f"Exchanger ≈ {fmt(M['hx_area_m2'])} m² plate-fin",
                  f"Water {fmt(M['t_supply_c'])}/{fmt(M['t_return_c'])} °C, {fmt(M['water_m3_h'], 1)} m³/h",
@@ -216,7 +242,7 @@ def general_arrangement(p: dict) -> str:
     concrete = "url(#concrete)"
 
     # ---- plan ---------------------------------------------------------------
-    sp, px0, py0 = 20.0, 80.0, 150.0          # px per m, origin = back-left outer corner
+    sp, px0, py0 = 19.0, 70.0, 205.0          # px per m, origin = back-left outer corner
 
     def Pp(x, y):
         return px0 + x * sp, py0 + (y + T) * sp
@@ -241,23 +267,32 @@ def general_arrangement(p: dict) -> str:
         ex, ey = Pp(bay_x(i) + W / 2, 1.2)
         s.add(f'<circle cx="{ex:.1f}" cy="{ey:.1f}" r="5" fill="none" stroke="{hot}" stroke-width="1.6"/>')
     # manifold and skid
-    a, b = Pp(bay_x(0) + W / 2, 1.2), Pp(19.6, 1.2)
+    hx, fan, tank, bio = LAY.hx, LAY.fan, LAY.tank, LAY.biofilter
+    bcx, bcy, bdia = LAY.buffer
+    a, b = Pp(bay_x(0) + W / 2, LAY.exhaust_y_m), Pp(hx[0] + 1.0, LAY.exhaust_y_m)
     s.line(a[0], a[1], b[0], b[1], hot, 3)
-    hx0, hy0 = Pp(18.6, 0.2)
-    s.rect(hx0, hy0, 2.8 * sp, 4.0 * sp, p["b"], ink, 1.3, 'fill-opacity="0.6"')
-    s.text(hx0 + 1.4 * sp, hy0 + 2.1 * sp, "HX-201", 10, anchor="middle", weight="bold")
-    fx, fy = Pp(21.9, 1.4)
-    s.rect(fx, fy, 1.2 * sp, 1.4 * sp, p["panel"], ink, 1.2)
-    s.text(fx + 0.6 * sp, fy + 0.85 * sp, "K", 10, anchor="middle", weight="bold")
-    bfx, bfy = Pp(19.0, 8.0)
-    s.rect(bfx, bfy, 7.0 * sp, 8.0 * sp, p["d"], ink, 1.2)
-    s.text(bfx + 3.5 * sp, bfy + 4.2 * sp, "Biofilter F-301", 11, anchor="middle", weight="bold")
+    hx0, hy0 = Pp(hx[0], hx[2])
+    s.rect(hx0, hy0, (hx[1] - hx[0]) * sp, (hx[3] - hx[2]) * sp, p["b"], ink, 1.3, 'fill-opacity="0.6"')
+    s.text(hx0 + (hx[1] - hx[0]) / 2 * sp, hy0 + 2.1 * sp, "HX-201", 10, anchor="middle", weight="bold")
+    fx, fy = Pp(fan[0], fan[2])
+    s.rect(fx, fy, (fan[1] - fan[0]) * sp, (fan[3] - fan[2]) * sp, p["panel"], ink, 1.2)
+    s.text(fx + (fan[1] - fan[0]) / 2 * sp, fy + 0.85 * sp, "K", 10, anchor="middle", weight="bold")
+    tkx, tky = Pp(tank[0], tank[2])
+    s.rect(tkx, tky, (tank[1] - tank[0]) * sp, (tank[3] - tank[2]) * sp, p["c"], ink, 1.1)
+    bx_, by_ = Pp(bcx, bcy)
+    s.add(f'<circle cx="{bx_:.1f}" cy="{by_:.1f}" r="{bdia / 2 * sp:.1f}" fill="{p["panel"]}" stroke="{ink}" stroke-width="1.3"/>')
+    s.text(bx_, by_ + 4, "TK-201", 10, anchor="middle", weight="bold")
+    s.text(bx_, by_ + 18, f"{fmt(M['buffer_m3'])} m³", 9.5, mu, anchor="middle")
+    bfx, bfy = Pp(bio[0], bio[2])
+    s.rect(bfx, bfy, (bio[1] - bio[0]) * sp, (bio[3] - bio[2]) * sp, p["d"], ink, 1.2)
+    s.text(bfx + (bio[1] - bio[0]) / 2 * sp, bfy + (bio[3] - bio[2]) / 2 * sp, "Biofilter F-301", 11,
+           anchor="middle", weight="bold")
     # section markers
     ay = Pp(0, L * 0.72)[1]
     s.line(px0 - 22, ay, px0 + X_ALL * sp + 22, ay, ink, 0.9, 'stroke-dasharray="14 4 3 4"')
     s.text(px0 - 30, ay + 4, "A", 13, weight="bold", anchor="end")
     s.text(px0 + X_ALL * sp + 30, ay + 4, "A", 13, weight="bold")
-    bxm = Pp(bay_x(2) + W / 2, 0)[0]
+    bxm = Pp(bay_x(N - 1) + W / 2, 0)[0]
     s.line(bxm, py0 - 6, bxm, Pp(0, L + 0.8)[1], ink, 0.9, 'stroke-dasharray="14 4 3 4"')
     s.text(bxm + 8, py0 - 4, "B", 13, weight="bold")
     # dimensions
@@ -271,7 +306,7 @@ def general_arrangement(p: dict) -> str:
     s.dim(dd0[0], dd0[1], dd1[0], dd1[1], f"door {fmt(DOOR_W, 1)}", 18, 11)
 
     # ---- section A-A --------------------------------------------------------
-    sa, ax0, ay0 = 32.0, 740.0, 440.0          # ground line at ay0
+    sa, ax0, ay0 = 24.0, 780.0, 420.0          # ground line at ay0
 
     def Pa(x, z):
         return ax0 + x * sa, ay0 - z * sa
@@ -304,19 +339,19 @@ def general_arrangement(p: dict) -> str:
     s.dim(a[0], a[1], b[0], b[1], f"{fmt(H, 1)} clear", 22, 11)
     a, b = Pa(bay_x(1), SLAB), Pa(bay_x(1), SLAB + FILL)
     s.dim(a[0], a[1], b[0], b[1], f"bed {fmt(FILL, 1)} avg", 22, 11)
-    a, b = Pa(bay_x(2), 0), Pa(bay_x(2) + W, 0)
+    a, b = Pa(bay_x(N - 1), 0), Pa(bay_x(N - 1) + W, 0)
     s.dim(a[0], a[1], b[0], b[1], fmt(W, 1), 30, 11)
     s.text(Pa(X_ALL, 0)[0] + 20, Pa(0, SLAB / 2)[1] + 4, "plenum slab, channels at 0.5", 11, mu)
     s.text(Pa(X_ALL, 0)[0] + 20, Pa(0, SLAB + H + T / 2)[1] + 4, "200 concrete + 100 PIR", 11, mu)
     s.text(Pa(X_ALL, 0)[0] + 20, Pa(0, SLAB + H + T / 2)[1] + 20, f"U = {M['u_wall_w_m2k']:.2f} W/m²K", 11, mu)
 
     # ---- section B-B --------------------------------------------------------
-    sb, bx0, by0 = 32.0, 740.0, 790.0
+    sb, bx0, by0 = 32.0, 780.0, 780.0
 
     def Pb(y, z):
         return bx0 + (y + T) * sb, by0 - z * sb
 
-    s.text(bx0, Pb(0, SLAB + H + T + 1.2)[1] - 18, "SECTION B-B  (T-103)", 12, mu, weight="bold", extra='letter-spacing="1.5"')
+    s.text(bx0, Pb(0, SLAB + H + T + 1.2)[1] - 18, f"SECTION B-B  (T-10{N})", 12, mu, weight="bold", extra='letter-spacing="1.5"')
     s.line(Pb(-T - 0.6, 0)[0], by0, Pb(L + 1.0, 0)[0], by0, ink, 1.4)
     x, y = Pb(-T, SLAB)
     s.rect(x, y, (L + T) * sb, SLAB * sb, concrete, ink, 1.2)
@@ -335,31 +370,32 @@ def general_arrangement(p: dict) -> str:
     for depth, label in ((OPS["fill_depth_m"], "fill, day 0"), (OPS["settled_depth_m"], "day 15")):
         lx0, ly0 = Pb(0, SLAB + depth)
         s.line(lx0, ly0, lx0 + L * sb, ly0, p["timber"], 1.2, 'stroke-dasharray="8 4"')
-        s.text(lx0 + L * sb * 0.62, ly0 - 5, f"{label}: {depth:.1f} m", 11, p["timber"])
+        s.text(lx0 + L * sb * 0.55, ly0 - 5, f"{label}: {depth:.1f} m", 11, p["timber"])
     # recirculation duct along the back and exhaust stub
     ex, ey = Pb(1.2, SLAB + H + T)
     s.rect(ex - 5, ey - 1.0 * sb, 10, 1.0 * sb, hot, hot, 1)
     s.text(ex + 12, ey - 0.7 * sb, f"exhaust Ø{DUCT_T}", 11, hot)
     a, b = Pb(0, SLAB + 0.15), Pb(-T - 0.4, SLAB + 0.15)
     s.line(b[0], b[1], a[0], a[1], cool, 2, 'marker-end="url(#arrCool)"')
-    s.text(b[0] - 6, b[1] + 4, f"K-103 {fmt(M['air_per_tunnel_m3_h'], 0)} m³/h", 11, cool, anchor="end")
+    s.text(b[0] - 6, b[1] + 4, f"K-10{N} up to {fmt(M['blower_m3_h_each'], 0)} m³/h", 11, cool, anchor="end")
     a, b = Pb(0, 0), Pb(L, 0)
     s.dim(a[0], a[1], b[0], b[1], f"{fmt(L, 1)}", 30, 11)
     a, b = Pb(L, SLAB), Pb(L, SLAB + DOOR_H)
     s.dim(a[0], a[1], b[0], b[1], f"door {fmt(DOOR_H, 1)}", 18, 11)
 
     # ---- data table --------------------------------------------------------
-    tx, ty = 80, 640
+    tx, ty = 80, 620
     rows = [
         ("Feedstock", f"{fmt(M['feedstock_t_per_day'], 1)} t/day, 15-day residence"),
         ("Tunnels", f"{N} × {fmt(W, 1)} × {fmt(H, 1)} × {fmt(L, 1)} m inner"),
         ("Material in tunnels", f"{fmt(M['solids_per_tunnel_m3'] * N)} m³ (model {fmt(M['gross_total_m3'])} m³ gross)"),
-        ("Aeration", f"{fmt(M['air_m3_h'], 0)} m³/h, {M['air_changes_per_h']:.1f} vol/h"),
-        ("Blowers", f"{N} × {M['fan_kw_per_tunnel']:.1f} kW at {fmt(M['fan_pressure_pa'])} Pa"),
+        ("Aeration", f"{fmt(M['air_m3_h'], 0)} m³/h mean, {M['air_changes_per_h']:.1f} vol/h"),
+        ("Blowers", f"{N} × {M['blower_kw_each']:.1f} kW at {fmt(M['fan_pressure_pa'])} Pa (batch peak)"),
         ("Exhaust ducts", f"Ø{DUCT_T} per tunnel, Ø{DUCT_M} manifold"),
         ("Envelope loss", f"{M['wall_loss_kw_per_tunnel']:.1f} kW per tunnel"),
-        ("Heat-recovery duty", f"{fmt(M['duty_kw'])} kW, {M['heat_gwh_per_year']:.1f} GWh/yr"),
-        ("Operation", f"staggered: one tunnel refilled every {OPS['stage_days']:.0f} days (CE-11)"),
+        ("Heat recovery", f"{fmt(M['duty_kw'])} kW mean, {fmt(M['peak_duty_kw'])} kW peak, {M['heat_gwh_per_year']:.1f} GWh/yr"),
+        ("Buffer", f"TK-201, {fmt(M['buffer_m3'])} m³ hot water"),
+        ("Operation", f"one tunnel refilled every {OPS['stage_days']:.2f} days (CE-11)"),
     ]
     s.rect(tx - 12, ty - 22, 520, 30 + 24 * len(rows), p["bg"], p["faint"], 1, 'rx="6"')
     s.text(tx, ty, "DESIGN DATA", 10, mu, extra='letter-spacing="1.5"')
@@ -478,11 +514,11 @@ def recovery_module(p: dict) -> str:
 
     # ---- data ---------------------------------------------------------------
     tx, ty = 1000, 650
-    rows = [("Duty", f"{fmt(M['duty_kw'])} kW (heating-season mean)"),
+    rows = [("Duty", f"{fmt(M['duty_kw'])} kW mean, {fmt(M['peak_duty_kw'])} kW peak (4 staggered batches)"),
             ("Air", f"{M['air_dry_kg_s']:.2f} kg/s dry, {fmt(M['air_m3_h'], 0)} m³/h"),
             ("Water", f"{fmt(M['t_return_c'])} → {fmt(M['t_supply_c'])} °C, {fmt(M['water_m3_h'], 1)} m³/h"),
             ("Pinch", f"{M['pinch_k']:.1f} K at the cold end"),
-            ("Area", f"{fmt(M['hx_area_m2'])} m², scaled from 23.3 kW / 9.2 m²"),
+            ("Area", f"{fmt(M['hx_area_m2'])} m² for the peak, scaled from 23.3 kW / 9.2 m²"),
             ("", "measured on a dairy-farm composter (Kojima 2022)")]
     s.text(tx, ty, "DESIGN POINT", 10, mu, extra='letter-spacing="1.5"')
     for n, (kk, vv) in enumerate(rows):
@@ -500,7 +536,7 @@ def recovery_module(p: dict) -> str:
 def process_pid(p: dict) -> str:
     s = Svg(1600, 1000, p, "Farm-scale P&amp;ID")
     header(s, "Farm-scale process: air and water P&amp;ID",
-           "Per-tunnel aeration with recirculation, shared exhaust to heat recovery and biofilter, heat-metered water loop.")
+           "Per-tunnel aeration with recirculation and roof spray bars, shared exhaust to heat recovery and biofilter, heat-metered water loop.")
     ink, mu, hot, cool, g = p["ink"], p["muted"], p["hot"], p["cool"], p["green"]
 
     def inst(x, y, a, b, col=g):
@@ -523,34 +559,43 @@ def process_pid(p: dict) -> str:
         s.text(x, y + 36, tag, 11, weight="bold", anchor="middle")
 
     # tunnels
+    pitch, hh = 690 / N, 690 / N - 34                     # row pitch and tunnel box height
+    stage = OPS["stage_days"]
     for i in range(N):
-        y = 170 + i * 210
-        s.rect(220, y, 300, 150, p["b"] if i == 1 else p["a"] if i == 0 else p["c"], ink, 1.6,
-               'rx="6" fill-opacity="0.55"')
-        s.text(240, y + 26, f"T-10{i + 1}  tunnel", 14, weight="bold")
-        s.text(240, y + 46, ["now on day 0-5: heating up", "now on day 5-10: hot, 55-70 °C", "now on day 10-15: cooling"][i], 12, mu)
-        s.line(230, y + 128, 510, y + 128, cool, 1.2, 'stroke-dasharray="2 3"')
-        s.text(500, y + 120, "spigot floor", 10, cool, anchor="end")
-        # supply blower and dampers
-        blower(130, y + 128, f"K-10{i + 1}")
-        s.path(f"M148,{y + 128} L230,{y + 128}", cool, 2, extra='marker-end="url(#arrCool)"')
-        s.path(f"M60,{y + 128} L112,{y + 128}", cool, 2)
-        damper(80, y + 128, f"FD-10{i + 1}", 0, 26)
-        s.text(40, y + 132, "air", 11, mu, anchor="end")
-        # recirculation from the headspace back to the blower
-        s.path(f"M220,{y + 30} L170,{y + 30} L170,{y + 80} L130,{y + 80} L130,{y + 110}", mu, 1.6,
+        y = 150 + i * pitch
+        d0, d1 = i * stage, (i + 1) * stage
+        fill = p["a"] if d1 <= T45 + 0.5 else p["c"] if d0 >= COOL else p["b"]
+        s.rect(220, y, 300, hh, fill, ink, 1.6, 'rx="6" fill-opacity="0.55"')
+        s.text(240, y + 24, f"T-10{i + 1}  tunnel", 14, weight="bold")
+        phase = "mesophilic" if d1 <= T45 + 0.5 else "cooling" if d0 >= COOL else "thermophilic, 60 °C"
+        s.text(240, y + 42, f"batch now on day {d0:g}-{d1:g}: {phase}", 11.5, mu)
+        yb = y + hh - 18
+        s.line(230, yb, 510, yb, cool, 1.2, 'stroke-dasharray="2 3"')
+        s.text(500, yb - 6, "spigot floor", 10, cool, anchor="end")
+        blower(130, yb, f"K-10{i + 1}")
+        s.path(f"M148,{yb} L230,{yb}", cool, 2, extra='marker-end="url(#arrCool)"')
+        s.path(f"M60,{yb} L112,{yb}", cool, 2)
+        damper(80, yb, f"FD-10{i + 1}", 0, 24)
+        s.text(40, yb + 4, "air", 11, mu, anchor="end")
+        s.path(f"M220,{y + 26} L170,{y + 26} L170,{yb - 40} L130,{yb - 40} L130,{yb - 18}", mu, 1.6,
                extra='marker-end="url(#arr)" stroke-dasharray="6 4"')
-        damper(150, y + 80, f"RD-10{i + 1}", -6, -12, "end")
-        # exhaust
-        s.path(f"M520,{y + 40} L640,{y + 40}", hot, 2.4)
-        damper(580, y + 40, f"XD-10{i + 1}")
-        # instruments
-        inst(300, y + 80, "TT", f"10{i + 1}")
-        inst(370, y + 80, "OT", f"10{i + 1}")
-        inst(440, y + 80, "PT", f"10{i + 1}")
-        s.text(300, y + 116, "×3 core probes", 9.5, mu, anchor="middle")
+        damper(150, yb - 40, f"RD-10{i + 1}", -6, -12, "end")
+        s.path(f"M520,{y + 34} L640,{y + 34}", hot, 2.4)
+        damper(580, y + 34, f"XD-10{i + 1}")
+        for xi, tag in ((290, "TT"), (350, "OT"), (410, "PT")):
+            inst(xi, y + hh / 2 + 6, tag, f"10{i + 1}")
+        # roof spray bar SP-10x, fed from the irrigation header through XV-10x
+        ys = y + 62
+        s.line(456, ys, 512, ys, cool, 1.6)
+        for xn in (466, 484, 502):
+            s.poly([(xn - 5, ys + 11), (xn + 5, ys + 11), (xn, ys + 2)], "none", cool, 1)
+        s.text(484, ys - 6, f"SP-10{i + 1}", 9.5, cool, anchor="middle")
+        s.path(f"M560,{ys} L512,{ys}", cool, 1.6, extra='stroke-dasharray="8 3"')
+        s.poly([(530, ys - 6), (540, ys), (530, ys + 6)], p["bg"], ink, 1)
+        s.poly([(550, ys - 6), (540, ys), (550, ys + 6)], p["bg"], ink, 1)
+        s.text(540, ys + 18, f"XV-10{i + 1}", 9.5, mu, anchor="middle")
     # manifold
-    s.path("M640,210 L640,670", hot, 4)
+    s.path(f"M640,{150 + 34} L640,{150 + (N - 1) * pitch + 34}", hot, 4)
     s.path("M640,440 L720,440", hot, 4, extra='marker-end="url(#arrHot)"')
     inst(690, 380, "TT", "201")
     inst(690, 500, "MT", "201")
@@ -565,7 +610,21 @@ def process_pid(p: dict) -> str:
     s.path("M800,530 L800,600 L780,600", cool, 1.6, extra='stroke-dasharray="5 3" marker-end="url(#arrCool)"')
     s.rect(680, 580, 96, 46, p["c"], ink, 1.3, 'rx="4"')
     s.text(728, 608, "TK-401", 11, weight="bold", anchor="middle")
-    s.text(680, 646, "condensate → bed wetting", 10.5, mu)
+    s.text(684, 644, "condensate", 10.5, mu)
+    # irrigation: TK-401 -> P-401 -> header -> spray bars; farm water after sanitisation
+    y_last = 150 + (N - 1) * pitch + 62
+    s.path("M680,603 L662,603 L662,880 L560,880 L560,212", cool, 1.6, extra='stroke-dasharray="8 3"')
+    s.add(f'<circle cx="612" cy="880" r="14" fill="{p["bg"]}" stroke="{ink}" stroke-width="1.4"/>')
+    s.poly([(619, 872), (603, 880), (619, 888)], ink, ink, 1)
+    s.text(612, 910, "P-401", 10.5, weight="bold", anchor="middle")
+    s.path("M470,930 L560,930 L560,880", cool, 1.6, extra='stroke-dasharray="8 3"')
+    s.poly([(500, 924), (510, 930), (500, 936)], p["bg"], ink, 1)
+    s.poly([(520, 924), (510, 930), (520, 936)], p["bg"], ink, 1)
+    s.text(510, 950, "XV-402", 9.5, mu, anchor="middle")
+    s.text(462, 934, "farm water", 10.5, mu, anchor="end")
+    inst(590, 840, "FT", "401")
+    s.text(320, 880, "spray water: condensate until the batch", 10.5, mu)
+    s.text(320, 894, "is sanitised, farm water after (CE-14)", 10.5, mu)
     # cooled exhaust to biofilter, via the exhaust fan
     s.path("M860,530 L860,640", cool, 2.4)
     s.add(f'<circle cx="860" cy="664" r="18" fill="{p["bg"]}" stroke="{ink}" stroke-width="1.5"/>')
@@ -596,7 +655,7 @@ def process_pid(p: dict) -> str:
     # buffer tank and users
     s.rect(1184, 330, 90, 240, p["panel"], ink, 1.6, 'rx="30"')
     s.text(1229, 450, "TK-201", 11, weight="bold", anchor="middle")
-    s.text(1229, 466, "buffer", 10.5, mu, anchor="middle")
+    s.text(1229, 466, f"buffer {fmt(M['buffer_m3'])} m³", 10.5, mu, anchor="middle")
     s.path("M1274,380 L1380,380", hot, 3, extra='marker-end="url(#arrHot)"')
     s.path("M1380,520 L1274,520", cool, 3, extra='marker-end="url(#arrCool)"')
     s.poly([(1310, 368), (1330, 380), (1310, 392)], p["bg"], ink, 1.3)
@@ -615,14 +674,15 @@ def process_pid(p: dict) -> str:
     for n, (col, dash, label) in enumerate([(cool, "", "process air in / cooled air"),
                                             (hot, "", "hot exhaust / supply water"),
                                             (mu, "6 4", "recirculation / by-pass"),
+                                            (cool, "8 3", "spray water to the beds"),
                                             (g, "3 3", "instrument signal")]):
         s.line(lx, ly + n * 22, lx + 40, ly + n * 22, col, 2.4 if not dash else 1.4,
                f'stroke-dasharray="{dash}"' if dash else "")
         s.text(lx + 50, ly + n * 22 + 4, label, 11.5)
-    s.text(lx, ly + 100, "TT temperature · OT oxygen · PT pressure", 11, mu)
-    s.text(lx, ly + 116, "MT humidity · FT flow · AT ammonia", 11, mu)
+    s.text(lx, ly + 122, "TT temperature · OT oxygen · PT pressure", 11, mu)
+    s.text(lx, ly + 138, "MT humidity · FT flow · AT ammonia · XV valve", 11, mu)
 
-    s.text(32, s.h - 30, "Indicative. Batches are staggered 5 days apart, so the three tunnels are always in different phases (CE-11). Tags are used by CE-10.", 12, mu)
+    s.text(32, s.h - 30, f"Indicative. Batches are staggered {OPS['stage_days']:.2f} days apart, so the {N} tunnels are always at different stages (CE-11). Tags are used by CE-10.", 12, mu)
     s.title_block("Process P&amp;ID", "CE-09")
     return s.render()
 
@@ -671,7 +731,7 @@ def control(p: dict) -> str:
         "Runs one batch per tunnel:",
         "load → heat-up → sanitise",
         "→ stabilise → cool → unload",
-        "tunnels staggered 5 days (CE-11)",
+        f"tunnels staggered {OPS['stage_days']:.2f} days (CE-11)",
         "",
         "Same CSV schema and cleaning",
         "pipeline as the prototype logger",
@@ -746,83 +806,92 @@ def control(p: dict) -> str:
 # ---------------------------------------------------------------------------
 def operating_modes_sheet(p: dict) -> str:
     s = Svg(1600, 1000, p, "Operating modes")
+    stage = OPS["stage_days"]
     header(s, "How a batch moves through the phases",
-           "A: each tunnel runs the whole cycle in place, staggered 5 days apart (base design). "
+           f"A: each tunnel runs the whole cycle in place, staggered {stage:.2f} days apart (base design). "
            "B: a loader moves each batch from tunnel to tunnel.")
     ink, mu = p["ink"], p["muted"]
-    stage = OPS["stage_days"]
-    phases = [(p["a"], "heat-up"), (p["b"], "hot: sanitise, max heat"), (p["c"], "cooling")]
+    # phase windows of one batch (days), as the controller runs it (CE-10, configurations.py)
+    windows = [(0.0, round(T45, 1), p["a"], "mesophilic heat-up"), (round(T45, 1), COOL, p["b"], "thermophilic: sanitise, most heat"),
+               (COOL, 15.0, p["c"], "cooling (still ≥ 45 °C)")]
     days = 30
-    gx, gw, rh = 150, 720, 34
+    gx, gw, rh, gap = 150, 720, 30, 8
 
     def X(day):
         return gx + day / days * gw
 
     def axis(y0):
         for d in range(0, days + 1, 5):
-            s.line(X(d), y0 - 8, X(d), y0 + 3 * (rh + 10), p["faint"], 0.8)
-            s.text(X(d), y0 + 3 * (rh + 10) + 16, f"d{d}", 11, mu, anchor="middle")
+            s.line(X(d), y0 - 8, X(d), y0 + N * (rh + gap), p["faint"], 0.8)
+            s.text(X(d), y0 + N * (rh + gap) + 14, f"d{d}", 11, mu, anchor="middle")
 
-    def block(t, d0, d1, phase, label, y0):
+    def block(t, d0, d1, fill, label, y0):
         d0c, d1c = max(d0, 0), min(d1, days)
         if d1c <= d0c:
             return
-        y = y0 + t * (rh + 10)
-        s.rect(X(d0c), y, X(d1c) - X(d0c), rh, phase[0], ink, 0.9, 'fill-opacity="0.8"')
-        if X(d1c) - X(d0c) > 40:
-            s.text((X(d0c) + X(d1c)) / 2, y + rh / 2 + 4, label, 11, anchor="middle")
+        y = y0 + t * (rh + gap)
+        s.rect(X(d0c), y, X(d1c) - X(d0c), rh, fill, ink, 0.9, 'fill-opacity="0.8"')
+        if label and X(d1c) - X(d0c) > 46:
+            s.text((X(d0c) + X(d1c)) / 2, y + rh / 2 + 4, label, 10.5, anchor="middle")
 
     def rows(y0):
         for t in range(N):
-            s.text(gx - 14, y0 + t * (rh + 10) + rh / 2 + 4, f"T-10{t + 1}", 12, weight="bold", anchor="end")
+            s.text(gx - 14, y0 + t * (rh + gap) + rh / 2 + 4, f"T-10{t + 1}", 12, weight="600", anchor="end")
 
-    def loader(x, y, col=None):
-        s.poly([(x - 7, y - 12), (x + 7, y - 12), (x, y - 2)], col or ink, col or ink, 1)
+    def loader(x, y):
+        s.poly([(x - 7, y - 12), (x + 7, y - 12), (x, y - 2)], ink, ink, 1)
+
+    def batch(start, t_of_day, y0, label, moves=False):
+        """Draw one batch started at `start`; t_of_day(age) gives the tunnel it sits in."""
+        for w0, w1, fill, _ in windows:
+            # split the phase window where the batch changes tunnel
+            cuts = sorted({w0, w1, *[k * stage for k in range(1, N) if moves and w0 < k * stage < w1]})
+            for c0, c1 in zip(cuts, cuts[1:]):
+                block(t_of_day(c0), start + c0, start + c1, fill, label if c0 == 0 else "", y0)
 
     # ---- A: staggered -------------------------------------------------------
-    ya = 180
-    s.text(60, ya - 34, "A  STAGGERED BATCHES  (base design)", 12, weight="bold", extra='letter-spacing="1"')
+    ya = 170
+    s.text(60, ya - 30, "A  STAGGERED BATCHES  (base design)", 12, weight="600", extra='letter-spacing="1"')
     axis(ya)
     rows(ya)
-    for k in range(-2, 6):
-        t, start = k % N, k * stage
-        for j, ph in enumerate(phases):
-            block(t, start + j * stage, start + (j + 1) * stage, ph, f"batch {k + 3}" if j == 0 else "", ya)
-    for k in range(0, 6):
-        loader(X(k * stage), ya + (k % N) * (rh + 10))
-    s.text(X(0), ya + 3 * (rh + 10) + 36,
-           "▼ loader empties one tunnel to the maturation hall and refills it, every 5 days. The batch never moves inside.",
+    for k in range(-N, 9):
+        batch(k * stage, lambda age, k=k: k % N, ya, f"batch {k + N}")
+    for k in range(0, 9):
+        if k * stage <= days:
+            loader(X(k * stage), ya + (k % N) * (rh + gap))
+    s.text(X(0), ya + N * (rh + gap) + 34,
+           f"▼ every {stage:.2f} days the loader empties one tunnel to the maturation hall and refills it. The batch never moves inside.",
            11.5, mu)
 
     # ---- B: transfer --------------------------------------------------------
-    yb = 470
-    s.text(60, yb - 34, "B  TRANSFER BETWEEN TUNNELS  (one phase per tunnel)", 12, weight="bold", extra='letter-spacing="1"')
+    yb = 450
+    s.text(60, yb - 30, "B  TRANSFER BETWEEN TUNNELS  (one stage per tunnel)", 12, weight="600", extra='letter-spacing="1"')
     axis(yb)
     rows(yb)
-    for k in range(-2, 6):
-        for t in range(N):
-            start = (k + t) * stage
-            block(t, start, start + stage, phases[t], f"batch {k + 3}", yb)
-    for k in range(1, 6):
+    for k in range(-N, 9):
+        batch(k * stage, lambda age: min(int(age // stage + 1e-9), N - 1), yb, f"batch {k + N}", moves=True)
+    for k in range(1, 9):
         x = X(k * stage)
+        if x > X(days):
+            break
         for t in range(N - 1):
-            y1 = yb + t * (rh + 10) + rh / 2
-            d = f"M{x - 18},{y1} C{x + 2},{y1} {x - 2},{y1 + rh + 10} {x + 16},{y1 + rh + 10}"
+            y1 = yb + t * (rh + gap) + rh / 2
+            d = f"M{x - 16},{y1} C{x + 2},{y1} {x - 2},{y1 + rh + gap} {x + 14},{y1 + rh + gap}"
             s.path(d, p["bg"], 6)
             s.path(d, p["hot"], 2, extra='marker-end="url(#arrHot)"')
         loader(x, yb)
-    s.text(X(0), yb + 3 * (rh + 10) + 36,
-           "▼ every 5 days: empty T-103, move T-102 → T-103 and T-101 → T-102 (hot, open-air moves), refill T-101.",
+    s.text(X(0), yb + N * (rh + gap) + 34,
+           f"▼ every {stage:.2f} days: empty T-10{N}, move every batch one tunnel along (hot, in the open), refill T-101.",
            11.5, mu)
 
     # legend
-    ly = 700
-    for n, (col, label) in enumerate(phases):
-        s.rect(60 + n * 230, ly, 26, 16, col, ink, 0.9, 'fill-opacity="0.8"')
-        s.text(96 + n * 230, ly + 13, label, 12)
+    ly = 740
+    for n, (_, _, col, label) in enumerate(windows):
+        s.rect(60 + n * 250, ly, 26, 16, col, ink, 0.9, 'fill-opacity="0.8"')
+        s.text(96 + n * 250, ly + 13, label, 12)
     s.text(60, ly + 44, f"Batch = {fmt(OPS['batch_t'])} t ({fmt(OPS['batch_m3'])} m³) of fresh feedstock. "
                         f"In A it fills a tunnel to {OPS['fill_depth_m']:.1f} m and settles to {OPS['settled_depth_m']:.1f} m by day 15.", 12, mu)
-    s.text(60, ly + 62, "Phases drawn as 5-day blocks for clarity; the control setpoints are in CE-10.", 12, mu)
+    s.text(60, ly + 62, "Phase windows from the batch model (process.py); setpoints in CE-10; the whole process sheet in CE-14.", 12, mu)
 
     # ---- comparison ---------------------------------------------------------
     a, b = OPS["staggered"], OPS["transfer"]
@@ -834,12 +903,12 @@ def operating_modes_sheet(p: dict) -> str:
         ("Diesel", f"{fmt(a['diesel_l_per_day'])} L/day", f"{fmt(b['diesel_l_per_day'])} L/day"),
         ("Hot moves per batch", "0", f"{b['hot_transfers_per_batch']}"),
         ("Heat released in moves", "none", f"≈ {fmt(b['released_kw'])} kW ({OPS['transfer_released_share'] * 100:.1f} % of duty)"),
-        ("Exhaust to HX-201", "blend of 3 tunnels", "steady from T-102"),
-        ("Tunnel design", "3 identical", "can specialise each"),
+        ("Exhaust to HX-201", f"blend of {N} batches", "same blend, other tunnels"),
+        ("Tunnel design", f"{N} identical", "can specialise each"),
         ("Remixing", "once, at loading", "at every move"),
-        ("Net value", f"€{a['net_eur'] / 1000:,.0f}k/yr", f"€{b['net_eur'] / 1000:,.0f}k/yr"),
+        ("Net value before capital", f"€{a['net_eur'] / 1000:,.0f}k/yr", f"€{b['net_eur'] / 1000:,.0f}k/yr"),
     ]
-    c1, c2, c3 = tx, tx + 190, tx + 360
+    c1, c2, c3 = tx, tx + 200, tx + 380
     s.rect(tx - 16, ty - 26, 640, 30 * len(rows_) + 12, p["bg"], p["faint"], 1, 'rx="6"')
     for n, (k, va, vb) in enumerate(rows_):
         y = ty + n * 30
@@ -848,24 +917,464 @@ def operating_modes_sheet(p: dict) -> str:
         if n:
             s.line(tx - 16, y - 20, tx + 624, y - 20, p["faint"], 0.8)
         s.text(c1, y, k, 12, mu)
-        s.text(c2, y, va, 12.5, weight="bold" if head or last else "normal")
-        s.text(c3, y, vb, 12.5, weight="bold" if head or last else "normal")
+        s.text(c2, y, va, 12.5, weight="600" if head or last else "normal")
+        s.text(c3, y, vb, 12.5, weight="600" if head or last else "normal")
 
     ry = ty + 30 * len(rows_) + 20
-    s.rect(tx - 16, ry, 640, 148, p["d"], ink, 1.2, 'rx="6" fill-opacity="0.45"')
-    s.text(tx, ry + 28, "Recommendation: A as the base design", 14, weight="bold")
+    s.rect(tx - 16, ry, 640, 166, p["d"], ink, 1.2, 'rx="6" fill-opacity="0.45"')
+    s.text(tx, ry + 28, "A is the base design", 14, weight="600")
     for n, t in enumerate([
-        "Half the loader work, no hot material in the open, identical tunnels.",
+        f"{b['t_per_day'] / a['t_per_day']:.1f}× less loader work, no hot material in the open, identical tunnels.",
         "The patent's one-chamber-per-phase idea survives as a control scheme:",
         "each tunnel passes through the phases in time instead of in space.",
-        "B is worth a pilot trial only if remixing at day 5 and 10 proves",
-        "to raise the temperature or the heat recovered.",
+        "B pays only if remixing at each move raised the heat recovered by ~12 %.",
+        "Tunnel count, automatic transfer and a stacked tower: CE-12 and CE-13.",
     ]):
-        s.text(tx, ry + 54 + n * 18, t, 12)
+        s.text(tx, ry + 54 + n * 20, t, 12)
 
-    s.text(32, s.h - 30, f"Assumptions in model/compost_energy/industrial.py (Handling): 0.25 L diesel/t, 120 t/h, 10 K lost per hot move, "
-                         "30 % mass loss over 15 days. Routine fill/empty is inside the €100k operating cost.", 11.5, mu)
+    s.text(32, s.h - 30, f"Assumptions in industrial.py (Handling): 0.25 L diesel/t, 120 t/h, 10 K lost per hot move, "
+                         "30 % mass loss over 15 days (CE-14: 46 %). Fill/empty is in the €100k opex.", 11.5, mu)
     s.title_block("Operating modes", "CE-11")
+    return s.render()
+
+
+# ---------------------------------------------------------------------------
+# CE-12  configuration study
+# ---------------------------------------------------------------------------
+def configuration_study(p: dict) -> str:
+    s = Svg(1600, 1000, p, "Configuration study")
+    header(s, "Which reactor? Configuration study",
+           "2-4 tunnels, loader transfer, an automatic transfer train and the patent's stacked chambers, "
+           "paid for over 10 years at 6 %. MODEL, first-pass costs.")
+    ink, mu, hot, cool, g = p["ink"], p["muted"], p["hot"], p["cool"], p["green"]
+    mono = f'font-family="{MONO}"'
+
+    # ---- exhaust heat over one cycle ---------------------------------------
+    shape = CFG.batch_profile()
+    duty = M["duty_kw"]
+    cx0, cy0, cw, ch = 110, 150, 600, 300
+    k0, k1 = 350.0, 900.0
+
+    def C(day, kw):
+        return cx0 + day / 15 * cw, cy0 + ch - (kw - k0) / (k1 - k0) * ch
+
+    s.text(cx0 - 60, cy0 - 22, "PLANT EXHAUST HEAT, ONE 15-DAY CYCLE", 10.5, mu, extra=f'letter-spacing="1.4" {mono}')
+    s.rect(cx0, cy0, cw, ch, p["bg"], p["faint"], 1)
+    for kw in range(400, 901, 100):
+        _, y = C(0, kw)
+        s.line(cx0, y, cx0 + cw, y, p["faint"], 0.6)
+        s.text(cx0 - 8, y + 4, str(kw), 10.5, mu, anchor="end")
+    for d in range(0, 16, 3):
+        x, _ = C(d, k0)
+        s.text(x, cy0 + ch + 16, f"d{d}", 10.5, mu, anchor="middle")
+    s.text(cx0 - 52, cy0 + ch / 2, "kW", 11, mu, anchor="middle")
+    _, ym = C(0, duty)
+    s.line(cx0, ym, cx0 + cw, ym, ink, 0.8, 'stroke-dasharray="3 3"')
+    s.text(cx0 + 6, ym - 6, f"mean {fmt(duty)} kW", 10.5, ink)
+    styles = [(2, p["a"], 1.4, "2 tunnels"), (3, p["b"], 1.4, "3 tunnels"), (15, cool, 1.2, "daily slices"),
+              (4, g, 2.6, "4 tunnels (final)")]
+    n = len(shape)
+    for nb, col, w, label in styles:
+        prof = CFG.combined_profile(nb, shape) * duty
+        stroke = col if nb not in (2, 3) else ("#a7b83f" if nb == 2 else "#e0882a")
+        pts = " ".join(f"{'M' if i == 0 else 'L'}{C(i / n * 15, v)[0]:.1f},{C(i / n * 15, v)[1]:.1f}"
+                       for i, v in enumerate(prof) if i % 2 == 0)
+        s.path(pts, stroke, w)
+    ly = cy0 + ch + 44
+    for i, (nb, col, w, label) in enumerate(styles):
+        prof = CFG.combined_profile(nb, shape) * duty
+        stroke = col if nb not in (2, 3) else ("#a7b83f" if nb == 2 else "#e0882a")
+        x = cx0 + (i % 2) * 300
+        y = ly + (i // 2) * 22
+        s.line(x, y - 4, x + 26, y - 4, stroke, w + 0.4)
+        s.text(x + 34, y, f"{label}: peak {fmt(prof.max())} kW", 11.5)
+
+    # ---- A-2 / A-3 / A-4 detail ----------------------------------------------
+    base = {r["code"]: r for r in CFG.ranking(CFG.Costs())}
+    low = {r["code"]: r["value_eur"] for r in CFG.ranking(CFG.LOW)}
+    high = {r["code"]: r["value_eur"] for r in CFG.ranking(CFG.HIGH)}
+    tx, ty = 110, 590
+    cols = [("", 0), ("A-2", 230), ("A-3", 340), ("A-4", 450)]
+    rows = [("Peak / mean", lambda r: f"{r['peak_to_mean']:.2f}"),
+            ("Exchanger", lambda r: f"{fmt(r['hx_area_m2'])} m²"),
+            ("Buffer tank", lambda r: f"{fmt(r['buffer_m3'])} m³"),
+            ("Doors, blowers", lambda r: f"{r['n']}, {r['n']}"),
+            ("Capex", lambda r: f"€{r['capex'] / 1e3:,.0f}k"),
+            ("Value after capital", lambda r: f"€{r['value_eur'] / 1e3:,.1f}k/yr")]
+    s.text(tx - 60, ty - 22, "WHOLE CYCLE IN PLACE: HOW MANY TUNNELS?", 10.5, mu, extra=f'letter-spacing="1.4" {mono}')
+    s.rect(tx - 16, ty - 4, 600, 26 * (len(rows) + 1) + 12, p["bg"], p["faint"], 1, 'rx="6"')
+    for name, x in cols[1:]:
+        s.text(tx + x, ty + 18, name, 12.5, g if name == CFG.FINAL else ink, weight="600")
+    for i, (label, f) in enumerate(rows):
+        y = ty + 18 + (i + 1) * 26
+        s.line(tx - 16, y - 18, tx + 584, y - 18, p["faint"], 0.7)
+        s.text(tx, y, label, 12, mu)
+        for name, x in cols[1:]:
+            s.text(tx + x, y, f(base[name]), 12, weight="600" if i == len(rows) - 1 else "normal")
+
+    # ---- ranking ---------------------------------------------------------------
+    order = [r["code"] for r in CFG.ranking(CFG.Costs())]
+    rx0, ry0, rw, rhh = 940, 150, 420, 34
+    v0, v1 = -220e3, 80e3
+
+    def V(v):
+        return rx0 + (v - v0) / (v1 - v0) * rw
+
+    s.text(rx0 - 120, ry0 - 22, "VALUE AFTER CAPITAL, k€/yr  (bar: base · line: low-high)", 10.5, mu,
+           extra=f'letter-spacing="1.4" {mono}')
+    for v in range(-200, 81, 50):
+        x = V(v * 1e3)
+        s.line(x, ry0 - 6, x, ry0 + rhh * len(order), p["faint"], 0.6)
+        s.text(x, ry0 + rhh * len(order) + 16, str(v), 10.5, mu, anchor="middle")
+    s.line(V(0), ry0 - 6, V(0), ry0 + rhh * len(order), ink, 1)
+    fam = {"A": g, "B": "#e0882a", "C": cool, "D": mu}
+    for i, code in enumerate(order):
+        r = base[code]
+        y = ry0 + i * rhh
+        v = r["value_eur"]
+        x0, x1 = sorted((V(0), V(v)))
+        s.rect(x0, y + 7, x1 - x0, rhh - 14, fam[code[0]], "none", 0, 'fill-opacity="0.85"')
+        s.line(V(high[code]), y + rhh / 2, V(low[code]), y + rhh / 2, ink, 1)
+        s.text(rx0 - 120, y + rhh / 2 + 4, code + ("  ◀ final" if code == CFG.FINAL else ""), 11.5,
+               g if code == CFG.FINAL else ink, weight="600" if code == CFG.FINAL else "normal", extra=mono)
+        s.text(max(V(low[code]), V(0)) + 8, y + rhh / 2 + 4, r["title"], 10, mu)
+
+    # ---- findings ---------------------------------------------------------------
+    fx, fy = 820, 700
+    s.rect(fx - 16, fy - 26, 760, 150, p["d"], ink, 1.2, 'rx="6" fill-opacity="0.45"')
+    boost_c = CFG.break_even_boost("C-3-NW", CFG.FINAL)
+    for i, t in enumerate([
+        (f"A-4 is the final design: best at low, base and high costs; A-3 is within €{(base['A-4']['value_eur'] - base['A-3']['value_eur']) / 1e3:.0f}k/yr.", True),
+        ("More batches in flight = steadier exhaust = smaller exchanger and buffer tank.", False),
+        (f"Moving material costs more than it saves. The automatic train needs ~{boost_c * 100:.0f} % more heat from remixing", False),
+        ("to break even (CE-13). The stacked tower is the most expensive option.", False),
+        ("A-3 wins if the feedstock composts faster/slower than assumed or arrives warm: a pilot batch decides.", False),
+    ]):
+        s.text(fx, fy + i * 22, t[0], 12.5 if t[1] else 12, weight="600" if t[1] else "normal")
+
+    s.text(32, s.h - 30, "MODEL. Costs, upkeep and batch kinetics in model/compost_energy/configurations.py; "
+                         "all options in docs/configurations.md and data/model/configurations.json.", 12, mu)
+    s.title_block("Configuration study", "CE-12")
+    return s.render()
+
+
+# ---------------------------------------------------------------------------
+# CE-13  automatic transfer train (studied, not selected)
+# ---------------------------------------------------------------------------
+def transfer_train(p: dict) -> str:
+    s = Svg(1600, 1000, p, "Automatic transfer train")
+    header(s, "Automatic transfer train (studied, not selected)",
+           "Fill only T-101; the bed moves to the next tunnel inside the building. Engineered and costed in the "
+           "configuration study, it loses to A-4 (CE-12).")
+    ink, mu, hot, cool, g = p["ink"], p["muted"], p["hot"], p["cool"], p["green"]
+    mono = f'font-family="{MONO}"'
+    n_t = 3
+    Lt = CFG.evaluate_option(next(o for o in CFG.all_options() if o.code == "C-3-NW")).numbers["tunnel_length_m"]
+
+    # ---- long section ---------------------------------------------------------
+    sc, x0, y0 = 22.0, 230.0, 330.0           # px per m, ground line
+    door = 0.35
+
+    def X(m):
+        return x0 + m * sc
+
+    def Z(m):
+        return y0 - m * sc
+
+    total = n_t * Lt + (n_t + 1) * door
+    s.text(60, 140, "LONG SECTION  (3 tunnels in line, floor-net option)", 10.5, mu, extra=f'letter-spacing="1.4" {mono}')
+    s.line(X(-6), y0, X(total + 6), y0, ink, 1.4)
+    s.rect(X(0), Z(SLAB), total * sc, SLAB * sc, "url(#concrete)", ink, 1.1)
+    s.rect(X(0), Z(SLAB + H + T), total * sc, T * sc, "url(#concrete)", ink, 1.1)
+    phase_fill = [p["a"], p["b"], p["c"]]
+    labels = ["T-101  heat-up", "T-102  hot, sanitise", "T-103  cooling"]
+    for i in range(n_t):
+        xa = door + i * (Lt + door)
+        # door (guillotine) at the inlet of each tunnel, and the outlet door
+        s.rect(X(xa - door), Z(SLAB + H), door * sc, H * sc, p["c"], ink, 1.1)
+        bed = FILL * (1.15 - 0.15 * i)
+        s.rect(X(xa), Z(SLAB + bed), Lt * sc, bed * sc, phase_fill[i], p["timber"], 1, 'fill-opacity="0.85"')
+        s.line(X(xa), Z(SLAB) - 2, X(xa + Lt), Z(SLAB) - 2, cool, 1.4, 'stroke-dasharray="2 3"')
+        s.text(X(xa + Lt / 2), Z(SLAB + H) + 20, labels[i], 12, weight="600", anchor="middle")
+        for xx in (0.25, 0.5, 0.75):
+            a, b = (X(xa + Lt * xx), Z(SLAB + 0.1)), (X(xa + Lt * xx), Z(SLAB + bed + 0.6))
+            s.line(a[0], a[1], b[0], b[1], cool, 1.1, 'marker-end="url(#arrCool)"')
+        # remix reel at the internal doors
+        if i > 0:
+            rx, rz = X(xa - door / 2), Z(SLAB + 0.9)
+            s.add(f'<circle cx="{rx:.1f}" cy="{rz:.1f}" r="13" fill="{p["bg"]}" stroke="{ink}" stroke-width="1.4"/>')
+            for k in range(6):
+                ang = k * math.pi / 3
+                s.line(rx, rz, rx + 13 * math.cos(ang), rz + 13 * math.sin(ang), ink, 1)
+            s.path(f"M{rx},{rz - 13} L{rx},{rz - 34}", cool, 1, extra='stroke-dasharray="2 2"')
+        # winch pulling the floor net to the outlet end
+        wx = X(xa + Lt - 0.4)
+        s.rect(wx - 8, Z(SLAB + 0.6), 16, 0.6 * sc, p["panel"], ink, 1)
+        s.path(f"M{X(xa + 0.3)},{Z(SLAB) - 5} L{wx - 8},{Z(SLAB) - 5}", g, 1.4, extra='marker-end="url(#arrGreen)"')
+    s.rect(X(total - door), Z(SLAB + H), door * sc, H * sc, p["c"], ink, 1.1)
+    # hopper and feed conveyor
+    hx0 = X(-5.5)
+    s.poly([(hx0, Z(3.4)), (hx0 + 3.2 * sc, Z(3.4)), (hx0 + 2.2 * sc, Z(1.8)), (hx0 + 1.0 * sc, Z(1.8))], p["panel"], ink, 1.3)
+    s.text(hx0 + 1.6 * sc, Z(3.4) - 10, "hopper + mixer", 11, anchor="middle", weight="600")
+    s.path(f"M{hx0 + 1.6 * sc},{Z(1.8)} L{X(door + 0.5)},{Z(SLAB + 2.4)}", ink, 4)
+    s.text(hx0 + 1.6 * sc, Z(1.0), "loader tips fresh feed", 10.5, mu, anchor="middle")
+    # outlet conveyor
+    ox = X(total)
+    s.path(f"M{ox},{Z(SLAB + 0.4)} L{ox + 5 * sc},{Z(1.6)}", ink, 4, extra='marker-end="url(#arr)"')
+    s.text(ox + 5 * sc + 8, Z(1.6) + 4, "to maturation hall", 10.5, mu)
+    # exhaust
+    for i in range(n_t):
+        xa = door + i * (Lt + door) + 1.0
+        s.line(X(xa), Z(SLAB + H + T), X(xa), Z(SLAB + H + T + 0.9), hot, 4)
+    s.line(X(door + 1.0), Z(SLAB + H + T + 0.9), X(total + 3), Z(SLAB + H + T + 0.9), hot, 5)
+    s.text(X(total + 3) + 8, Z(SLAB + H + T + 0.9) + 4, "exhaust → HX-201", 10.5, hot)
+    s.dim(X(door), y0, X(door + Lt), y0, f"{fmt(Lt, 1)}", 26, 11)
+    s.dim(X(0), y0, X(total), y0, f"{fmt(total, 1)} overall", 48, 11)
+
+    # ---- move sequence ---------------------------------------------------------
+    qx, qy = 60, 500
+    s.text(qx, qy - 22, "ONE MOVE, EVERY 5 DAYS (OR A SLICE DAILY)", 10.5, mu, extra=f'letter-spacing="1.4" {mono}')
+    steps = ["Open the outlet door; T-103's net pulls its bed onto the outlet conveyor.",
+             "Open door 2-3; T-102's bed is pulled through the remix reel into T-103.",
+             "Open door 1-2; T-101's bed moves into T-102 the same way.",
+             "Fill T-101 from the hopper; close all doors; restart aeration."]
+    for i, t in enumerate(steps):
+        y = qy + i * 30
+        s.add(f'<circle cx="{qx + 11}" cy="{y - 4}" r="11" fill="{p["bg"]}" stroke="{ink}" stroke-width="1.2"/>')
+        s.text(qx + 11, y, str(i + 1), 11, weight="600", anchor="middle")
+        s.text(qx + 32, y, t, 12)
+
+    ix, iy = 60, 680
+    s.text(ix, iy - 22, "INTERLOCKS: A MOVE STARTS ONLY IF", 10.5, mu, extra=f'letter-spacing="1.4" {mono}')
+    for i, t in enumerate(["the downstream tunnel is empty (load cells, door switches)",
+                           "the hot batch has held ≥ 55 °C for 3 days (PFRP timer)",
+                           "net and door positions agree; no jam on winch current",
+                           "it is a low heat-demand hour. If a move fails, batches compost in place (mode A)."]):
+        s.text(ix, iy + i * 22, "·  " + t, 12)
+
+    # ---- the numbers -------------------------------------------------------------
+    a4 = CFG.evaluate_option(next(o for o in CFG.all_options() if o.code == CFG.FINAL)).numbers
+    c3 = CFG.evaluate_option(next(o for o in CFG.all_options() if o.code == "C-3-NW")).numbers
+    cd = CFG.evaluate_option(next(o for o in CFG.all_options() if o.code == "C-3-WF-daily")).numbers
+    bx, by = 900, 500
+    s.rect(bx - 16, by - 30, 690, 230, p["bg"], p["faint"], 1, 'rx="6"')
+    s.text(bx, by - 8, "WHY IT LOSES TO A-4 (base costs, MODEL)", 10.5, mu, extra=f'letter-spacing="1.4" {mono}')
+    rows = [("", "A-4", "C-3 net+winch", "C-3 daily"),
+            ("Capex", f"€{a4['capex'] / 1e3:,.0f}k", f"€{c3['capex'] / 1e3:,.0f}k", f"€{cd['capex'] / 1e3:,.0f}k"),
+            ("of which transfer kit", "–", f"€{c3['capex_transfer'] / 1e3:,.0f}k", f"€{cd['capex_transfer'] / 1e3:,.0f}k"),
+            ("Loader work", f"{fmt(a4['loader_t_day'])} t/day", f"{fmt(c3['loader_t_day'])} t/day", f"{fmt(cd['loader_t_day'])} t/day"),
+            ("Buffer tank", f"{fmt(a4['buffer_m3'])} m³", f"{fmt(c3['buffer_m3'])} m³", f"{fmt(cd['buffer_m3'])} m³"),
+            ("Value after capital", eur(a4['value_eur']), eur(c3['value_eur']), eur(cd['value_eur']))]
+    for i, r in enumerate(rows):
+        y = by + 22 + i * 26
+        for j, (txt, x) in enumerate(zip(r, (0, 210, 330, 490))):
+            s.text(bx + x, y, txt, 12, mu if j == 0 else ink, weight="600" if i in (0, len(rows) - 1) and j else "normal")
+    s.text(bx, by + 190, "The loader work it replaces costs only ~€19k/yr; €1 of kit costs ~€0.19/yr repaid and maintained.", 11.5, mu)
+
+    s.text(32, s.h - 30, "Concept for the record. Walking-floor and floor-net prices are unquoted assumptions (configurations.Costs).", 12, mu)
+    s.title_block("Automatic transfer train", "CE-13")
+    return s.render()
+
+
+# ---------------------------------------------------------------------------
+# CE-14  process sheet: phases, recipe, moisture and water
+# ---------------------------------------------------------------------------
+def process_sheet(p: dict) -> str:
+    s = Svg(1600, 1000, p, "Process sheet")
+    header(s, "One batch: phases, moisture and water",
+           "What a tunnel runs: 15 days in the tunnel, then 8 weeks of maturation in windrows. MODEL, literature feedstock values.")
+    ink, mu, hot, cool, g = p["ink"], p["muted"], p["hot"], p["cool"], p["green"]
+    mono = f'font-family="{MONO}"'
+    tg = PROC.Targets()
+    b = BATCH
+    day = b["day"]
+    mat = PH["maturation"]
+
+    # ---- the whole process on one strip ------------------------------------------
+    sx0, sx1, sy = 110, 900, 128
+    tunnel_w = (sx1 - sx0) * 0.62
+
+    def SX(d):
+        if d <= 15:
+            return sx0 + d / 15 * tunnel_w
+        return sx0 + tunnel_w + (d - 15) / (mat["end"] - 15) * (sx1 - sx0 - tunnel_w)
+
+    for name, col in (("mesophilic", p["a"]), ("thermophilic", p["b"]), ("maturation", p["d"])):
+        ph = PH[name]
+        s.rect(SX(ph["start"]), sy, SX(ph["end"]) - SX(ph["start"]), 26, col, ink, 0.9, 'fill-opacity="0.9"')
+        share = f" · {ph['share'] * 100:.0f} %" if ph["share"] else ""
+        label = {"mesophilic": "mesophilic", "thermophilic": "thermophilic, 45-60 °C",
+                 "maturation": "maturation in windrows, 8 weeks"}[name]
+        x1 = SX(COOL) if name == "thermophilic" else SX(ph["end"])
+        s.text((SX(ph["start"]) + x1) / 2, sy + 17, label + share, 11, anchor="middle")
+    s.rect(SX(COOL), sy, SX(15) - SX(COOL), 26, p["c"], ink, 0.9, 'fill-opacity="0.75"')
+    s.text((SX(COOL) + SX(15)) / 2, sy + 17, "cooling", 11, anchor="middle")
+    s.line(SX(15), sy - 10, SX(15), sy + 36, ink, 1.4)
+    s.text(SX(15), sy - 14, "emptied, day 15", 10.5, ink, anchor="middle")
+    for d in (0, 5, 10, 15, 29, 43, 57, int(mat["end"])):
+        s.text(SX(d), sy + 42, f"d{d}", 10, mu, anchor="middle")
+    s.text(sx0 - 14, sy + 17, "TUNNEL", 9.5, mu, anchor="end", extra=f'letter-spacing="1.2" {mono}')
+    s.text(sx1 + 8, sy + 17, f"% = share of the degradable matter broken down", 10, mu)
+
+    # ---- temperature and moisture, 15 tunnel days --------------------------------
+    cx0, cw = 110, 790
+    ty0, th = 210, 170          # temperature panel
+    my0, mh = 418, 150          # moisture panel
+
+    def X(d):
+        return cx0 + d / 15 * cw
+
+    def YT(t):
+        return ty0 + th - (t - 10) / 60 * th
+
+    def YM(m):
+        return my0 + mh - (m - 0.40) / 0.32 * mh
+
+    for name, col, d0, d1 in (("mesophilic", p["a"], 0, T45), ("thermophilic", p["b"], T45, COOL),
+                              ("cooling", p["c"], COOL, 15)):
+        for y0, hh in ((ty0, th), (my0, mh)):
+            s.rect(X(d0), y0, X(d1) - X(d0), hh, col, "none", 0, 'fill-opacity="0.35"')
+    for y0, hh in ((ty0, th), (my0, mh)):
+        s.rect(cx0, y0, cw, hh, "none", p["faint"], 1)
+    for t in range(10, 71, 10):
+        s.line(cx0, YT(t), cx0 + cw, YT(t), p["faint"], 0.5)
+        s.text(cx0 - 8, YT(t) + 4, f"{t}", 10, mu, anchor="end")
+    s.text(cx0 - 40, ty0 + th / 2, "°C", 11, mu, anchor="middle")
+    s.line(cx0, YT(tg.sanitise_c), cx0 + cw, YT(tg.sanitise_c), mu, 0.8, 'stroke-dasharray="4 3"')
+    pts = " ".join(f"{'M' if i == 0 else 'L'}{X(d):.1f},{YT(t):.1f}" for i, (d, t) in enumerate(zip(day, b["t_bed_c"])) if i % 2 == 0)
+    s.path(pts, hot, 2.2)
+    h0, sd = PH["sanitisation"]["start"], b["sanitised_day"]
+    yb = YT(tg.sanitise_c) + 16
+    s.line(X(h0), yb, X(sd), yb, ink, 1, 'marker-start="url(#arr)" marker-end="url(#arr)"')
+    s.text((X(h0) + X(sd)) / 2, yb + 15, f"sanitised: {tg.sanitise_h:.0f} h ≥ {tg.sanitise_c:.0f} °C (day {h0:.1f}-{sd:.1f})", 10.5, anchor="middle")
+    s.text(X(7.5), YT(60) - 8, "hot hold at 60 °C: fastest breakdown, most heat", 10.5, hot, anchor="middle")
+    s.text(X(12.6), YT(40), "fresh air cools to 45 °C", 10.5, mu, anchor="middle")
+    s.text(X(T45 / 2), YT(32) - 12, "self-heating on", 10.5, mu, anchor="middle")
+    s.text(X(T45 / 2), YT(32) + 2, "recirculated air", 10.5, mu, anchor="middle")
+
+    s.rect(cx0, YM(0.60), cw, YM(0.50) - YM(0.60), g, "none", 0, 'fill-opacity="0.10"')
+    s.text(cx0 + 8, YM(0.60) + 13, "preferred 50-60 %", 10, g)
+    for m in (0.40, 0.50, 0.60, 0.70):
+        s.line(cx0, YM(m), cx0 + cw, YM(m), p["faint"], 0.5)
+        s.text(cx0 - 8, YM(m) + 4, f"{m * 100:.0f} %", 10, mu, anchor="end")
+    s.text(cx0 - 52, my0 + mh / 2, "moisture", 11, mu, anchor="middle")
+    for fill, dash, w in ((None, "", 2.2), (0.55, 'stroke-dasharray="2 3"', 1.4), (0.70, 'stroke-dasharray="7 4"', 1.4)):
+        r = b if fill is None else PROC.run_batch(fill_moisture=fill)
+        pts = " ".join(f"{'M' if i == 0 else 'L'}{X(d):.1f},{YM(m):.1f}" for i, (d, m) in enumerate(zip(day, r["moisture"])) if i % 2 == 0)
+        s.path(pts, cool, w, extra=dash)
+        if fill is not None:
+            for i in [i for i, v in enumerate(r["sprayed_kg"]) if v > 0]:
+                s.add(f'<circle cx="{X(day[i]):.1f}" cy="{YM(r["moisture"][i]):.1f}" r="3.6" fill="{p["b"]}" stroke="{hot}" stroke-width="1"/>')
+    for d in range(0, 16, 3):
+        s.text(X(d), my0 + mh + 16, f"d{d}", 10, mu, anchor="middle")
+    lx, lyy = cx0, my0 + mh + 40
+    for n, (dash, w, label) in enumerate((("", 2.2, f"this recipe, filled at {b['fill_moisture'] * 100:.0f} %"),
+                                          ('stroke-dasharray="2 3"', 1.4, "drier mix, 55 %"),
+                                          ('stroke-dasharray="7 4"', 1.4, "wetter mix, 70 %"))):
+        x = lx + n * 230
+        s.line(x, lyy - 4, x + 28, lyy - 4, cool, w, dash)
+        s.text(x + 36, lyy, label, 11)
+    s.add(f'<circle cx="{lx + 700:.1f}" cy="{lyy - 4:.1f}" r="3.6" fill="{p["b"]}" stroke="{hot}" stroke-width="1"/>')
+    s.text(lx + 710, lyy, "spray bars on", 11)
+
+    # ---- recipe and process window ----------------------------------------------
+    rx, ry = 1000, 128
+    mix = PROC.mix()
+    s.text(rx, ry, "RECIPE, BY MASS", 10.5, mu, extra=f'letter-spacing="1.4" {mono}')
+    rows = [("", "share", "moisture", "C:N")]
+    for f, share in PROC.Recipe().parts:
+        rows.append((f.name, f"{share * 100:.0f} %", f"{f.moisture * 100:.0f} %", f"{f.c_pct_dm / f.n_pct_dm:.0f}"))
+    rows.append(("mix", "", f"{mix['moisture'] * 100:.0f} %", f"{mix['cn']:.0f}"))
+    for i, row in enumerate(rows):
+        y = ry + 26 + i * 21
+        for j, (x, txt) in enumerate(zip((0, 260, 345, 440), row)):
+            s.text(rx + x, y, txt, 11.5, mu if i == 0 else ink, weight="600" if i == len(rows) - 1 else "normal")
+        if i:
+            s.line(rx, y - 15, rx + 560, y - 15, p["faint"], 0.6)
+
+    wy = ry + 26 + len(rows) * 21 + 26
+    s.text(rx, wy, "PROCESS WINDOW", 10.5, mu, extra=f'letter-spacing="1.4" {mono}')
+    window = [
+        ("C:N ratio", f"{tg.cn[0]:.0f}-{tg.cn[1]:.0f}", "straw share at the mixer"),
+        ("Moisture at filling", f"{tg.moisture_fill[0] * 100:.0f}-{tg.moisture_fill[1] * 100:.0f} %", "straw; water at the mixer"),
+        ("Moisture, thermophilic", f"≥ {tg.moisture_hot_min * 100:.0f} % → {tg.moisture_hot_set * 100:.0f} %", "spray bars SP-10x"),
+        ("Moisture, cooling", f"≥ {tg.moisture_cool_min * 100:.0f} % → {tg.moisture_cool_set * 100:.0f} %", "spray bars, farm water"),
+        ("Moisture, maturation", f"{tg.moisture_maturation[0] * 100:.0f}-{tg.moisture_maturation[1] * 100:.0f} %", "water when turning"),
+        ("Oxygen in exhaust", f"≥ {tg.o2_min_pct:.0f} %", "fresh-air damper, overrides all"),
+        ("Bed temperature", "60 °C, 45 °C to empty", "blower speed, recirculation"),
+        ("Sanitisation", f"≥ {tg.sanitise_c:.0f} °C for {tg.sanitise_h:.0f} h", "timer restarts on a dip"),
+        ("Bulk density at filling", f"≤ {tg.bulk_max_t_m3:.2f} t/m³", "bucket test at the mixer"),
+        ("Particle size", f"{tg.particle_mm[0]:.0f}-{tg.particle_mm[1]:.0f} mm", "shredder"),
+        ("pH", f"{tg.ph[0]}-{tg.ph[1]}", "lab, per batch"),
+    ]
+    for i, (k, v, how) in enumerate(window):
+        y = wy + 26 + i * 21
+        s.text(rx, y, k, 11.5, mu)
+        s.text(rx + 175, y, v, 11.5, weight="600")
+        s.text(rx + 345, y, how, 11.5, mu)
+        s.line(rx, y + 6, rx + 560, y + 6, p["faint"], 0.5)
+
+    # ---- water per batch ------------------------------------------------------------
+    t = b["totals"]
+    bx, by = 80, 690
+    w0 = b["batch_kg"] * b["fill_moisture"] / 1000
+    water_end = w0 - t["evaporated_t"] + t["metabolic_t"] + t["sprayed_t"]
+    s.text(bx, by - 26, f"WATER PER {fmt(b['batch_kg'] / 1000)} t BATCH", 10.5, mu, extra=f'letter-spacing="1.4" {mono}')
+    scale = 3.2
+    bars = [("in the fresh mix", w0, p["c"], ""), ("evaporated into the exhaust", -t["evaporated_t"], p["b"], ""),
+            ("formed by the microbes", t["metabolic_t"], p["a"], ""), ("sprayed back (this recipe)", t["sprayed_t"], p["c"], ""),
+            ("left in the bed at day 15", water_end, p["c"], f"{t['end_moisture'] * 100:.0f} % moisture")]
+    for i, (label, v, col, note) in enumerate(bars):
+        y = by + i * 30
+        s.text(bx, y + 13, label, 11.5, mu)
+        x0 = bx + 200
+        s.rect(x0, y, max(abs(v) * scale, 1.5), 18, col, ink, 0.8)
+        sign = "−" if v < 0 else ("+" if 0 < i < 4 else "")
+        s.text(x0 + abs(v) * scale + 8, y + 13, f"{sign}{fmt(abs(v))} t {note}", 11.5, weight="600" if i == 4 else "normal")
+    s.text(bx, by + 172, f"The exchanger condenses {fmt(t['condensate_t'])} t back out of the exhaust; spare condensate", 11, mu)
+    s.text(bx, by + 188, "goes to the slurry store. 92 % of the heat recovered is this water condensing.", 11, mu)
+
+    # ---- spray bars, cross-section ------------------------------------------------
+    qx, qy, qw, qh = 690, 688, 240, 150
+    s.text(qx - 12, by - 26, "SPRAY BARS, SECTION", 10.5, mu, extra=f'letter-spacing="1.4" {mono}')
+    s.rect(qx - 12, qy - 12, qw + 24, qh + 24, "url(#concrete)", ink, 1.2)
+    s.rect(qx, qy, qw, qh, p["bg"], ink, 1)
+    s.rect(qx, qy + qh - 80, qw, 80, p["b"], "none", 0, 'fill-opacity="0.75"')
+    s.text(qx + qw / 2, qy + qh - 30, "bed", 11, anchor="middle")
+    for k in range(1, 6):
+        xa = qx + k * qw / 6
+        s.line(xa, qy + qh - 6, xa, qy + qh - 60, cool, 1, 'marker-end="url(#arrCool)"')
+    for xb_ in (qx + qw * 0.2, qx + qw * 0.5, qx + qw * 0.8):
+        s.add(f'<circle cx="{xb_:.1f}" cy="{qy + 14}" r="5" fill="{p["bg"]}" stroke="{cool}" stroke-width="1.6"/>')
+        s.path(f"M{xb_ - 22:.1f},{qy + 66} L{xb_:.1f},{qy + 19} L{xb_ + 22:.1f},{qy + 66}", cool, 0.8, extra='stroke-dasharray="2 3"')
+    s.text(qx + qw + 22, qy + 18, "SP-10x: 3 bars", 11, weight="600")
+    s.text(qx + qw + 22, qy + 34, "flat-fan nozzles", 10.5, mu)
+    s.text(qx + qw + 22, qy + 50, f"{PROC.WaterModel().spray_m3_h:.0f} m³/h per tunnel", 10.5, mu)
+    s.text(qx + qw + 22, qy + 76, "air up through the", 10.5, mu)
+    s.text(qx + qw + 22, qy + 92, "spigot floor carries", 10.5, mu)
+    s.text(qx + qw + 22, qy + 108, "water to the drier", 10.5, mu)
+    s.text(qx + qw + 22, qy + 124, "bottom layer", 10.5, mu)
+    s.text(qx - 12, qy + qh + 34, "TK-401 condensate → P-401 → XV-10x until sanitised;", 10.5, mu)
+    s.text(qx - 12, qy + qh + 50, "farm water through XV-402 after (no germs back on).", 10.5, mu)
+
+    # ---- control of the bars ----------------------------------------------------------
+    kx, ky = 1100, 590
+    s.text(kx, ky, "WHEN THE BARS COME ON", 10.5, mu, extra=f'letter-spacing="1.4" {mono}')
+    for i, line in enumerate([
+        "The PLC keeps a running water balance per tunnel:",
+        "  water in at filling (weighbridge × moisture sample)",
+        "  − evaporated (airflow × exhaust − inlet humidity, MT-201)",
+        "  + formed (from the heat released) + sprayed (FT-10x).",
+        f"Thermophilic: spray below {tg.moisture_hot_min * 100:.0f} % back to {tg.moisture_hot_set * 100:.0f} %.",
+        f"Cooling: spray below {tg.moisture_cool_min * 100:.0f} % back to {tg.moisture_cool_set * 100:.0f} %, farm water only.",
+        "A grab sample (oven-dry or squeeze test) corrects it daily.",
+        "Spray only with the blower at full flow.",
+    ]):
+        s.text(kx, ky + 24 + i * 19, line, 11.5, ink if i in (0, 4, 5) else mu)
+
+    s.text(32, s.h - 30, "Process model: model/compost_energy/process.py, docs/process.md. Feedstock values are typical, not lab results; "
+                         f"tunnels sized at 0.85 t/m³, the mix should be ≤ {tg.bulk_max_t_m3:.2f} (to settle on the pilot).", 11.5, mu)
+    s.title_block("Process sheet", "CE-14")
     return s.render()
 
 
@@ -876,4 +1385,7 @@ DRAWINGS = {
     "farm-process-pid": process_pid,
     "farm-control": control,
     "farm-operating-modes": operating_modes_sheet,
+    "farm-configurations": configuration_study,
+    "farm-transfer-train": transfer_train,
+    "farm-process-sheet": process_sheet,
 }

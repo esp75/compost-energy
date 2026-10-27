@@ -6,9 +6,9 @@ All drawings are generated from one script, so a dimension changes in one place:
 python hardware/drawings/src/make_drawings.py
 ```
 
-It writes the light SVGs here (for GitHub) and night-theme copies in [`dark/`](dark/) (for the website). PNG exports are in [`png/`](png/) (`rsvg-convert -w 2400 <name>.svg`).
+It writes the light SVGs here (for GitHub) and night-theme copies in [`dark/`](dark/) (for the website), and renders PNGs into [`png/`](png/) with headless Chrome (`brand/src/render.mjs`; run `npm install` in `video/src` once, or pass `--no-png`). The drawings use the brand palette and embed subsetted Instrument Sans and Geist Mono (OFL), so they render the same on GitHub and in a browser.
 
-CE-06 to CE-11 are drawn from [`industrial_drawings.py`](src/industrial_drawings.py), which reads every number from [`model/compost_energy/industrial.py`](../../model/compost_energy/industrial.py). The design is described in [docs/farm-unit.md](../../docs/farm-unit.md).
+CE-06 to CE-14 are drawn from [`industrial_drawings.py`](src/industrial_drawings.py), which reads every number from [`industrial.py`](../../model/compost_energy/industrial.py) and [`configurations.py`](../../model/compost_energy/configurations.py) and [`process.py`](../../model/compost_energy/process.py). The design is described in [docs/farm-unit.md](../../docs/farm-unit.md) and the choice of layout in [docs/configurations.md](../../docs/configurations.md).
 
 **Dimensions are indicative.** The patent gives no dimensions. They come from the prototype bill of materials ([`bom/prototypes.csv`](../bom/prototypes.csv)): 500 × 500 mesh and PVC dividers, 120 × 24 decking boards, 70 × 70 posts, a 600 × 400 × 420 Euro container. Nothing here has been checked against a physical build.
 
@@ -18,13 +18,16 @@ CE-06 to CE-11 are drawn from [`industrial_drawings.py`](src/industrial_drawings
 | CE-02 | [`prototype-2-build.svg`](prototype-2-build.svg) | Front, side and top views with dimensions, the hatch hinge detail, and a parts list keyed to the BOM |
 | CE-03 | [`exchanger-coil.svg`](exchanger-coil.svg) | Coil in its concrete block: prototype 2 (one 3 m tube) against prototype 3 (two tubes), sections, expected output, and where the thermal resistance sits |
 | CE-04 | [`water-loop-pid.svg`](water-loop-pid.svg) | P&ID of the by-pass on the heating return, with sensor tags matching the [logger firmware](../logger/) |
-| CE-05 | [`farm-plant-layout.svg`](farm-plant-layout.svg) | First-pass farm plant: reception → reactors A/B/C → exhaust-air exchanger → farm heat users, then maturation → storage → fields |
-| CE-06 | [`farm-unit-cutaway.svg`](farm-unit-cutaway.svg) | Farm-scale unit, isometric cutaway: three aerated tunnels, exhaust manifold, heat-recovery skid, biofilter |
+| CE-05 | [`farm-plant-layout.svg`](farm-plant-layout.svg) | First-pass farm plant: reception → tunnels (heat-up, hot, cooling) → exhaust-air exchanger → farm heat users, then maturation → storage → fields |
+| CE-06 | [`farm-unit-cutaway.svg`](farm-unit-cutaway.svg) | Farm-scale unit, isometric cutaway: four aerated tunnels, exhaust manifold, heat-recovery skid, buffer tank, biofilter |
 | CE-07 | [`farm-unit-ga.svg`](farm-unit-ga.svg) | General arrangement: plan, cross-section, long section with fill levels, design data |
 | CE-08 | [`heat-recovery-module.svg`](heat-recovery-module.svg) | Exhaust-air plate-fin exchanger, condensate trap, and the enthalpy chart that sizes it |
 | CE-09 | [`farm-process-pid.svg`](farm-process-pid.svg) | Air and water P&ID with instrument tags |
 | CE-10 | [`farm-control.svg`](farm-control.svg) | Control loops, alarms and the batch setpoint profile |
 | CE-11 | [`farm-operating-modes.svg`](farm-operating-modes.svg) | Staggered batches against transfer between tunnels, with the numbers |
+| CE-12 | [`farm-configurations.svg`](farm-configurations.svg) | Configuration study: plant exhaust heat for 2, 3, 4 tunnels and daily slices; value after capital for all 14 options |
+| CE-13 | [`farm-transfer-train.svg`](farm-transfer-train.svg) | The automatic transfer train (studied, not selected): long section, move sequence, interlocks, why it loses |
+| CE-14 | [`farm-process-sheet.svg`](farm-process-sheet.svg) | Process sheet: phases of one batch, temperature and moisture, recipe, process window, water per batch, roof spray bars |
 | - | [`system-schematic.svg`](system-schematic.svg) | The original stacked-chamber schematic from the 2024 patent |
 
 ![Compostito cutaway](png/compostito-cutaway.png)

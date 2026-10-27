@@ -1,51 +1,75 @@
 part,group,material,x_mm,y_mm,z_mm,volume_m3
-slab,civil,precast concrete,16200,17100,300,83.106
-wall-back,civil,concrete + PIR,16200,300,4000,19.44
-wall-1,civil,concrete + PIR,300,16500,4000,19.8
-wall-2,civil,concrete + PIR,300,16500,4000,19.8
-wall-3,civil,concrete + PIR,300,16500,4000,19.8
-wall-4,civil,concrete + PIR,300,16500,4000,19.8
-T-101-roof,civil,concrete + PIR,5300,17100,300,27.189
+slab,civil,precast concrete,21500,13100,300,84.495
+wall-back,civil,concrete + PIR,21500,300,4000,25.8
+wall-1,civil,concrete + PIR,300,12500,4000,15.0
+wall-2,civil,concrete + PIR,300,12500,4000,15.0
+wall-3,civil,concrete + PIR,300,12500,4000,15.0
+wall-4,civil,concrete + PIR,300,12500,4000,15.0
+wall-5,civil,concrete + PIR,300,12500,4000,15.0
+T-101-roof,civil,concrete + PIR,5300,13100,300,20.829
 T-101-jamb-l,civil,concrete + PIR,250,300,4000,0.3
 T-101-jamb-r,civil,concrete + PIR,250,300,4000,0.3
 T-101-lintel,civil,concrete + PIR,4500,300,400,0.54
 T-101-door,civil,insulated sectional door,4500,80,3600,1.296
-T-102-roof,civil,concrete + PIR,5300,17100,300,27.189
+T-102-roof,civil,concrete + PIR,5300,13100,300,20.829
 T-102-jamb-l,civil,concrete + PIR,250,300,4000,0.3
 T-102-jamb-r,civil,concrete + PIR,250,300,4000,0.3
 T-102-lintel,civil,concrete + PIR,4500,300,400,0.54
 T-102-door,civil,insulated sectional door,4500,80,3600,1.296
-T-103-roof,civil,concrete + PIR,5300,17100,300,27.189
+T-103-roof,civil,concrete + PIR,5300,13100,300,20.829
 T-103-jamb-l,civil,concrete + PIR,250,300,4000,0.3
 T-103-jamb-r,civil,concrete + PIR,250,300,4000,0.3
 T-103-lintel,civil,concrete + PIR,4500,300,400,0.54
 T-103-door,civil,insulated sectional door,4500,80,3600,1.296
-T-101-spigot-floor,process,HDPE channels with spigots,4080,16100,130,1.507
-T-101-bed,process,"compost, day 12.5",5000,16500,1472,121.437
-T-102-spigot-floor,process,HDPE channels with spigots,4080,16100,130,1.507
-T-102-bed,process,"compost, day 2.5",5000,16500,2458,202.822
-T-103-spigot-floor,process,HDPE channels with spigots,4080,16100,130,1.507
-T-103-bed,process,"compost, day 7.5",5000,16500,1902,156.94
-K-101-blower,air,centrifugal blower 2.7 kW,900,900,900,0.573
-K-101-duct,air,galvanised duct,259,550,259,0.029
-K-102-blower,air,centrifugal blower 2.7 kW,900,900,900,0.573
-K-102-duct,air,galvanised duct,259,550,259,0.029
-K-103-blower,air,centrifugal blower 2.7 kW,900,900,900,0.573
-K-103-duct,air,galvanised duct,259,550,259,0.029
-X-101-stub,air,PP duct Ø315,315,315,900,0.07
-X-102-stub,air,PP duct Ø315,315,315,900,0.07
-X-103-stub,air,PP duct Ø315,315,315,900,0.07
-manifold,air,PP duct Ø500,17200,500,500,3.377
-manifold-drop,air,PP duct Ø500,500,500,2350,0.461
+T-104-roof,civil,concrete + PIR,5300,13100,300,20.829
+T-104-jamb-l,civil,concrete + PIR,250,300,4000,0.3
+T-104-jamb-r,civil,concrete + PIR,250,300,4000,0.3
+T-104-lintel,civil,concrete + PIR,4500,300,400,0.54
+T-104-door,civil,insulated sectional door,4500,80,3600,1.296
+T-101-spigot-floor,process,HDPE channels with spigots,4080,12100,130,1.133
+T-101-bed,process,"compost, day 1.875",5000,12500,2539,158.659
+T-102-spigot-floor,process,HDPE channels with spigots,4080,12100,130,1.133
+T-102-bed,process,"compost, day 13.125",5000,12500,1426,89.095
+T-103-spigot-floor,process,HDPE channels with spigots,4080,12100,130,1.133
+T-103-bed,process,"compost, day 9.375",5000,12500,1728,107.992
+T-104-spigot-floor,process,HDPE channels with spigots,4080,12100,130,1.133
+T-104-bed,process,"compost, day 5.625",5000,12500,2094,130.896
+K-101-blower,air,centrifugal blower 4.1 kW,900,900,900,0.573
+K-101-duct,air,galvanised duct,224,550,224,0.022
+K-102-blower,air,centrifugal blower 4.1 kW,900,900,900,0.573
+K-102-duct,air,galvanised duct,224,550,224,0.022
+K-103-blower,air,centrifugal blower 4.1 kW,900,900,900,0.573
+K-103-duct,air,galvanised duct,224,550,224,0.022
+K-104-blower,air,centrifugal blower 4.1 kW,900,900,900,0.573
+K-104-duct,air,galvanised duct,224,550,224,0.022
+X-101-stub,air,PP duct Ø355,355,355,900,0.089
+X-102-stub,air,PP duct Ø355,355,355,900,0.089
+X-103-stub,air,PP duct Ø355,355,355,900,0.089
+X-104-stub,air,PP duct Ø355,355,355,900,0.089
+manifold,air,PP duct Ø560,22500,560,560,5.542
+manifold-drop,air,PP duct Ø560,560,560,2380,0.586
 HX-201-casing,heat,insulated stainless casing,2800,4000,3400,3.973
 HX-201-coil-1,heat,Al fins on stainless tubes,2400,3600,700,6.048
 HX-201-coil-2,heat,Al fins on stainless tubes,2400,3600,700,6.048
 HX-201-coil-3,heat,Al fins on stainless tubes,2400,3600,700,6.048
 K-201-fan,air,booster fan,1200,1400,1600,2.688
 K-201-inlet,air,PP duct,500,450,450,0.08
-K-201-to-biofilter,air,PP duct,450,5200,450,0.827
+K-201-to-biofilter,air,PP duct,450,3700,450,0.588
 F-301-biofilter,air,wood chip bed in concrete bunker,7000,8000,1600,89.6
 TK-401-condensate,heat,PE tank,1000,1000,900,0.707
-condensate-line,heat,PE pipe,2600,80,80,0.013
-water-supply,heat,"steel DN100, insulated",2000,110,110,0.019
-water-return,heat,"steel DN100, insulated",2000,110,110,0.019
+condensate-line,heat,PE pipe,400,80,80,0.002
+SP-101-spray-bars,water,"PE spray bars, flat-fan nozzles",3060,12730,60,0.114
+SP-101-drop,water,PE pipe,60,60,900,0.003
+SP-102-spray-bars,water,"PE spray bars, flat-fan nozzles",3060,12730,60,0.114
+SP-102-drop,water,PE pipe,60,60,900,0.003
+SP-103-spray-bars,water,"PE spray bars, flat-fan nozzles",3060,12730,60,0.114
+SP-103-drop,water,PE pipe,60,60,900,0.003
+SP-104-spray-bars,water,"PE spray bars, flat-fan nozzles",3060,12730,60,0.114
+SP-104-drop,water,PE pipe,60,60,900,0.003
+irrigation-header,water,PE DN65 irrigation header,24840,4440,80,0.147
+irrigation-riser,water,"PE DN65, P-401 at the tank",80,80,3950,0.02
+TK-201-buffer,heat,insulated steel tank 85 m³,4400,4400,5600,85.15
+water-supply,heat,"steel DN100, insulated",2755,2455,110,0.048
+water-return,heat,"steel DN100, insulated",2155,3455,110,0.052
+users-supply,heat,steel DN100 to heat users,3100,110,110,0.029
+users-return,heat,steel DN100 from heat users,3100,110,110,0.029

@@ -13,6 +13,7 @@ materials (hardware/bom/prototypes.csv), not from a verified build.
 from __future__ import annotations
 
 import math
+import subprocess
 from pathlib import Path
 
 OUT = Path(__file__).resolve().parents[1]
@@ -32,24 +33,78 @@ COIL_PASSES = 6
 COIL_PASS_LEN = 450      # 6 x 450 + bends ~= 3 m of tube
 BLOCK = (460, 460, 80)   # concrete block holding the coil
 
+# Brand tokens (brand/10_color/tokens.json): Mist paper for GitHub, Night for the website.
+# a-d are the composting phases: heat-up, hot, cooling, maturation.
 PALETTES = {
     "light": dict(
-        bg="#ffffff", ink="#1f2328", muted="#6e7781", faint="#d0d7de", panel="#f6f8fa",
-        timber="#9a6a3a", timber_fill="#f3e6d6", timber_side="#e6d2bb",
-        a="#fde68a", b="#fca5a5", c="#bfdbfe", d="#d9f99d",
-        hot="#c2410c", cool="#2563eb", green="#15803d", concrete="#e5e7eb", stone="#9ca3af",
-        coil="#c2410c", display="#111827", display_ink="#86efac", accent="#15803d",
+        bg="#f4f7f5", ink="#0f1a13", muted="#4a5c51", faint="#c9d3cd", panel="#e3eae5",
+        timber="#8a6238", timber_fill="#efe3d2", timber_side="#e2d1ba",
+        a="#e1e6b4", b="#f2cfae", c="#cfe0df", d="#d6dfcd",
+        hot="#b23f0a", cool="#2f6f73", green="#3d6e22", concrete="#dde4df", stone="#9aa79f",
+        coil="#b23f0a", display="#0e1611", display_ink="#7cc04a", accent="#3d6e22",
     ),
     "dark": dict(
-        bg="#050505", ink="#fafafa", muted="#a1a1aa", faint="#27272a", panel="#0d0d0f",
+        bg="#060a07", ink="#eef3ef", muted="#93a69a", faint="#233029", panel="#0e1611",
         timber="#c08a55", timber_fill="#1a1510", timber_side="#241c14",
-        a="#5c4a17", b="#6b2a22", c="#1f3a57", d="#33501f",
-        hot="#f7c72f", cool="#2dd4bf", green="#2dd4bf", concrete="#2a2a2e", stone="#52525b",
-        coil="#f59e5b", display="#000000", display_ink="#2dd4bf", accent="#8b5cf6",
+        a="#3a4318", b="#5a2a12", c="#1b3537", d="#283325",
+        hot="#f26a21", cool="#4fb3b0", green="#7cc04a", concrete="#1a221d", stone="#4d5a52",
+        coil="#f26a21", display="#000000", display_ink="#7cc04a", accent="#7cc04a",
     ),
 }
 
-FONT = "Helvetica Neue, Helvetica, Arial, sans-serif"
+FONT = "Instrument Sans, Helvetica Neue, Helvetica, Arial, sans-serif"
+MONO = "Geist Mono, Menlo, monospace"
+BRAND = Path(__file__).resolve().parents[3] / "brand"
+
+
+def _font_css() -> str:
+    """Instrument Sans and Geist Mono, subset to the characters the drawings use,
+    embedded as data URIs so the SVGs render the same on GitHub and in a browser."""
+    import base64
+    import io
+
+    from fontTools import subset
+    from fontTools.ttLib import TTFont
+
+    chars = ("".join(chr(c) for c in range(32, 127))
+             + "°²³×→←↑↓·−–—≥≤≈ΔṁøØₓ₂₃€µ▼◀▶●○±’“”…≠ÖéèàçôüöäÉ")
+    css = []
+    for fam, fname in (("Instrument Sans", "InstrumentSans.ttf"), ("Geist Mono", "GeistMono.ttf")):
+        f = BRAND / "11_typography" / "fonts" / fname
+        if not f.exists():
+            continue
+        font = TTFont(f)
+        font.recalcTimestamp = False  # keep the SVGs byte-stable across runs (CI diffs them)
+        opts = subset.Options()
+        opts.layout_features = ["kern", "liga", "tnum"]
+        sub = subset.Subsetter(opts)
+        sub.populate(text=chars)
+        sub.subset(font)
+        buf = io.BytesIO()
+        font.save(buf)
+        b64 = base64.b64encode(buf.getvalue()).decode()
+        css.append(f"@font-face{{font-family:'{fam}';src:url(data:font/ttf;base64,{b64}) format('truetype');"
+                   f"font-weight:100 900;}}")
+    return "".join(css)
+
+
+_FONT_CSS = None
+
+
+def font_css() -> str:
+    global _FONT_CSS
+    if _FONT_CSS is None:
+        _FONT_CSS = _font_css()
+    return _FONT_CSS
+
+
+def title_mark() -> str:
+    """The flat brand ring for title blocks (brand/09_marketing/drawing_titleblock_mark.svg)."""
+    f = BRAND / "09_marketing" / "drawing_titleblock_mark.svg"
+    if not f.exists():
+        return ""
+    svg = f.read_text().strip()
+    return svg[svg.index(">") + 1: svg.rindex("</svg>")]
 
 
 class Svg:
@@ -121,14 +176,17 @@ class Svg:
         self.line(x, y + 72, x + w, y + 72, p["faint"], 0.8)
         for cx in (x + 150, x + 290):
             self.line(cx, y + 40, cx, y + h, p["faint"], 0.8)
-        self.text(x + 14, y + 26, title, 15, weight="bold")
-        rows = [("DRAWING", number), ("REV / DATE", "A · 2026-10"), ("SCALE", scale),
+        mark = title_mark()
+        if mark:
+            self.add(f'<svg x="{x + w - 40}" y="{y + 6}" width="30" height="30" viewBox="0 0 64 64">{mark}</svg>')
+        self.text(x + 14, y + 26, title, 15, weight="600")
+        rows = [("DRAWING", number), ("REV / DATE", "B · 2026-10"), ("SCALE", scale),
                 ("AUTHOR", "Maxime Kadri"), ("PROJECT", "Compost Energy"), ("LICENCE", "CERN-OHL-P-2.0")]
         for i, (k, v) in enumerate(rows):
             cx = x + 14 + (i % 3) * (150 if i % 3 < 2 else 140)
             cx = [x + 14, x + 164, x + 304][i % 3]
             cy = y + 54 + (i // 3) * 32
-            self.text(cx, cy, k, 8.5, p["muted"], extra='letter-spacing="1"')
+            self.text(cx, cy, k, 8, p["muted"], extra=f'letter-spacing="1" font-family="{MONO}"')
             self.text(cx, cy + 13, v, 11.5)
 
     def render(self) -> str:
@@ -146,12 +204,12 @@ class Svg:
 </defs>"""
         body = "\n".join(self.parts)
         return (f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {self.w} {self.h}" '
-                f'font-family="{FONT}">\n<title>{self.title}</title>\n{defs}\n'
+                f'font-family="{FONT}">\n<title>{self.title}</title>\n<style>{font_css()}</style>\n{defs}\n'
                 f'<rect width="{self.w}" height="{self.h}" fill="{p["bg"]}"/>\n{body}\n</svg>\n')
 
 
 def header(s: Svg, title: str, sub: str) -> None:
-    s.text(32, 46, title, 24, weight="bold")
+    s.text(32, 46, title, 25, weight="600", extra='letter-spacing="-0.4"')
     s.text(32, 72, sub, 14, s.p["muted"])
 
 
@@ -328,8 +386,8 @@ def cutaway(p: dict) -> str:
     s.line(px - 70, py, qx, qy, p["green"], 1.6)
     s.add(f'<circle cx="{qx:.1f}" cy="{qy:.1f}" r="4" fill="{p["green"]}"/>')
     s.rect(px - 190, py - 26, 120, 52, p["display"], p["display"], 1, 'rx="7"')
-    s.text(px - 130, py - 3, "62.4 °C", 16, p["display_ink"], anchor="middle", extra='font-family="Menlo, monospace"')
-    s.text(px - 130, py + 16, "RH 96 %", 12, p["display_ink"], anchor="middle", extra='font-family="Menlo, monospace"')
+    s.text(px - 130, py - 3, "62.4 °C", 16, p["display_ink"], anchor="middle", extra=f'font-family="{MONO}"')
+    s.text(px - 130, py + 16, "RH 96 %", 12, p["display_ink"], anchor="middle", extra=f'font-family="{MONO}"')
     s.add("</g>")
 
     # water connections out of B
@@ -753,10 +811,10 @@ def farm(p: dict) -> str:
     block(60, 170, 220, 120, "1  Reception", ["39 t/day manure, silage,", "straw ≈ 46 m³/day", "optional shredding"], p["panel"])
     # reactors
     s.rect(340, 140, 640, 330, "none", ink, 1.2, 'rx="14" stroke-dasharray="8 6"')
-    s.text(360, 166, "Enclosed tunnels · ~490 m³ · phases shown in order (operation: CE-11)", 13, p["muted"])
-    block(360, 190, 180, 150, "2  Reactor A", ["mesophilic", "seeded, mixed", "~40-45 °C"], p["a"])
-    block(570, 190, 190, 150, "3  Reactor B", ["thermophilic", "55-70 °C, aerated", "sanitises the compost"], p["b"])
-    block(790, 190, 170, 150, "4  Reactor C", ["mesophilic", "cooling", "~40 °C"], p["c"])
+    s.text(360, 166, "4 tunnels · phases run in place (CE-11)", 13, p["muted"])
+    block(360, 190, 180, 150, "2  Heat-up", ["mesophilic, ~4 days", "air recirculated", "→ 55 °C"], p["a"])
+    block(570, 190, 190, 150, "3  Hot phase", ["thermophilic, 55-65 °C", "≥ 3 days ≥ 55 °C", "most heat to recovery"], p["b"])
+    block(790, 190, 170, 150, "4  Cooling", ["fresh air", "from day 10", "→ ~45 °C, unload"], p["c"])
     flow("M280,230 L356,230")
     flow("M540,265 L566,265")
     flow("M760,265 L786,265")
@@ -797,15 +855,27 @@ DRAWINGS = {
 }
 
 
-def main() -> None:
-    from industrial_drawings import DRAWINGS as FARM_UNIT  # CE-06..CE-10
+def export_png(svg: Path, out: Path) -> None:
+    """Rasterise with headless Chrome (brand/src/render.mjs), which reads the embedded fonts."""
+    import re
+    w, h = (float(v) for v in re.search(r'viewBox="0 0 ([\d.]+) ([\d.]+)"', svg.read_text()[:400]).groups())
+    subprocess.run(["node", str(BRAND / "src" / "render.mjs"), str(svg), str(out), str(int(w)), str(int(h)), "1.5"],
+                   check=True, stdout=subprocess.DEVNULL)
+
+
+def main(png: bool = True) -> None:
+    from industrial_drawings import DRAWINGS as FARM_UNIT  # CE-06..CE-14
 
     (OUT / "dark").mkdir(exist_ok=True)
+    (OUT / "png").mkdir(exist_ok=True)
     for name, fn in {**DRAWINGS, **FARM_UNIT}.items():
         (OUT / f"{name}.svg").write_text(fn(PALETTES["light"]))
         (OUT / "dark" / f"{name}.svg").write_text(fn(PALETTES["dark"]))
+        if png:
+            export_png(OUT / f"{name}.svg", OUT / "png" / f"{name}.png")
         print("wrote", name)
 
 
 if __name__ == "__main__":
-    main()
+    import sys
+    main(png="--no-png" not in sys.argv)

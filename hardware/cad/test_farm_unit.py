@@ -17,9 +17,9 @@ def parts():
 
 
 def test_tunnels_have_the_model_volume(parts):
-    # inner volume between the walls, slab and roof equals the model's gross volume
+    # inner volume equals the model's gross volume; the length is rounded up to the next 0.5 m
     inner = fu.N * fu.W * fu.H * fu.L
-    assert inner == pytest.approx(fu.M["gross_total_m3"], rel=0.01)
+    assert fu.M["gross_total_m3"] <= inner < fu.M["gross_total_m3"] * 1.02
 
 
 def test_beds_hold_about_the_model_inventory(parts):
@@ -37,3 +37,10 @@ def test_every_part_is_a_valid_solid():
     assy, _ = fu.build()
     for child in assy.children:
         assert child.obj.val().isValid(), child.name
+
+
+def test_buffer_tank_holds_the_study_volume(parts):
+    import math
+    tk = parts["TK-201-buffer"]
+    assert tk["volume_m3"] == pytest.approx(fu.M["buffer_m3"], rel=0.03)
+    assert fu.N == 4
