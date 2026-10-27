@@ -1,0 +1,177 @@
+{
+ "note": "MODEL. Literature feedstock values and the batch kinetics of configurations.py; not measured.",
+ "mix": {
+  "moisture": 0.6545000000000001,
+  "cn": 27.284546805349184,
+  "parts": [
+   [
+    "cattle manure with bedding",
+    0.7
+   ],
+   [
+    "spoiled grass/maize silage",
+    0.15
+   ],
+   [
+    "chopped straw",
+    0.15
+   ]
+  ]
+ },
+ "targets": {
+  "cn": [
+   25.0,
+   35.0
+  ],
+  "moisture_fill": [
+   0.55,
+   0.65
+  ],
+  "moisture_hot_min": 0.52,
+  "moisture_hot_set": 0.56,
+  "moisture_cool_min": 0.47,
+  "moisture_cool_set": 0.5,
+  "moisture_end": [
+   0.45,
+   0.55
+  ],
+  "moisture_maturation": [
+   0.4,
+   0.5
+  ],
+  "bulk_max_t_m3": 0.65,
+  "o2_min_pct": 5.0,
+  "particle_mm": [
+   6.0,
+   50.0
+  ],
+  "ph": [
+   6.5,
+   8.5
+  ],
+  "sanitise_c": 55.0,
+  "sanitise_h": 72.0
+ },
+ "batch_t": 146.70205479452056,
+ "sanitised_day": 7.583333333333333,
+ "phases": [
+  {
+   "phase": "mesophilic",
+   "start": 0.0,
+   "end": 4.104166666666666,
+   "where": "tunnel",
+   "temp": "15 \u2192 45 \u00b0C",
+   "air": "mostly recirculated",
+   "share": 0.1027371805253332
+  },
+  {
+   "phase": "thermophilic",
+   "start": 4.104166666666666,
+   "end": 15.0,
+   "where": "tunnel",
+   "temp": "45-60 \u00b0C",
+   "air": "temperature loop, O\u2082 \u2265 5 %",
+   "share": 0.5471025619563906
+  },
+  {
+   "phase": "hot hold",
+   "start": 4.604166666666666,
+   "end": 10.770833333333332,
+   "where": "tunnel",
+   "sub": true,
+   "temp": "\u2265 55 \u00b0C, held at 60",
+   "air": "fresh air as needed",
+   "share": 0.39439712785447123
+  },
+  {
+   "phase": "sanitisation",
+   "start": 4.604166666666666,
+   "end": 7.583333333333333,
+   "where": "tunnel",
+   "sub": true,
+   "temp": "\u2265 55 \u00b0C for 72 h",
+   "air": "timer restarts on any dip",
+   "share": null
+  },
+  {
+   "phase": "cooling",
+   "start": 10.0,
+   "end": 15.0,
+   "where": "tunnel",
+   "sub": true,
+   "temp": "60 \u2192 45 \u00b0C",
+   "air": "full fresh air",
+   "share": 0.15495319728300383
+  },
+  {
+   "phase": "maturation",
+   "start": 15.0,
+   "end": 71.0,
+   "where": "windrows",
+   "temp": "45 \u00b0C \u2192 ambient",
+   "air": "turned weekly",
+   "share": 0.3501602575182762
+  }
+ ],
+ "water_per_batch": {
+  "evaporated_t": 63.10614484165299,
+  "metabolic_t": 6.135597091120189,
+  "condensate_t": 44.211148045631674,
+  "sprayed_t": 0.0,
+  "sprayed_condensate_t": 0.0,
+  "organic_matter_lost_t": 10.225995151866982,
+  "mass_left": 0.5419522719261216,
+  "end_moisture": 0.49110993921354135,
+  "min_moisture": 0.49110993921354135
+ },
+ "fill_moisture_sensitivity": [
+  {
+   "fill_moisture": 0.55,
+   "evaporated_t": 63.10614484165299,
+   "metabolic_t": 6.135597091120189,
+   "condensate_t": 44.211148045631674,
+   "sprayed_t": 27.0,
+   "sprayed_condensate_t": 9.0,
+   "organic_matter_lost_t": 10.225995151866982,
+   "mass_left": 0.7259987737819938,
+   "end_moisture": 0.4761780069920065,
+   "min_moisture": 0.4701536560320753
+  },
+  {
+   "fill_moisture": 0.6,
+   "evaporated_t": 63.10614484165299,
+   "metabolic_t": 6.135597091120189,
+   "condensate_t": 44.211148045631674,
+   "sprayed_t": 12.0,
+   "sprayed_condensate_t": 0.0,
+   "organic_matter_lost_t": 10.225995151866982,
+   "mass_left": 0.6237507171953981,
+   "end_moisture": 0.47047095017547774,
+   "min_moisture": 0.47007378761320495
+  },
+  {
+   "fill_moisture": 0.65,
+   "evaporated_t": 63.10614484165299,
+   "metabolic_t": 6.135597091120189,
+   "condensate_t": 44.211148045631674,
+   "sprayed_t": 0.0,
+   "sprayed_condensate_t": 0.0,
+   "organic_matter_lost_t": 10.225995151866982,
+   "mass_left": 0.5419522719261216,
+   "end_moisture": 0.48280662500469623,
+   "min_moisture": 0.48280662500469623
+  },
+  {
+   "fill_moisture": 0.7,
+   "evaporated_t": 63.10614484165299,
+   "metabolic_t": 6.135597091120189,
+   "condensate_t": 44.211148045631674,
+   "sprayed_t": 0.0,
+   "sprayed_condensate_t": 0.0,
+   "organic_matter_lost_t": 10.225995151866982,
+   "mass_left": 0.5419522719261216,
+   "end_moisture": 0.5750656717696406,
+   "min_moisture": 0.5750656717696406
+  }
+ ]
+}

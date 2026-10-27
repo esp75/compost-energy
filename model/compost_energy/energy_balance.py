@@ -125,9 +125,9 @@ def farm_sizing(
 ) -> dict:
     """First-pass volumes for a farm-scale plant.
 
-    Feedstock moves through three enclosed reactors (mesophilic, thermophilic
-    with heat extraction, mesophilic) over ``precompost_days``, losing volume
-    every day, then matures in windrows and is stored until spreading season.
+    Feedstock spends ``precompost_days`` in enclosed, aerated tunnels (heat-up,
+    thermophilic with heat extraction, cooling), losing volume every day, then
+    matures in windrows and is stored until spreading season.
     """
     daily_t = feedstock_t_per_year / 365.0
     daily_m3 = daily_t / density_t_per_m3

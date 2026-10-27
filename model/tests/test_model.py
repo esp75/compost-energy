@@ -189,8 +189,9 @@ def test_psychrometrics_match_tables():
 
 def test_tunnels_hold_the_model_volume():
     m = size()
+    assert m["n_tunnels"] == 4
     assert m["gross_total_m3"] == pytest.approx(farm_sizing()["reactor_volume_m3"], rel=1e-9)
-    assert 15 < m["tunnel_length_m"] < 18
+    assert 11 < m["tunnel_length_m"] < 14
 
 
 def test_heat_recovery_balances():
@@ -224,12 +225,114 @@ def test_staggered_batches_fill_and_settle_inside_the_tunnel():
     ops = operating_modes()
     assert ops["fill_depth_m"] < size()["tunnel_height_m"] - 1.0      # headspace left at fill
     assert ops["settled_depth_m"] < ops["fill_depth_m"]
-    # the average of the settling bed is the model's 2 m design depth
-    assert ops["batch_t"] == pytest.approx(5 * farm_sizing()["feedstock_t_per_day"])
+    # one batch is 15/N days of feedstock
+    assert ops["batch_t"] == pytest.approx(15 / size()["n_tunnels"] * farm_sizing()["feedstock_t_per_day"])
 
 
-def test_transfer_mode_doubles_handling_and_costs_more():
+def test_transfer_mode_multiplies_handling_and_costs_more():
+    from compost_energy.industrial import IndustrialDesign, operating_modes
+    for n, ratio in ((3, 2.0), (4, 2.5)):        # every extra tunnel adds one hot move per batch
+        ops = operating_modes(IndustrialDesign(n_tunnels=n))
+        a, b = ops["staggered"], ops["transfer"]
+        assert b["t_per_day"] / a["t_per_day"] == pytest.approx(ratio, abs=0.1)
+        assert b["net_eur"] < a["net_eur"]
+
+
+# ---- configuration study ---------------------------------------------------
+
+from compost_energy import configurations as C  # noqa: E402
+
+
+def test_batch_profile_is_normalised_and_thermophilic():
+    shape = C.batch_profile()
+    assert shape.sum() == pytest.approx(1.0)
+    n = len(shape)
+    day = np.arange(n) * C.DT_H / 24
+    # little heat leaves while the bed warms up; most leaves in the hot phase
+    assert shape[day < 2].sum() < 0.05
+    assert shape[(day >= 3) & (day < 10)].sum() > 0.5
+
+
+def test_combined_profile_keeps_the_mean_and_smooths_with_more_batches():
+    shape = C.batch_profile()
+    peaks = [C.combined_profile(n, shape).max() for n in (2, 3, 4, 15)]
+    assert all(C.combined_profile(n, shape).mean() == pytest.approx(1.0) for n in (2, 3, 4, 15))
+    assert peaks == sorted(peaks, reverse=True)
+
+
+def test_every_option_value_adds_up():
+    for r in C.study():
+        n = r.numbers
+        assert n["value_eur"] == pytest.approx(n["operating_eur"] - n["annuity_eur"])
+        assert n["capex"] == pytest.approx(n["capex_civil"] + n["capex_mech"] + n["capex_transfer"])
+
+
+def test_final_design_wins_at_low_base_and_high_costs():
+    for c in (C.LOW, C.Costs(), C.HIGH):
+        assert C.final_choice(c) == C.FINAL == "A-4"
+
+
+def test_design_constants_match_the_study():
+    from compost_energy.industrial import IndustrialDesign
+    n = C.evaluate_option(next(o for o in C.all_options() if o.code == C.FINAL)).numbers
+    d = IndustrialDesign()
+    assert d.peak_to_mean == pytest.approx(n["peak_to_mean"], abs=0.01)
+    assert d.buffer_m3 == pytest.approx(n["buffer_m3"], abs=1.0)
+    assert d.blower_peak_factor == pytest.approx(n["fan_kw_installed"] / n["fan_kw_mean"], abs=0.05)
+
+
+def test_automatic_transfer_needs_an_implausible_remix_boost():
+    assert C.break_even_boost("C-3-NW", C.FINAL) > 0.3
+
+
+def test_a3_reproduces_the_previous_operating_mode_numbers():
+    from compost_energy.industrial import IndustrialDesign, operating_modes
+    ops = operating_modes(IndustrialDesign(n_tunnels=3))
+    assert ops["staggered"]["t_per_day"] == pytest.approx(66.5, abs=0.1)
+    assert ops["staggered"]["net_eur"] == pytest.approx(156_978, abs=1)
+    assert ops["transfer"]["net_eur"] == pytest.approx(129_194, abs=1)
+
+
+# ---- process: recipe, phases, water ------------------------------------------
+
+from compost_energy import process as P  # noqa: E402
+
+
+def test_recipe_sits_in_the_composting_window():
+    m = P.mix()
+    tg = P.Targets()
+    assert tg.cn[0] <= m["cn"] <= tg.cn[1]
+    assert tg.moisture_fill[0] <= m["moisture"] <= tg.moisture_fill[1] + 0.01
+
+
+def test_batch_is_sanitised_inside_the_hot_hold():
+    b = P.run_batch()
+    ph = {p["phase"]: p for p in P.phases(b)}
+    assert b["sanitised_day"] is not None
+    assert ph["hot hold"]["start"] <= b["sanitised_day"] <= ph["hot hold"]["end"]
+    assert ph["thermophilic"]["end"] - ph["thermophilic"]["start"] > 10
+
+
+def test_phase_shares_cover_the_whole_batch():
+    ph = {p["phase"]: p for p in P.phases(P.run_batch())}
+    total = ph["mesophilic"]["share"] + ph["thermophilic"]["share"] + ph["maturation"]["share"]
+    assert total == pytest.approx(1.0, abs=0.01)
+    assert 0.2 < ph["maturation"]["share"] < 0.5          # day 15 is not the end of composting
+
+
+def test_recovered_heat_matches_the_farm_scenario():
     from compost_energy.industrial import operating_modes
-    a, b = operating_modes()["staggered"], operating_modes()["transfer"]
-    assert 1.8 < b["t_per_day"] / a["t_per_day"] < 2.2
-    assert b["net_eur"] < a["net_eur"]
+    b = P.run_batch()
+    assert b["recovered_kwh"].sum() == pytest.approx(operating_modes()["batch_t"] * 1000 * FARM.kwh_per_kg, rel=1e-6)
+
+
+def test_water_balance_closes_and_moisture_stays_in_band():
+    b = P.run_batch()
+    t = b["totals"]
+    water0 = b["batch_kg"] * b["fill_moisture"] / 1000
+    dry0 = b["batch_kg"] * (1 - b["fill_moisture"]) / 1000
+    end = water0 - t["evaporated_t"] + t["metabolic_t"] + t["sprayed_t"]
+    assert end / (end + dry0 - t["organic_matter_lost_t"]) == pytest.approx(t["end_moisture"], abs=1e-6)
+    assert t["condensate_t"] < t["evaporated_t"]
+    for row in P.sensitivity():
+        assert row["min_moisture"] >= P.Targets().moisture_cool_min - 0.01

@@ -1,7 +1,7 @@
 """First-pass sizing of the farm-scale unit: tunnels, aeration, heat recovery.
 
 The farm scenario in energy_balance.py says how much heat there is. This
-module turns that into hardware: how big the tunnels are, how much air the
+module turns that into hardware (the final design, A-4 in configurations.py): how big the tunnels are, how much air the
 fans move, how much exchanger area that air needs, and what the water loop
 looks like. The drawings CE-06..CE-10 read every number from here.
 
@@ -16,7 +16,7 @@ Everything here is a design estimate. Nothing has been built at this scale.
 from __future__ import annotations
 
 import math
-from dataclasses import dataclass
+from dataclasses import dataclass, replace
 
 from .energy_balance import FARM, evaluate, farm_sizing
 
@@ -54,7 +54,10 @@ def specific_volume_m3_per_kg(t_c: float, rh: float = 1.0) -> float:
 
 @dataclass(frozen=True)
 class IndustrialDesign:
-    n_tunnels: int = 3
+    # Four tunnels, each running the whole 15-day cycle, started 3.75 days apart.
+    # Chosen in configurations.py (option A-4) over 2-4 tunnels, loader transfer,
+    # automatic transfer and a stacked tower; see docs/configurations.md.
+    n_tunnels: int = 4
     tunnel_width_m: float = 5.0
     tunnel_height_m: float = 4.0
     fill_depth_m: float = 2.0
@@ -79,6 +82,12 @@ class IndustrialDesign:
     # biofilter surface loading, typical 50-150 m³ of air per m² per hour
     biofilter_loading_m3_m2_h: float = 125.0
     heating_hours: float = 5 * 730.0
+    # Exhaust heat of four staggered batches peaks at 1.15x its mean, and a buffer
+    # of about 85 m3 flattens it for the heat user (configurations.py, A-4).
+    peak_to_mean: float = 1.15
+    buffer_m3: float = 85.0
+    # Each blower must carry its own batch at that batch's peak, 2.03x the plant's mean airflow / N.
+    blower_peak_factor: float = 2.03
 
 
 def duct_diameter_mm(flow_m3_h: float, velocity_m_s: float) -> float:
@@ -129,7 +138,7 @@ def size(d: IndustrialDesign = IndustrialDesign()) -> dict:
     condensate = m_dry_air * (humidity_ratio(d.t_exhaust_c) - humidity_ratio(d.t_air_out_c))
     sensible_share = 1.006 * (d.t_exhaust_c - d.t_air_out_c) / dh
 
-    hx_area = duty_kw / KOJIMA_KW_PER_M2
+    hx_area = duty_kw * d.peak_to_mean / KOJIMA_KW_PER_M2      # sized for the peak, not the mean
     m_water = duty_kw / (CP_WATER * (d.t_supply_c - d.t_return_c))  # kg/s
     per_tunnel = v_air / d.n_tunnels
 
@@ -156,11 +165,15 @@ def size(d: IndustrialDesign = IndustrialDesign()) -> dict:
         "air_changes_per_h": v_air / (gross_per_tunnel * d.n_tunnels),
         "fan_kw": fan_kw,
         "fan_kw_per_tunnel": fan_kw / d.n_tunnels,
+        "blower_kw_each": fan_kw * d.blower_peak_factor / d.n_tunnels,
+        "blower_m3_h_each": v_air * d.blower_peak_factor / d.n_tunnels,
         "enthalpy_drop_kj_kg": dh,
         "latent_share": 1.0 - sensible_share,
         "condensate_m3_h": condensate * 3.6,
         "hx_area_m2": hx_area,
-        "biofilter_m2": v_air / d.biofilter_loading_m3_m2_h,
+        "peak_duty_kw": duty_kw * d.peak_to_mean,
+        "buffer_m3": d.buffer_m3,
+        "biofilter_m2": v_air * d.peak_to_mean / d.biofilter_loading_m3_m2_h,
         "water_kg_s": m_water,
         "water_m3_h": m_water * 3.6,
         "pinch_k": pinch_k(d, m_dry_air, m_water),
@@ -192,21 +205,34 @@ class Layout:
     spigot_pitch_m: float = 0.5
     exhaust_y_m: float = 1.2        # exhaust stubs sit near the back wall
     manifold_rise_m: float = 0.9    # manifold height above the roof
-    hx: tuple = (18.6, 21.4, 0.2, 4.2, 0.0, 3.4)
-    fan: tuple = (21.9, 23.1, 1.4, 2.8, 0.0, 1.6)
-    tank: tuple = (24.0, 25.0, 3.4, 4.4, 0.0, 0.9)
-    biofilter: tuple = (19.0, 26.0, 8.0, 16.0, 0.0, 1.6)
+    # Equipment boxes, x measured from the outer face of the last tunnel wall.
+    hx: tuple = (2.4, 5.2, 0.2, 4.2, 0.0, 3.4)
+    fan: tuple = (5.7, 6.9, 1.4, 2.8, 0.0, 1.6)
+    tank: tuple = (5.6, 6.6, 3.4, 4.4, 0.0, 0.9)     # TK-401 condensate
+    buffer: tuple = (8.6, -2.6, 5.5)       # TK-201 hot-water buffer: centre x, centre y, diameter (set from volume)
+    buffer_h_m: float = 5.6
+    biofilter: tuple = (2.8, 9.8, 6.5, 14.5, 0.0, 1.6)
 
 
 def layout(d: IndustrialDesign = IndustrialDesign(), lay: Layout = Layout()) -> dict:
     m = size(d)
     length = math.ceil(m["tunnel_length_m"] * 2) / 2           # next 0.5 m
     bays = [lay.wall_m + i * (d.tunnel_width_m + lay.wall_m) for i in range(d.n_tunnels)]
+    x_end = lay.wall_m + d.n_tunnels * (d.tunnel_width_m + lay.wall_m)
+
+    def shift(b):
+        return (b[0] + x_end, b[1] + x_end, *b[2:])
+
+    lay = replace(lay, hx=shift(lay.hx), fan=shift(lay.fan), tank=shift(lay.tank), biofilter=shift(lay.biofilter),
+                  buffer=(lay.buffer[0] + x_end, *lay.buffer[1:]))
+    # buffer tank diameter from its volume and height
+    dia = math.sqrt(4 * d.buffer_m3 / (math.pi * lay.buffer_h_m))
+    lay = replace(lay, buffer=(lay.buffer[0], lay.buffer[1], round(dia, 1)))
     return {
         "length_m": length,
         "width_m": d.tunnel_width_m,
         "height_m": d.tunnel_height_m,
-        "overall_x_m": lay.wall_m + d.n_tunnels * (d.tunnel_width_m + lay.wall_m),
+        "overall_x_m": x_end,
         "bay_x_m": bays,
         "roof_z_m": lay.slab_m + d.tunnel_height_m + lay.wall_m,
         "biofilter_m2": (lay.biofilter[1] - lay.biofilter[0]) * (lay.biofilter[3] - lay.biofilter[2]),
@@ -234,11 +260,14 @@ def operating_modes(d: IndustrialDesign = IndustrialDesign(), h: Handling = Hand
     """Compare two ways of taking a batch through the three phases.
 
     A, staggered: each tunnel runs the whole 15-day cycle in place and the
-    phases change by changing the air. Tunnels start 5 days apart, so every
-    5 days one is emptied and refilled.
+    phases change by changing the air. Tunnels start 15/N days apart, so every
+    15/N days one is emptied and refilled.
 
-    B, transfer: each tunnel holds one phase for 5 days, and every 5 days the
-    loader moves T-102 -> T-103 and T-101 -> T-102 before refilling T-101.
+    B, transfer: each tunnel holds one stage for 15/N days, and at each step
+    the loader moves every batch one tunnel along before refilling T-101.
+
+    configurations.py extends this comparison to 2-4 tunnels, automatic
+    transfer and a stacked tower, with capital costs.
     """
     m = size(d)
     stage = 15 / d.n_tunnels                     # days per tunnel or per phase
