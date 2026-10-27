@@ -14,6 +14,8 @@
 
 > **Start here:** [docs/](docs/README.md) is organised as [Diátaxis](https://diataxis.fr/): [tutorials](docs/tutorials/run-the-model.md) to run the model, [how-to guides](docs/how-to/), [reference](docs/reference/farm-unit.md) for the numbers, and [explanation](docs/explanation/pivot.md) for why the design is what it is.
 
+> **Watch on the web:** the farm-scale demo and the explainer are embedded at [maximekadri.org/research/compost-energy](https://www.maximekadri.org/research/compost-energy), with the drawings.
+
 ## Watch
 
 | | |
