@@ -20,7 +20,7 @@ The value proposition for homes is year-round, controlled composting, not energy
 - **Feedstock is free and huge.** A mid-size farm cooperative handles ~14,000 t/yr of manure, silage and straw.
 - **Auxiliaries get diluted.** 13 kW of conveying and aeration fans against ~550 kW of recovered heat over the heating season ([farm unit](farm-unit.md)).
 - **Measured elsewhere, too.** On an enclosed farm composter in Japan, 38% of the microbial heat reached the water, against ~9% in a simulated 200 kg box ([reference data](../data/reference/README.md)).
-- **Result:** ~2 GWh/yr of heat, ~€157k/yr net, and enough to repay ~€1.6M of capex over 10 years. Mid-size anaerobic digesters cost ~€3.2M, so this sits in a different, cheaper class.
+- **Result:** ~2 GWh/yr of heat and ~€157k/yr net before capital. Four aerated tunnels with heat recovery cost about €0.68M (MODEL, €0.51–0.91M), which leaves ~€42k/yr after repaying them over 10 years at 6 % ([configuration study](configurations.md)). Mid-size anaerobic digesters cost ~€3.2M, so this sits in a different, cheaper class.
 
 ## What is still unproven
 
@@ -28,7 +28,8 @@ The value proposition for homes is year-round, controlled composting, not energy
 |---|---|
 | Heat needs a nearby user | site next to a greenhouse, dryer or small heat network |
 | CO2 is released, with no biogas revenue | compare carbon accounting against digestion and open windrows |
-| Moving 40 t/day of heterogeneous solids through enclosed reactors | conveyor/screw trials at pilot scale |
+| The heat curve of one batch (it decides between 3 and 4 tunnels) | log one batch's exhaust heat hour by hour on the pilot |
+| Whether automatic transfer is ever worth it | it isn't at this scale (≈ €100k/yr behind); revisit only for much larger plants |
 | Real recovery rate in a big reactor | instrumented pilot, using the same logger and analysis pipeline as this repo |
 
 Suggested path: a funded research project with an engineering lab (~€150-200k), then a pilot installation (~€200-500k).

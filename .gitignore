@@ -9,3 +9,5 @@ node_modules
 video/src/stills/
 .gstack/
 video/farm-unit-demo.mp4
+brand/src/build/
+brand/13_booklet/booklet.local.html

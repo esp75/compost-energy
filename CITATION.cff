@@ -1,0 +1,10 @@
+cff-version: 1.2.0
+message: "If you use this design, model or data, please cite it as below."
+title: "Compost Energy: open hardware for recovering heat from compost"
+authors:
+  - family-names: Kadri
+    given-names: Maxime
+type: software
+license: [CERN-OHL-P-2.0, CC-BY-4.0, MIT]
+repository-code: "https://github.com/esp75/compost-energy"
+keywords: [compost, heat recovery, open hardware, agriculture, energy model, CAD]

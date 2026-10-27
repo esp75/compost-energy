@@ -1,0 +1,35 @@
+name: ci
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  model:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python: ["3.10", "3.12"]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+      - run: pip install -e "model[test]"
+      - name: Tests
+        run: python -m pytest model/tests -q
+      - name: Drawings regenerate from the model unchanged
+        run: |
+          python hardware/drawings/src/make_drawings.py
+          git diff --exit-code -- 'hardware/drawings/*.svg' 'hardware/drawings/dark/*.svg'
+
+  cad:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install -e "model[test,cad]"
+      - name: CAD model matches the sizing model
+        run: python -m pytest hardware/cad -q
