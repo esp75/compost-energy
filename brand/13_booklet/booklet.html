@@ -1,0 +1,382 @@
+<title>Compost Energy Brand Book</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist+Mono:wght@400;500&family=Instrument+Sans:wght@400;500;600&family=Unbounded:wght@600&display=swap">
+<style>
+  /* Layout: alternating full-bleed bands, Night for the mark and imagery, Mist for reading.
+     One band = one printed A4 landscape page. A 12-column grid with a 72px margin. */
+  :root {
+    --night: #060a07; --night-surface: #0e1611; --night-text: #eef3ef; --night-muted: #93a69a;
+    --leaf-d: #7cc04a; --ember-d: #f26a21; --glow: #e9f07e;
+    --mist: #e3eae5; --mist-surface: #f4f7f5; --ink: #0f1a13; --ink-muted: #4a5c51;
+    --leaf-l: #3d6e22; --ember-l: #b23f0a;
+    --text: "Instrument Sans", "Helvetica Neue", Arial, sans-serif;
+    --mono: "Geist Mono", ui-monospace, Menlo, monospace;
+    --figure: "Unbounded", "Instrument Sans", sans-serif;
+    --ease: cubic-bezier(0.22, 1, 0.36, 1);
+    color-scheme: dark;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--night); color: var(--night-text); font: 400 17px/1.6 var(--text); -webkit-font-smoothing: antialiased; }
+  img { max-width: 100%; height: auto; display: block; }
+
+  .band { position: relative; overflow: hidden; }
+  .band > .in { max-width: 1240px; margin: 0 auto; padding-block: clamp(64px, 10vw, 128px);
+    padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+  @media (min-width: 720px) { .band > .in { padding-left: max(72px, env(safe-area-inset-left, 0px)); padding-right: max(72px, env(safe-area-inset-right, 0px)); } }
+  .dark { background: var(--night); color: var(--night-text); --muted: var(--night-muted); --line: rgba(238,243,239,.14); --leaf: var(--leaf-d); --ember: var(--ember-d); --card: rgba(14,22,17,.62); --card-edge: rgba(238,243,239,.14); }
+  .light { background: var(--mist); color: var(--ink); --muted: var(--ink-muted); --line: rgba(15,26,19,.14); --leaf: var(--leaf-l); --ember: var(--ember-l); --card: rgba(244,247,245,.75); --card-edge: rgba(255,255,255,.75); }
+
+  .label { font: 500 12px/1.4 var(--mono); letter-spacing: .14em; text-transform: uppercase; color: var(--muted); }
+  h1, h2, h3 { margin: 0; font-weight: 500; text-wrap: balance; }
+  h1 { font-size: clamp(3rem, 8vw, 7rem); line-height: .98; letter-spacing: -.035em; }
+  h2 { font-size: clamp(2rem, 4.4vw, 3.6rem); line-height: 1.02; letter-spacing: -.03em; margin: 14px 0 0; }
+  h3 { font-size: 1.2rem; font-weight: 600; letter-spacing: -.01em; }
+  p { margin: 0; max-width: 64ch; }
+  .muted { color: var(--muted); }
+  .lede { font-size: clamp(1.1rem, 1.6vw, 1.35rem); line-height: 1.5; margin-top: 22px; color: var(--muted); max-width: 52ch; }
+  .head { display: grid; gap: 4px; margin-bottom: clamp(36px, 5vw, 64px); }
+  .grid { display: grid; gap: 24px; }
+  .g2 { grid-template-columns: repeat(auto-fit, minmax(min(100%, 420px), 1fr)); }
+  .g3 { grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr)); }
+  .g4 { grid-template-columns: repeat(auto-fit, minmax(min(100%, 200px), 1fr)); }
+  .grid > * { min-width: 0; }
+  .card { background: var(--card); border: 1px solid var(--card-edge); border-radius: 28px; padding: clamp(22px, 3vw, 34px); backdrop-filter: blur(18px); -webkit-backdrop-filter: blur(18px); position: relative; }
+  .rule { height: 1px; background: var(--line); border: 0; margin: 28px 0; }
+  .tag { display: inline-block; font: 500 11px var(--mono); letter-spacing: .12em; text-transform: uppercase; border: 1px solid var(--line); border-radius: 8px; padding: 4px 8px; color: var(--muted); }
+  table { width: 100%; border-collapse: collapse; font-size: 15px; }
+  th { text-align: left; font: 500 11px var(--mono); letter-spacing: .12em; text-transform: uppercase; color: var(--muted); padding: 10px 12px 10px 0; border-bottom: 1px solid var(--line); }
+  td { padding: 12px 12px 12px 0; border-bottom: 1px solid var(--line); vertical-align: top; }
+  td code, .mono { font: 13px/1.5 var(--mono); }
+  .scroll { overflow-x: auto; }
+
+  /* cover */
+  .cover { min-height: min(100vh, 900px); }
+  .cover canvas { position: absolute; inset: 0; width: 100%; height: 100%; opacity: .55; }
+  .cover .in { position: relative; display: grid; gap: 40px; align-items: center; grid-template-columns: 1fr; }
+  @media (min-width: 900px) { .cover .in { grid-template-columns: 1.05fr 1fr; min-height: min(100vh, 900px); } }
+  .cover .ring { width: min(100%, 560px); justify-self: center; }
+  .cover .word { width: min(100%, 520px); margin-top: 36px; }
+  .cover .meta { display: flex; flex-wrap: wrap; gap: 10px 22px; margin-top: 40px; }
+
+  /* swatches */
+  .sw { border-radius: 28px; min-height: 168px; padding: 20px; display: flex; flex-direction: column; justify-content: space-between; border: 1px solid var(--line); }
+  .sw b { font-weight: 500; }
+  .sw span { font: 13px var(--mono); opacity: .85; }
+
+  /* type */
+  .fig { font: 600 clamp(2.4rem, 5vw, 4rem)/1 var(--figure); letter-spacing: -.02em; color: var(--ember); }
+  .specimen { font-size: clamp(2.6rem, 6vw, 5.2rem); line-height: 1; letter-spacing: -.035em; font-weight: 500; }
+
+  /* verbs */
+  .verbs { display: grid; gap: 0; grid-template-columns: repeat(auto-fit, minmax(min(100%, 240px), 1fr)); border-top: 1px solid var(--line); }
+  .verb { padding: 26px 24px 26px 0; border-bottom: 1px solid var(--line); }
+  .verb .w { font-size: clamp(2rem, 3.6vw, 2.8rem); letter-spacing: -.03em; font-weight: 500; }
+
+  /* logo tiles */
+  .tile { border-radius: 28px; border: 1px solid var(--line); overflow: hidden; display: grid; }
+  .tile .pic { display: grid; place-items: center; padding: 28px; min-height: 220px; }
+  .tile .cap { padding: 14px 20px; border-top: 1px solid var(--line); display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+  .on-night { background: var(--night); }
+  .on-mist { background: var(--mist); }
+
+  .do { border-left: 2px solid var(--leaf); padding-left: 16px; }
+  .dont { border-left: 2px solid var(--ember); padding-left: 16px; color: var(--muted); }
+  .ring-deco { position: absolute; border: 1px solid var(--line); border-radius: 50%; pointer-events: none; }
+  .plus { position: absolute; font: 300 26px var(--text); color: var(--muted); pointer-events: none; }
+
+  .reveal { animation: rise .9s var(--ease) both; }
+  @keyframes rise { from { opacity: .001; transform: translateY(14px); } to { opacity: 1; transform: none; } }
+  @media (prefers-reduced-motion: reduce) { .reveal { animation: none; } .cover canvas { display: none; } }
+  a { color: var(--leaf); }
+
+  @page { size: 297mm 210mm; margin: 0; }
+  @media print {
+    body { font-size: 11pt; }
+    .band { break-after: page; page-break-after: always; min-height: 210mm; }
+    .band > .in { padding: 14mm 18mm; max-width: none; }
+    .cover, .cover .in { min-height: 210mm; }
+    .reveal { animation: none; }
+    .card { backdrop-filter: none; }
+    h1 { font-size: 64pt; } h2 { font-size: 34pt; }
+    .head { margin-bottom: 9mm; }
+    .tile .pic { min-height: 40mm; padding: 6mm; }
+    .sw { min-height: 34mm; }
+    .no-print { display: none; }
+  }
+</style>
+
+<!-- Cover -->
+<section class="band dark cover">
+  <canvas id="field" aria-hidden="true"></canvas>
+  <div class="in">
+    <div class="reveal">
+      <div class="label">Brand book · v1.0 · October 2026</div>
+      <h1 style="margin-top:22px">Heat from what farms already make.</h1>
+      <img class="word" src="assets/wordmark_dark.svg" alt="Compost Energy wordmark">
+      <div class="meta">
+        <span class="tag">Recover</span><span class="tag">Condense</span><span class="tag">Keep</span>
+      </div>
+    </div>
+    <img class="ring reveal" src="assets/mark_ring_dark.png" alt="The Compost Energy ring: a leaf that turns into a glowing band of heat" width="880" height="730">
+  </div>
+</section>
+
+<!-- Strategy -->
+<section class="band light">
+  <div class="in">
+    <div class="head">
+      <div class="label">Strategy</div>
+      <h2>An open, enclosed composter whose exhaust heat is condensed and kept.</h2>
+      <p class="lede">Compost Energy turns the heat that farm compost already makes into hot water for a nearby user. The patent, model, drawings, data and code are public, so an engineer can audit every figure.</p>
+    </div>
+    <div class="verbs">
+      <div class="verb"><div class="label">Verb 1</div><div class="w">Recover</div><p class="muted">The heat is already there. A farm's manure and straw release hundreds of kilowatts while they compost. No fuel is added.</p></div>
+      <div class="verb"><div class="label">Verb 2</div><div class="w">Condense</div><p class="muted">Most of that heat leaves as water vapour. The engineering is the condensing exchanger.</p></div>
+      <div class="verb"><div class="label">Verb 3</div><div class="w">Keep</div><p class="muted">Keep the heat for a greenhouse or dryer, keep the nutrients in the compost, keep the numbers honest.</p></div>
+    </div>
+    <div class="grid g3" style="margin-top:40px">
+      <div class="card"><div class="label">Audience</div><p style="margin-top:10px">Farm co-op managers and agricultural engineers who run 10,000+ t/yr of manure and straw and have a heat user nearby. Secondary: technical reviewers.</p></div>
+      <div class="card"><div class="label">Against</div><p style="margin-top:10px">Open windrows that vent their heat to the sky, and green-tech claims that never show their numbers.</p></div>
+      <div class="card"><div class="label">Feeling</div><p style="margin-top:10px">Real engineering, calm and alive. Archetype: Sage first, Magician second.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- Voice -->
+<section class="band light" style="background:var(--mist-surface)">
+  <div class="in">
+    <div class="head">
+      <div class="label">Tone of voice</div>
+      <h2>Precise, calm, candid.</h2>
+      <p class="lede">Lead with the number, then what it means. Units always. Every figure carries MODEL, SIMULATED or MEASURED. Say what is unproven in the same breath.</p>
+    </div>
+    <div class="scroll">
+      <table>
+        <thead><tr><th>Context</th><th>Write this</th><th>Not this</th></tr></thead>
+        <tbody>
+          <tr><td class="muted">Headline</td><td>Heat from what farms already make.</td><td class="muted">Revolutionising farm energy!</td></tr>
+          <tr><td class="muted">Figure</td><td>A 40 t/day composter releases about 550 kW. Most of it leaves as vapour. <span class="tag">Model</span></td><td class="muted">Unlock the hidden power of nature.</td></tr>
+          <tr><td class="muted">Call to action</td><td>Open the model</td><td class="muted">Join the revolution</td></tr>
+          <tr><td class="muted">Caveat</td><td>Nothing at this scale has been built yet. The pilot is the next step.</td><td class="muted">Proven technology.</td></tr>
+          <tr><td class="muted">Empty state</td><td>No measured data yet. These curves are SIMULATED.</td><td class="muted">Coming soon!</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="muted" style="margin-top:24px">Off-limits: revolutionary, game-changing, disruptive, carbon neutral, zero emissions, free energy, and any figure without a source tag.</p>
+  </div>
+</section>
+
+<!-- Logo -->
+<section class="band dark">
+  <div class="in">
+    <div class="head">
+      <div class="label">Logo system</div>
+      <h2>The leaf becomes heat, and the loop closes.</h2>
+      <p class="lede">The ring is Maxime's artwork, lifted off its black ground. COMPOST is drawn as vector lettering after it; ENERGY is set in Lexend Zetta Light between a leaf rule and an ember rule.</p>
+    </div>
+    <div class="grid g2">
+      <div class="tile"><div class="pic on-night"><img src="assets/primary-dark.png" alt="Primary logo on Night" width="1200" height="1200" style="width:min(100%,360px)"></div><div class="cap"><span class="label">Primary · Night</span><span class="mono muted">primary_v2.png</span></div></div>
+      <div class="tile"><div class="pic on-mist"><img src="assets/primary-light.png" alt="Primary logo on Mist" width="1200" height="1200" style="width:min(100%,360px)"></div><div class="cap"><span class="label">Primary · Mist</span><span class="mono muted">primary_v2_light.png</span></div></div>
+      <div class="tile"><div class="pic on-night"><img src="assets/horizontal_dark.png" alt="Horizontal lockup on Night" width="1600" height="400"></div><div class="cap"><span class="label">Horizontal</span><span class="mono muted">horizontal_dark.svg</span></div></div>
+      <div class="tile"><div class="pic on-mist"><img src="assets/horizontal_light.png" alt="Horizontal lockup on Mist" width="1600" height="400"></div><div class="cap"><span class="label">Horizontal</span><span class="mono muted">horizontal_light.svg</span></div></div>
+    </div>
+    <div class="grid g4" style="margin-top:24px">
+      <div class="tile"><div class="pic on-night"><img src="assets/app_icon_512.png" alt="App icon" width="512" height="512" style="width:120px;border-radius:24px"></div><div class="cap"><span class="label">App icon</span></div></div>
+      <div class="tile"><div class="pic on-mist" style="gap:18px;grid-auto-flow:column"><img src="assets/favicon.svg" alt="" width="64" height="64" style="width:64px"><img src="assets/favicon.svg" alt="" width="32" height="32" style="width:32px"><img src="assets/favicon.svg" alt="Favicon sizes" width="16" height="16" style="width:16px"></div><div class="cap"><span class="label">≤ 32 px vector</span></div></div>
+      <div class="tile"><div class="pic on-mist"><img src="assets/mark_mono_light.svg" alt="One-colour mark" width="512" height="512" style="width:110px"></div><div class="cap"><span class="label">One colour</span></div></div>
+      <div class="tile"><div class="pic on-night"><img src="assets/wordmark_dark.svg" alt="Wordmark" width="1600" height="260"></div><div class="cap"><span class="label">Wordmark</span></div></div>
+    </div>
+    <div class="grid g3" style="margin-top:32px">
+      <div><div class="label">Minimum size</div><p style="margin-top:8px">Ring 32 px / 10 mm. Below that, the vector ring. Wordmark 120 px / 30 mm wide.</p></div>
+      <div><div class="label">Clear space</div><p style="margin-top:8px">The cap height of COMPOST on every side of a lockup.</p></div>
+      <div><div class="label">Grounds</div><p style="margin-top:8px">Dark ring with glow on Night only. Light ring on Mist or white. Never on photographs.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- Colour -->
+<section class="band dark">
+  <div class="in">
+    <div class="head">
+      <div class="label">Colour</div>
+      <h2>Leaf means matter. Ember means heat.</h2>
+      <p class="lede">Two grounds and one meaning. Ember appears only where there is heat: temperatures, kilowatts, the hot side of a diagram. All text pairs pass WCAG AA.</p>
+    </div>
+    <div class="grid g4">
+      <div class="sw" style="background:var(--night)"><b>Night</b><span>#060a07 · bg</span></div>
+      <div class="sw" style="background:var(--night-surface)"><b>Night surface</b><span>#0e1611</span></div>
+      <div class="sw" style="background:var(--night-text);color:var(--night)"><b>Light ink · 17.7</b><span>#eef3ef</span></div>
+      <div class="sw" style="background:var(--night-muted);color:var(--night)"><b>Sage · 7.7</b><span>#93a69a</span></div>
+      <div class="sw" style="background:var(--leaf-d);color:var(--night)"><b>Leaf · 9.0</b><span>#7cc04a</span></div>
+      <div class="sw" style="background:var(--ember-d);color:var(--night)"><b>Ember · 6.5</b><span>#f26a21</span></div>
+      <div class="sw" style="background:var(--glow);color:var(--night)"><b>Glow · no text</b><span>#e9f07e</span></div>
+      <div class="sw" style="background:var(--mist);color:var(--ink)"><b>Mist</b><span>#e3eae5 · bg</span></div>
+      <div class="sw" style="background:var(--mist-surface);color:var(--ink)"><b>Mist surface</b><span>#f4f7f5</span></div>
+      <div class="sw" style="background:var(--ink)"><b>Moss ink · 14.6</b><span>#0f1a13</span></div>
+      <div class="sw" style="background:var(--leaf-l)"><b>Leaf, light · 5.0</b><span>#3d6e22</span></div>
+      <div class="sw" style="background:var(--ember-l)"><b>Ember, light · 4.8</b><span>#b23f0a</span></div>
+    </div>
+    <p class="muted" style="margin-top:20px">Ratios are WCAG contrast against the section's ground. Composting phases in drawings: heat-up <span class="mono">#a7b83f</span>, hot <span class="mono">#e0882a</span>, cooling <span class="mono">#6f9fa0</span>, maturation <span class="mono">#7a8f6a</span>.</p>
+  </div>
+</section>
+
+<!-- Type -->
+<section class="band light">
+  <div class="in">
+    <div class="head">
+      <div class="label">Typography</div>
+      <h2>One plain voice, one technical voice, one loud number.</h2>
+    </div>
+    <div class="grid g2">
+      <div>
+        <div class="label">Instrument Sans · headlines and body</div>
+        <div class="specimen" style="margin-top:14px">Quiet matter, steady heat.</div>
+        <p style="margin-top:20px">Compost exhaust leaves the bed saturated. Cooling it from 60 to 35 °C releases about 330 kJ per kilogram of dry air, and most of that is water vapour condensing on the coils.</p>
+      </div>
+      <div class="grid" style="align-content:start">
+        <div class="card">
+          <div class="label">Figure · Unbounded 600</div>
+          <div class="fig" style="margin-top:8px">548 kW</div>
+          <div class="label" style="margin-top:8px">Model · heating-season duty, base design</div>
+        </div>
+        <div class="card">
+          <div class="label">Data · Geist Mono</div>
+          <p class="mono" style="margin-top:10px">T-101  core 62.4 °C  O₂ 11.2 %<br>HX-201 duty 548 kW  pinch 5.0 K<br>CE-12  configuration study</p>
+        </div>
+      </div>
+    </div>
+    <hr class="rule">
+    <div class="scroll">
+      <table>
+        <thead><tr><th>Step</th><th>Size</th><th>Face</th><th>Tracking</th></tr></thead>
+        <tbody>
+          <tr><td>display</td><td class="mono">clamp(3rem, 8vw, 7.5rem)</td><td>Instrument Sans 500</td><td class="mono">-0.035em</td></tr>
+          <tr><td>h1</td><td class="mono">clamp(2.25rem, 5vw, 4rem)</td><td>Instrument Sans 500</td><td class="mono">-0.03em</td></tr>
+          <tr><td>h2</td><td class="mono">clamp(1.6rem, 3vw, 2.5rem)</td><td>Instrument Sans 500</td><td class="mono">-0.02em</td></tr>
+          <tr><td>figure</td><td class="mono">clamp(2rem, 4vw, 3.5rem)</td><td>Unbounded 600</td><td class="mono">-0.02em</td></tr>
+          <tr><td>body</td><td class="mono">1.0625rem / 1.6</td><td>Instrument Sans 400</td><td class="mono">0</td></tr>
+          <tr><td>label</td><td class="mono">0.75rem caps</td><td>Geist Mono 500</td><td class="mono">0.12em</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- Shape -->
+<section class="band dark">
+  <div class="in" style="position:relative">
+    <div class="head">
+      <div class="label">Shape and motion</div>
+      <h2>Hairlines, glass, rings with crosshairs.</h2>
+      <p class="lede">Line work is always a hairline and never a box. Cards are frosted glass with one 28 px radius and an optional notch. Glow and particles live only on Night.</p>
+    </div>
+    <div class="grid g2">
+      <div class="card">
+        <div class="label">T-102 · hot phase</div>
+        <div class="fig" style="margin-top:10px">61.8 °C</div>
+        <p class="muted" style="margin-top:10px">Sanitising: 55 °C held for 2 d 14 h of 3 d. <span class="tag">Simulated</span></p>
+      </div>
+      <div class="grid g2" style="align-content:start">
+        <div><div class="label">Radius</div><p style="margin-top:8px" class="mono">0 · 8 · 28 · full</p></div>
+        <div><div class="label">Ease</div><p style="margin-top:8px" class="mono">cubic-bezier(0.22, 1, 0.36, 1)</p></div>
+        <div><div class="label">Entrances</div><p style="margin-top:8px">600–900 ms, staggered 60 ms, never bouncing.</p></div>
+        <div><div class="label">Ring motion</div><p style="margin-top:8px">A slow turn or a leaf → ember colour sweep. Never distort it.</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Templates -->
+<section class="band light">
+  <div class="in">
+    <div class="head">
+      <div class="label">Templates</div>
+      <h2>One headline, one supporting line, one label.</h2>
+    </div>
+    <div class="grid g2">
+      <figure style="margin:0"><img src="assets/social.jpg" alt="GitHub social preview" width="1280" height="640" style="border-radius:20px"><figcaption class="label" style="margin-top:10px">GitHub social preview · 1280 × 640</figcaption></figure>
+      <figure style="margin:0"><img src="assets/og.jpg" alt="Open Graph card" width="1200" height="630" style="border-radius:20px"><figcaption class="label" style="margin-top:10px">Open Graph · 1200 × 630</figcaption></figure>
+      <figure style="margin:0"><img src="assets/banner-dark.jpg" alt="README banner, dark" width="1600" height="480" style="border-radius:20px"><figcaption class="label" style="margin-top:10px">README banner · dark</figcaption></figure>
+      <figure style="margin:0"><img src="assets/banner-light.jpg" alt="README banner, light" width="1600" height="480" style="border-radius:20px"><figcaption class="label" style="margin-top:10px">README banner · light</figcaption></figure>
+      <figure style="margin:0"><img src="assets/video-title.jpg" alt="Video title card" width="1920" height="1080" style="border-radius:20px"><figcaption class="label" style="margin-top:10px">Video title · 1920 × 1080</figcaption></figure>
+      <figure style="margin:0"><img src="assets/video-end.jpg" alt="Video end card" width="1920" height="1080" style="border-radius:20px"><figcaption class="label" style="margin-top:10px">Video end card</figcaption></figure>
+    </div>
+  </div>
+</section>
+
+<!-- Do / don't -->
+<section class="band light" style="background:var(--mist-surface)">
+  <div class="in">
+    <div class="head">
+      <div class="label">Do and don't</div>
+      <h2>Five rules that keep it ours.</h2>
+    </div>
+    <div class="grid" style="gap:22px">
+      <div class="grid g2"><p class="do">Set "548 kW" in Unbounded, ember, with MODEL beside it in Geist Mono.</p><p class="dont">"Over 500 kW of clean energy!" in a gradient.</p></div>
+      <div class="grid g2"><p class="do">Use the dark ring with its glow on Night for the video title.</p><p class="dont">Paste the glowing ring on a white slide.</p></div>
+      <div class="grid g2"><p class="do">Draw in Mist with phase colours and hairline leaders.</p><p class="dont">Use drop shadows and saturated blue in drawings.</p></div>
+      <div class="grid g2"><p class="do">Put a live reading in a glass card with a notch.</p><p class="dont">Use white cards with thick borders and shadows.</p></div>
+      <div class="grid g2"><p class="do">End on "Nothing at this scale has been built yet."</p><p class="dont">End on "The future of energy is here."</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- Index -->
+<section class="band dark">
+  <div class="in">
+    <div class="head">
+      <div class="label">Asset index</div>
+      <h2>Everything regenerates from brand/src.</h2>
+    </div>
+    <div class="scroll">
+      <table>
+        <thead><tr><th>Asset</th><th>Path</th><th>Status</th></tr></thead>
+        <tbody>
+          <tr><td>Source artwork</td><td class="mono">05_logo_primary/source_artwork.png</td><td><span class="tag">Locked</span></td></tr>
+          <tr><td>Primary, Night / Mist</td><td class="mono">05_logo_primary/primary_v2{,_light}.png/.svg</td><td><span class="tag">Locked</span></td></tr>
+          <tr><td>Ring cut-outs</td><td class="mono">05_logo_primary/mark_v2_{dark,light}.png</td><td><span class="tag">Locked</span></td></tr>
+          <tr><td>Lockups, wordmark, icons</td><td class="mono">06_logo_variants/*</td><td><span class="tag">Approved</span></td></tr>
+          <tr><td>Social, OG, banners, hero, video cards</td><td class="mono">09_marketing/*</td><td><span class="tag">Approved</span></td></tr>
+          <tr><td>Colour tokens</td><td class="mono">10_color/tokens.json</td><td><span class="tag">Reference</span></td></tr>
+          <tr><td>Fonts and spec</td><td class="mono">11_typography/</td><td><span class="tag">Reference</span></td></tr>
+          <tr><td>Docs</td><td class="mono">12_docs/{Brand-Booklet,Brand,design-system,AGENTS}.md</td><td><span class="tag">Reference</span></td></tr>
+          <tr><td>Generators</td><td class="mono">src/{extract_mark,mark,assets}.py · src/render.mjs</td><td><span class="tag">Source</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="muted" style="margin-top:28px">Compost Energy · open hardware under CERN-OHL-P, code under MIT, documentation under CC-BY-4.0.</p>
+  </div>
+</section>
+
+<script>
+  // Contour field and particles behind the cover; static frame, no animation loop.
+  (function () {
+    const c = document.getElementById("field");
+    if (!c) return;
+    const box = c.getBoundingClientRect();
+    const dpr = Math.min(window.devicePixelRatio || 1, 2);
+    const W = Math.max(1, box.width), H = Math.max(1, box.height);
+    c.width = W * dpr; c.height = H * dpr;
+    const x = c.getContext("2d"); x.scale(dpr, dpr);
+    let s = 7; const r = () => (s = (s * 16807) % 2147483647) / 2147483647;
+    x.lineWidth = .6;
+    for (let i = 0; i < 70; i++) {
+      const t = i / 70;
+      x.strokeStyle = `rgba(${t < .5 ? "124,192,74" : "242,106,33"},${.05 + .12 * Math.sin(t * Math.PI)})`;
+      x.beginPath();
+      for (let X = 0; X <= W; X += 8) {
+        const Y = H * .62 + i * 3.4 + 50 * Math.sin(X / (W / 5) + i / 13) + 30 * Math.sin(X / (W / 15) - i / 8) * (X / W);
+        X ? x.lineTo(X, Y) : x.moveTo(X, Y);
+      }
+      x.stroke();
+    }
+    const cx = W > 900 ? W * .72 : W * .5, cy = W > 900 ? H * .5 : H * .7, R = Math.min(W, H) * .32;
+    for (let i = 0; i < 700; i++) {
+      const a = r() * Math.PI * 2, rad = R * (1 + (r() - .4) * .6 * r());
+      x.fillStyle = `rgba(${Math.cos(a) > -.15 ? "242,106,33" : "124,192,74"},${.1 + r() * .5})`;
+      x.beginPath(); x.arc(cx + Math.cos(a) * rad, cy + Math.sin(a) * rad, .4 + r() * r() * 1.6, 0, 7); x.fill();
+    }
+  })();
+</script>

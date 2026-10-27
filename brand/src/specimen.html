@@ -1,0 +1,173 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Visual System Specimen</title>
+<style>
+  @font-face { font-family: "Unbounded"; src: url("../11_typography/fonts/Unbounded.ttf"); font-weight: 200 900; }
+  @font-face { font-family: "Instrument Sans"; src: url("../11_typography/fonts/InstrumentSans.ttf"); font-weight: 400 700; font-stretch: 75% 100%; }
+  @font-face { font-family: "Geist Mono"; src: url("../11_typography/fonts/GeistMono.ttf"); font-weight: 100 900; }
+  @font-face { font-family: "Michroma"; src: url("../11_typography/fonts/Michroma.ttf"); }
+  :root {
+    --night: #060a07; --night-surface: #0e1611; --night-text: #eef3ef; --night-muted: #93a69a;
+    --leaf-d: #7cc04a; --ember-d: #f26a21; --glow: #e9f07e;
+    --mist: #e3eae5; --mist-surface: #f4f7f5; --ink: #0f1a13; --ink-muted: #4a5c51;
+    --leaf-l: #3d6e22; --ember-l: #b23f0a;
+  }
+  * { box-sizing: border-box; margin: 0; }
+  body { width: 1600px; background: var(--night); color: var(--night-text); font: 400 17px/1.55 "Instrument Sans", sans-serif; }
+  .label { font: 500 12px "Geist Mono", monospace; letter-spacing: .12em; text-transform: uppercase; color: var(--night-muted); }
+  section { padding: 72px 96px; position: relative; overflow: hidden; }
+  .dark { background: var(--night); }
+  .light { background: var(--mist); color: var(--ink); }
+  .light .label { color: var(--ink-muted); }
+  h1 { font: 500 88px/1.0 "Instrument Sans"; letter-spacing: -.035em; }
+  h2 { font: 500 40px/1.1 "Instrument Sans"; letter-spacing: -.02em; margin: 12px 0 28px; }
+  .row { display: flex; gap: 24px; }
+  .sw { flex: 1; height: 168px; border-radius: 28px; padding: 18px 20px; display: flex; flex-direction: column; justify-content: space-between; border: 1px solid rgba(238,243,239,.14); }
+  .light .sw { border-color: rgba(15,26,19,.14); }
+  .sw b { font: 500 15px "Instrument Sans"; }
+  .sw span { font: 400 12px "Geist Mono"; opacity: .8; }
+  .hero { height: 560px; display: grid; grid-template-columns: 1.1fr 1fr; align-items: center; }
+  .hero img { width: 640px; justify-self: end; margin-right: -40px;  }
+  canvas { position: absolute; inset: 0; opacity: .5; }
+  .wm { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-top: 8px; }
+  .wmcard { border: 1px solid rgba(238,243,239,.14); border-radius: 28px; padding: 40px 36px; text-align: center; }
+  .wm1 { font: 700 64px "Unbounded"; letter-spacing: .02em; }
+  .wm2 { font: 400 58px "Michroma"; letter-spacing: .03em; }
+  .sub { font: 500 18px "Instrument Sans"; letter-spacing: .6em; margin-top: 14px; color: var(--night-muted); display: flex; align-items: center; justify-content: center; gap: 22px; }
+  .sub i { display: block; width: 110px; height: 2px; border-radius: 2px; }
+  .types { display: grid; grid-template-columns: 1.3fr 1fr; gap: 56px; }
+  .fig { font: 600 64px "Unbounded"; letter-spacing: -.02em; color: var(--ember-l); }
+  .mono { font: 400 15px/1.7 "Geist Mono"; }
+  .glass { position: relative; border-radius: 28px; padding: 36px; background: rgba(14,22,17,.62); backdrop-filter: blur(18px); border: 1px solid rgba(238,243,239,.14); }
+  .glass.l { background: rgba(244,247,245,.72); border-color: rgba(255,255,255,.7); }
+  .notch { position: absolute; left: -1px; top: 64px; width: 44px; height: 88px; background: var(--night); border-radius: 0 44px 44px 0; border: 1px solid rgba(238,243,239,.14); border-left: 0; }
+  .ring { position: absolute; border-radius: 50%; border: 1px solid rgba(15,26,19,.35); }
+  .plus { position: absolute; font: 300 28px "Instrument Sans"; color: var(--ink); }
+  .voice { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+  .v { border-radius: 28px; padding: 28px 32px; font-size: 20px; line-height: 1.45; }
+  .yes { background: rgba(61,110,34,.10); border: 1px solid rgba(61,110,34,.35); }
+  .no { background: rgba(178,63,10,.07); border: 1px solid rgba(178,63,10,.30); text-decoration: line-through; text-decoration-color: rgba(178,63,10,.5); color: var(--ink-muted); }
+  .pill { display: inline-flex; gap: 10px; align-items: center; border: 1px solid currentColor; border-radius: 999px; padding: 10px 18px 10px 20px; font: 500 15px "Instrument Sans"; }
+</style>
+</head>
+<body>
+
+<section class="dark hero">
+  <canvas id="dots" width="1600" height="560"></canvas>
+  <div style="position:relative">
+    <div class="label">Compost Energy · visual system · gate 1</div>
+    <h1 style="margin-top:20px">Heat from<br>what farms<br>already make.</h1>
+    <p style="max-width:520px;margin-top:24px;color:var(--night-muted)">Hybrid direction: night glow for the hero, video and dark mode. Quiet mist for reading pages, drawings and the README. Leaf means matter. Ember means heat.</p>
+  </div>
+  <img src="../05_logo_primary/mark_v2_dark.png" alt="">
+</section>
+
+<section class="dark">
+  <div class="label">01 · Colour, dark (Night)</div>
+  <h2>Night</h2>
+  <div class="row">
+    <div class="sw" style="background:var(--night)"><b>bg</b><span>#060a07</span></div>
+    <div class="sw" style="background:var(--night-surface)"><b>surface</b><span>#0e1611</span></div>
+    <div class="sw" style="background:var(--night-text);color:var(--night)"><b>text · 17.7</b><span>#eef3ef</span></div>
+    <div class="sw" style="background:var(--night-muted);color:var(--night)"><b>muted · 7.7</b><span>#93a69a</span></div>
+    <div class="sw" style="background:var(--leaf-d);color:var(--night)"><b>leaf · matter · 9.0</b><span>#7cc04a</span></div>
+    <div class="sw" style="background:var(--ember-d);color:var(--night)"><b>ember · heat · 6.5</b><span>#f26a21</span></div>
+    <div class="sw" style="background:var(--glow);color:var(--night)"><b>glow · no text</b><span>#e9f07e</span></div>
+  </div>
+</section>
+
+<section class="light">
+  <div class="label">02 · Colour, light (Mist)</div>
+  <h2>Mist</h2>
+  <div class="row">
+    <div class="sw" style="background:var(--mist)"><b>bg</b><span>#e3eae5</span></div>
+    <div class="sw" style="background:var(--mist-surface)"><b>surface</b><span>#f4f7f5</span></div>
+    <div class="sw" style="background:var(--ink);color:var(--mist)"><b>text · 14.6</b><span>#0f1a13</span></div>
+    <div class="sw" style="background:var(--ink-muted);color:var(--mist)"><b>muted · 5.8</b><span>#4a5c51</span></div>
+    <div class="sw" style="background:var(--leaf-l);color:var(--mist)"><b>leaf · matter · 5.0</b><span>#3d6e22</span></div>
+    <div class="sw" style="background:var(--ember-l);color:var(--mist)"><b>ember · heat · 4.8</b><span>#b23f0a</span></div>
+  </div>
+  <p class="label" style="margin-top:18px">Numbers = WCAG contrast on the ground. All text pairs pass AA.</p>
+</section>
+
+<section class="dark">
+  <div class="label">03 · Wordmark</div>
+  <h2>COMPOST, drawn as vector after the logo; ENERGY in Lexend Zetta Light</h2>
+  <div class="wmcard"><img src="../06_logo_variants/wordmark_dark.svg" style="width:100%"></div>
+</section>
+
+<section class="light">
+  <div class="label">04 · Type</div>
+  <div class="types" style="margin-top:20px">
+    <div>
+      <div style="font:500 76px/1.0 'Instrument Sans';letter-spacing:-.035em">Quiet matter,<br>steady heat.</div>
+      <p style="margin-top:26px;max-width:620px">Instrument Sans for headlines and body. Compost exhaust leaves the bed saturated. Cooling it from 60 to 35 °C releases 330 kJ per kilogram of dry air, and 92 % of that is water vapour condensing on the coils.</p>
+    </div>
+    <div>
+      <div class="label">Figure · Unbounded 600</div>
+      <div class="fig">548 kW</div>
+      <div class="label" style="margin:4px 0 28px">MODEL · heating-season duty</div>
+      <div class="label">Data · Geist Mono</div>
+      <div class="mono">T-101  core  62.4 °C  O₂ 11.2 %<br>HX-201 duty 548 kW  pinch 5.0 K<br>CE-12  configuration study</div>
+    </div>
+  </div>
+</section>
+
+<section class="dark" style="height:520px">
+  <canvas id="contours" width="1600" height="520"></canvas>
+  <div class="label" style="position:relative">05 · Shape: glass, notch, hairline, contour texture</div>
+  <div class="glass" style="width:620px;margin:40px 0 0 120px">
+    <div class="notch"></div>
+    <div class="label">T-102 · hot phase</div>
+    <div style="font:600 54px 'Unbounded';color:var(--ember-d);margin:10px 0">61.8 °C</div>
+    <p style="color:var(--night-muted)">Sanitising: 55 °C held for 2 d 14 h of 3 d. SIMULATED.</p>
+    <div style="margin-top:22px" class="pill">Open the model <span>→</span></div>
+  </div>
+</section>
+
+<section class="light" style="height:520px">
+  <div class="label">06 · Ring and crosshairs on mist</div>
+  <div class="ring" style="width:380px;height:380px;left:610px;top:80px"></div>
+  <div class="plus" style="left:640px;top:150px">+</div>
+  <div class="plus" style="left:930px;top:300px">+</div>
+  <div class="plus" style="left:760px;top:420px">+</div>
+  <div style="position:absolute;right:96px;bottom:72px;font:500 120px/0.9 'Instrument Sans';letter-spacing:-.04em;text-align:right">Heat,<br>kept.</div>
+  <div style="position:absolute;left:96px;bottom:80px;max-width:300px;font-size:15px"><b>Leaf → ember.</b> Organic matter goes in at one end. Hot water comes out of the other. Nothing is burnt.</div>
+</section>
+
+<section class="light">
+  <div class="label">07 · Voice: precise · calm · candid</div>
+  <div class="voice" style="margin-top:24px">
+    <div class="v yes">A 40 t/day farm composter releases about 550 kW of heat. Most of it leaves as water vapour. We condense it and keep it. <span class="label">MODEL</span></div>
+    <div class="v no">Revolutionising the circular economy with game-changing green energy for a sustainable tomorrow!</div>
+  </div>
+</section>
+
+<script>
+  // point cloud drifting up from the right (matter turning to heat)
+  const c = document.getElementById("dots"), x = c.getContext("2d");
+  let s = 7; const r = () => (s = (s * 16807) % 2147483647) / 2147483647;
+  for (let i = 0; i < 1400; i++) {
+    const a = r() * Math.PI * 2, rad = 210 + r() * 120 * r();
+    const px = 1180 + Math.cos(a) * rad, py = 260 + Math.sin(a) * rad * 0.9;
+    const t = (Math.cos(a) + 1) / 2;
+    x.fillStyle = t > .5 ? `rgba(242,106,33,${.15 + r() * .5})` : `rgba(124,192,74,${.15 + r() * .5})`;
+    x.beginPath(); x.arc(px, py, r() * 1.4 + .3, 0, 7); x.fill();
+  }
+  // contour texture
+  const k = document.getElementById("contours"), g = k.getContext("2d");
+  g.lineWidth = .6;
+  for (let i = 0; i < 70; i++) {
+    g.strokeStyle = `rgba(${i < 35 ? "124,192,74" : "242,106,33"},${.10 + .2 * Math.sin(i / 70 * Math.PI)})`;
+    g.beginPath();
+    for (let X = 0; X <= 1600; X += 8) {
+      const Y = 120 + i * 4.2 + 70 * Math.sin(X / 260 + i / 14) + 40 * Math.sin(X / 90 - i / 9) * (X / 1600);
+      X ? g.lineTo(X, Y) : g.moveTo(X, Y);
+    }
+    g.stroke();
+  }
+</script>
+</body>
+</html>
