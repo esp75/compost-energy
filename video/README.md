@@ -36,7 +36,7 @@ Chapters: what compost is · aerobic vs anaerobic · what the microbes need · m
 
 - The pile temperature curves are **simulated**, from [`data/simulated/truth_run_01.csv`](../data/simulated/truth_run_01.csv), and they're labelled that way on screen.
 - The farm-tunnel batch (temperature, phases, water per batch) is **MODEL**, from [`process.py`](../model/compost_energy/process.py). `run_process.py` writes it to [`src/tunnel-data.js`](src/tunnel-data.js). The other farm numbers (92 % latent, 330 kJ/kg, 2 GWh a year) come from [`farm-unit.json`](../hardware/cad/out/farm-unit.json).
-- The process windows (C:N 25–35, moisture 50–60 %, O₂ at least 5 %, a pile of at least about 1 m³) are the on-farm composting handbook ranges in [`docs/process.md`](../docs/process.md).
+- The process windows (C:N 25–35, moisture 50–60 %, O₂ at least 5 %, a pile of at least about 1 m³) are the on-farm composting handbook ranges in [`docs/reference/process.md`](../docs/reference/process.md).
 - The 38% farm heat recovery is a **third-party measurement** (Kojima et al., 2022), credited on the end card.
 - The 50 W pipe and the 99.5% resistance share come from the [exchanger model](../model/compost_energy/heat_exchanger.py).
 - The methane factor is the IPCC AR5 100-year figure.
