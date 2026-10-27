@@ -161,7 +161,7 @@
 <text x="820.0" y="744.0" font-size="12" fill="#0f1a13" font-weight="normal" text-anchor="start" >Moving material costs more than it saves. The automatic train needs ~44 % more heat from remixing</text>
 <text x="820.0" y="766.0" font-size="12" fill="#0f1a13" font-weight="normal" text-anchor="start" >to break even (CE-13). The stacked tower is the most expensive option.</text>
 <text x="820.0" y="788.0" font-size="12" fill="#0f1a13" font-weight="normal" text-anchor="start" >A-3 wins if the feedstock composts faster/slower than assumed or arrives warm: a pilot batch decides.</text>
-<text x="32.0" y="970.0" font-size="12" fill="#4a5c51" font-weight="normal" text-anchor="start" >MODEL. Costs, upkeep and batch kinetics in model/compost_energy/configurations.py; all options in docs/configurations.md and data/model/configurations.json.</text>
+<text x="32.0" y="970.0" font-size="12" fill="#4a5c51" font-weight="normal" text-anchor="start" >MODEL. Costs, upkeep and batch kinetics in model/compost_energy/configurations.py; all options in docs/explanation/configuration-study.md and data/model/configurations.json.</text>
 <rect x="1146.0" y="872.0" width="430.0" height="104.0" fill="#f4f7f5" stroke="#0f1a13" stroke-width="1.4" />
 <line x1="1146.0" y1="912.0" x2="1576.0" y2="912.0" stroke="#0f1a13" stroke-width="0.8" />
 <line x1="1146.0" y1="944.0" x2="1576.0" y2="944.0" stroke="#c9d3cd" stroke-width="0.8" />

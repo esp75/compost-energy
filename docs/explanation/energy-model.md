@@ -1,6 +1,6 @@
 # Energy model: does compost heat pay?
 
-Code: [`model/compost_energy/energy_balance.py`](../model/compost_energy/energy_balance.py) · run `python model/scripts/run_scenarios.py`
+Code: [`model/compost_energy/energy_balance.py`](../../model/compost_energy/energy_balance.py) · run `python model/scripts/run_scenarios.py`
 
 ## Method
 
@@ -24,11 +24,11 @@ net saving (EUR/yr)       = fuel displaced x fuel price - auxiliary electricity 
 | Gas price | €0.12/kWh | France, Jan 2025 |
 | Electricity price | €0.20/kWh | France, Jan 2025 |
 | Boiler efficiency | 0.90 (house, farm) / 0.95 (block) | |
-| Auxiliaries | 0 / 50 W (house), 0 / 200 W (block), 13 kW for 5 months (farm): 5 kW conveying + 8 kW fans | fans sized in [farm-unit.md](farm-unit.md) |
+| Auxiliaries | 0 / 50 W (house), 0 / 200 W (block), 13 kW for 5 months (farm): 5 kW conveying + 8 kW fans | fans sized in [farm-unit.md](../reference/farm-unit.md) |
 
 ## Results
 
-![Net value by scale](../figures/scenarios_net_value.png)
+![Net value by scale](../../figures/scenarios_net_value.png)
 
 | Scenario | Heat (kWh/yr) | Mean power | Net (€/yr) |
 |---|---:|---:|---:|

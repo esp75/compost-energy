@@ -419,7 +419,7 @@ def break_even_boost(code: str, against: str, c: Costs = Costs()) -> float:
     return hi
 
 
-FINAL = "A-4"     # chosen 2026-10-21: best at low, base and high costs (see docs/configurations.md)
+FINAL = "A-4"     # chosen 2026-10-21: best at low, base and high costs (see docs/explanation/configuration-study.md)
 
 
 def final_choice(c: Costs = Costs()) -> str:

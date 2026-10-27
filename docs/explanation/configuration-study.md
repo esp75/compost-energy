@@ -1,12 +1,12 @@
 # Which reactor? The configuration study
 
-The farm scenario ([energy-model.md](energy-model.md)) fixes how much heat there is: about 2 GWh a year, 548 kW on average over the heating season. This page compares the ways of building the reactor that recovers it. All of it is in [`configurations.py`](../model/compost_energy/configurations.py) and the run script [`run_configurations.py`](../model/scripts/run_configurations.py), which writes [`data/model/configurations.json`](../data/model/configurations.json).
+The farm scenario ([energy-model.md](energy-model.md)) fixes how much heat there is: about 2 GWh a year, 548 kW on average over the heating season. This page compares the ways of building the reactor that recovers it. All of it is in [`configurations.py`](../../model/compost_energy/configurations.py) and the run script [`run_configurations.py`](../../model/scripts/run_configurations.py), which writes [`data/model/configurations.json`](../../data/model/configurations.json).
 
 **Everything here is MODEL.** The capital costs are first-pass estimates with low/base/high values, not quotes. Nothing at this scale has been built.
 
 **Result: four tunnels, each running the whole 15-day cycle in place, started 3.75 days apart (A-4).** It is the base design from now on. The options it beat are kept below as the trail.
 
-![Value after capital for every option](../figures/config_comparison.png)
+![Value after capital for every option](../../figures/config_comparison.png)
 
 ## The options
 
@@ -20,13 +20,13 @@ The farm scenario ([energy-model.md](energy-model.md)) fixes how much heat there
 
 ## What is compared
 
-1. **The shape of the exhaust heat.** One batch is simulated with the temperature model of [`simulate.py`](../model/compost_energy/simulate.py) under the tunnel controller: heat-up on recirculated air, the hot phase held at 60 °C, cooling to 45 °C from day 10. The plant's exhaust is the sum of its staggered batches. The peak sets the exchanger and biofilter size; the swing sets the **hot-water buffer** a heat user needs to get a flat supply.
+1. **The shape of the exhaust heat.** One batch is simulated with the temperature model of [`simulate.py`](../../model/compost_energy/simulate.py) under the tunnel controller: heat-up on recirculated air, the hot phase held at 60 °C, cooling to 45 °C from day 10. The plant's exhaust is the sum of its staggered batches. The peak sets the exchanger and biofilter size; the swing sets the **hot-water buffer** a heat user needs to get a flat supply.
 2. **The building:** walls, roof, aerated floor, doors, wall losses, footprint.
 3. **Moving the material:** tonnes a day through the loader, diesel, operator time, hot moves in the open, and the heat they release.
 4. **Equipment:** blowers (each sized for the largest load it sees), exchanger, biofilter, buffer tank, controls, and the transfer machinery.
 5. **Money:** capital repaid over 10 years at 6 %, equipment upkeep (1 %/yr civil, 5 %/yr mechanical), and the operating differences against the farm scenario's €157k/yr.
 
-![Exhaust heat of one batch and of the plant](../figures/config_heat_profiles.png)
+![Exhaust heat of one batch and of the plant](../../figures/config_heat_profiles.png)
 
 ## Results (base costs)
 

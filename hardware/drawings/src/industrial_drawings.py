@@ -1053,7 +1053,7 @@ def configuration_study(p: dict) -> str:
         s.text(fx, fy + i * 22, t[0], 12.5 if t[1] else 12, weight="600" if t[1] else "normal")
 
     s.text(32, s.h - 30, "MODEL. Costs, upkeep and batch kinetics in model/compost_energy/configurations.py; "
-                         "all options in docs/configurations.md and data/model/configurations.json.", 12, mu)
+                         "all options in docs/explanation/configuration-study.md and data/model/configurations.json.", 12, mu)
     s.title_block("Configuration study", "CE-12")
     return s.render()
 
@@ -1372,7 +1372,7 @@ def process_sheet(p: dict) -> str:
     ]):
         s.text(kx, ky + 24 + i * 19, line, 11.5, ink if i in (0, 4, 5) else mu)
 
-    s.text(32, s.h - 30, "Process model: model/compost_energy/process.py, docs/process.md. Feedstock values are typical, not lab results; "
+    s.text(32, s.h - 30, "Process model: model/compost_energy/process.py, docs/reference/process.md. Feedstock values are typical, not lab results; "
                          f"tunnels sized at 0.85 t/m³, the mix should be ≤ {tg.bulk_max_t_m3:.2f} (to settle on the pilot).", 11.5, mu)
     s.title_block("Process sheet", "CE-14")
     return s.render()

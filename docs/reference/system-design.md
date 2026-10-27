@@ -1,6 +1,6 @@
 # System design
 
-![System schematic](../hardware/drawings/system-schematic.svg)
+![System schematic](../../hardware/drawings/system-schematic.svg)
 
 The "biological boiler" is a composting box that runs each composting phase in its own chamber, and harvests heat from the hottest one through a water loop.
 
@@ -33,11 +33,11 @@ C and D are half size because the material loses 20-50% of its volume during the
 
 ## Instrumentation
 
-The patent specifies a temperature + humidity probe in each chamber (B is critical) with a front-panel display. The prototype logger in [`hardware/logger`](../hardware/logger) expands this to five temperatures, water flow and headspace humidity, enough to measure the heat actually extracted rather than estimate it.
+The patent specifies a temperature + humidity probe in each chamber (B is critical) with a front-panel display. The prototype logger in [`hardware/logger`](../../hardware/logger) expands this to five temperatures, water flow and headspace humidity, enough to measure the heat actually extracted rather than estimate it.
 
 ## Prototypes
 
-Three bench prototypes were specified and costed (~€640 in parts: [BOM](../hardware/bom/prototypes.csv)):
+Three bench prototypes were specified and costed (~€640 in parts: [BOM](../../hardware/bom/prototypes.csv)):
 
 | # | What it tests |
 |---|---|

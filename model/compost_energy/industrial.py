@@ -56,7 +56,7 @@ def specific_volume_m3_per_kg(t_c: float, rh: float = 1.0) -> float:
 class IndustrialDesign:
     # Four tunnels, each running the whole 15-day cycle, started 3.75 days apart.
     # Chosen in configurations.py (option A-4) over 2-4 tunnels, loader transfer,
-    # automatic transfer and a stacked tower; see docs/configurations.md.
+    # automatic transfer and a stacked tower; see docs/explanation/configuration-study.md.
     n_tunnels: int = 4
     tunnel_width_m: float = 5.0
     tunnel_height_m: float = 4.0

@@ -1,10 +1,10 @@
 # The composting process: recipe, phases, water
 
-The tunnels are a composting plant first and a heat source second. This page is the process sheet for one batch: what goes in, which phase the bed is in and for how long, and how its moisture is held. It all comes from [`process.py`](../model/compost_energy/process.py); [`run_process.py`](../model/scripts/run_process.py) writes [`data/model/process.json`](../data/model/process.json) and the figure below. Drawing [CE-14](../hardware/drawings/farm-process-sheet.svg) puts it on one sheet.
+The tunnels are a composting plant first and a heat source second. This page is the process sheet for one batch: what goes in, which phase the bed is in and for how long, and how its moisture is held. It all comes from [`process.py`](../../model/compost_energy/process.py); [`run_process.py`](../../model/scripts/run_process.py) writes [`data/model/process.json`](../../data/model/process.json) and the figure below. Drawing [CE-14](../../hardware/drawings/farm-process-sheet.svg) puts it on one sheet.
 
-**Everything here is MODEL**: literature feedstock values and the batch kinetics of [`configurations.py`](../model/compost_energy/configurations.py). A pilot replaces them with its own lab results and logs.
+**Everything here is MODEL**: literature feedstock values and the batch kinetics of [`configurations.py`](../../model/compost_energy/configurations.py). A pilot replaces them with its own lab results and logs.
 
-![One tunnel batch: phases, temperature and moisture](../figures/process_batch.png)
+![One tunnel batch: phases, temperature and moisture](../../figures/process_batch.png)
 
 ## Why a batch spends only 15 days in a tunnel
 
@@ -56,7 +56,7 @@ Straw is the control knob. More straw makes the mix drier, raises its C:N ratio 
 | Moisture, hot phase | ≥ 52 %, sprayed back to 56 % | below 45–50 % activity collapses | roof spray bars |
 | Moisture, leaving the tunnel | 45 – 55 % | maturation needs water too | spray bars in the cooling phase |
 | Moisture, maturation | 40 – 50 % | | water when turning |
-| Oxygen | ≥ 5 % in the exhaust (10–15 % preferred) | anaerobic pockets smell and make methane | fresh-air damper overrides everything ([CE-10](../hardware/drawings/farm-control.svg)) |
+| Oxygen | ≥ 5 % in the exhaust (10–15 % preferred) | anaerobic pockets smell and make methane | fresh-air damper overrides everything ([CE-10](../../hardware/drawings/farm-control.svg)) |
 | Temperature | 60 °C hot hold, 45 °C at emptying | fastest breakdown near 55–60 °C; above 65 °C the microbes die back | blower speed and recirculation |
 | Sanitisation | ≥ 55 °C for 72 h | French order of 22 April 2008 for forced-aeration composting (as summarised in a regional guide; check the official text); US EPA PFRP for in-vessel systems | timer restarts if any probe drops below |
 | Bulk density at filling | ≤ 0.60 – 0.65 t/m³ | denser mixes lack free air space | straw; a bucket test at the mixer |
@@ -88,7 +88,7 @@ Each 147 t batch, filled at 65 % moisture:
 | 60 % | 12 t | 47 % |
 | 55 % | 27 t | 48 % |
 
-**How water is added** ([CE-09](../hardware/drawings/farm-process-pid.svg), [CE-14](../hardware/drawings/farm-process-sheet.svg)):
+**How water is added** ([CE-09](../../hardware/drawings/farm-process-pid.svg), [CE-14](../../hardware/drawings/farm-process-sheet.svg)):
 
 1. **At the mixer, before filling.** If the mix is below 55 %, condensate or farm water goes on with the straw. This is the cheapest and most even way to add water.
 2. **Roof spray bars in each tunnel (SP-10x).** Three bars of flat-fan nozzles along the tunnel roof, at about 6 m³/h per tunnel, each with its own solenoid valve (XV-10x) and flow meter (FT-10x). They spray while the blower runs at full flow, so the water spreads through the top of the bed instead of pooling.

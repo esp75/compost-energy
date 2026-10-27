@@ -8,7 +8,7 @@ python hardware/drawings/src/make_drawings.py
 
 It writes the light SVGs here (for GitHub) and night-theme copies in [`dark/`](dark/) (for the website), and renders PNGs into [`png/`](png/) with headless Chrome (`brand/src/render.mjs`; run `npm install` in `video/src` once, or pass `--no-png`). The drawings use the brand palette and embed subsetted Instrument Sans and Geist Mono (OFL), so they render the same on GitHub and in a browser.
 
-CE-06 to CE-14 are drawn from [`industrial_drawings.py`](src/industrial_drawings.py), which reads every number from [`industrial.py`](../../model/compost_energy/industrial.py) and [`configurations.py`](../../model/compost_energy/configurations.py) and [`process.py`](../../model/compost_energy/process.py). The design is described in [docs/farm-unit.md](../../docs/farm-unit.md) and the choice of layout in [docs/configurations.md](../../docs/configurations.md).
+CE-06 to CE-14 are drawn from [`industrial_drawings.py`](src/industrial_drawings.py), which reads every number from [`industrial.py`](../../model/compost_energy/industrial.py) and [`configurations.py`](../../model/compost_energy/configurations.py) and [`process.py`](../../model/compost_energy/process.py). The design is described in [docs/farm-unit.md](../../docs/reference/farm-unit.md) and the choice of layout in [docs/configurations.md](../../docs/explanation/configuration-study.md).
 
 **Dimensions are indicative.** The patent gives no dimensions. They come from the prototype bill of materials ([`bom/prototypes.csv`](../bom/prototypes.csv)): 500 × 500 mesh and PVC dividers, 120 × 24 decking boards, 70 × 70 posts, a 600 × 400 × 420 Euro container. Nothing here has been checked against a physical build.
 

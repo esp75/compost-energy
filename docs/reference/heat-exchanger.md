@@ -1,6 +1,6 @@
 # Heat exchanger: the 2024 calculation and what was wrong with it
 
-Code: [`model/compost_energy/heat_exchanger.py`](../model/compost_energy/heat_exchanger.py)
+Code: [`model/compost_energy/heat_exchanger.py`](../../model/compost_energy/heat_exchanger.py)
 
 ## The 2024 design calculation
 
@@ -28,7 +28,7 @@ The arithmetic is right, but one input isn't. 1500 W/m²K is the kind of film co
 
 Because the three resistances are in series, the largest one dominates. With realistic numbers the compost side is ~99% of the total resistance, so the aluminium and the water barely matter:
 
-![Exchanger sensitivity](../figures/exchanger_sensitivity.png)
+![Exchanger sensitivity](../../figures/exchanger_sensitivity.png)
 
 | h_compost (W/m²K) | Power at 60/40 °C |
 |---:|---:|
@@ -37,11 +37,11 @@ Because the three resistances are in series, the largest one dominates. With rea
 | 30 | 106 W |
 | 1512.5 (2024 assumption) | 3,556 W |
 
-There is also a second, independent ceiling: **an exchanger can't extract more heat than the microbes produce.** A 200 kg prototype pile peaks at a few hundred watts of microbial heat, and most of it leaves through the walls and vents (see the [simulated heat ledger](../figures/sim_run_01_heat_ledger.png)).
+There is also a second, independent ceiling: **an exchanger can't extract more heat than the microbes produce.** A 200 kg prototype pile peaks at a few hundred watts of microbial heat, and most of it leaves through the walls and vents (see the [simulated heat ledger](../../figures/sim_run_01_heat_ledger.png)).
 
 ## Design consequences
 
 1. **Surface area beats material.** Swapping aluminium for copper changes almost nothing. What helps is more pipe in contact with the compost, which is what the patent proposed (§8.2: smaller diameter, more parallel circuits). Prototype 3 doubles the tube length to measure exactly this.
-2. **Bring the heat to the pipe.** Forced aeration, extracting heat from the exhaust air (air-to-water, as in the farm-scale design), or turning the material over the coil all raise the effective h far more than any pipe upgrade. Published measurements back this up. On a dairy farm, a 9.2 m² plate-fin exchanger in the composter's exhaust air removed a mean 22.6 kW, about **2.5 kW/m²**, against ~0.3 kW/m² for the buried pipe at realistic h. It also ran at a larger temperature difference, so this is an order-of-magnitude comparison ([data](../data/reference/README.md)).
+2. **Bring the heat to the pipe.** Forced aeration, extracting heat from the exhaust air (air-to-water, as in the farm-scale design), or turning the material over the coil all raise the effective h far more than any pipe upgrade. Published measurements back this up. On a dairy farm, a 9.2 m² plate-fin exchanger in the composter's exhaust air removed a mean 22.6 kW, about **2.5 kW/m²**, against ~0.3 kW/m² for the buried pipe at realistic h. It also ran at a larger temperature difference, so this is an order-of-magnitude comparison ([data](../../data/reference/README.md)).
 3. **Measure at low flow.** At ~50-130 W, normal pump flows give an outlet rise below the sensor's accuracy. The logger runs at 0.35 L/min to get a 3-5 °C rise.
-4. **Scale is the real fix.** Microbial heat grows with volume while wall losses grow with surface area. That's the physical reason the project [moved to farm scale](pivot.md).
+4. **Scale is the real fix.** Microbial heat grows with volume while wall losses grow with surface area. That's the physical reason the project [moved to farm scale](../explanation/pivot.md).
