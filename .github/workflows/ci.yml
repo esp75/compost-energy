@@ -20,7 +20,7 @@ jobs:
         run: python -m pytest model/tests -q
       - name: Drawings regenerate from the model unchanged
         run: |
-          python hardware/drawings/src/make_drawings.py
+          python hardware/drawings/src/make_drawings.py --no-png
           git diff --exit-code -- 'hardware/drawings/*.svg' 'hardware/drawings/dark/*.svg'
 
   cad:
